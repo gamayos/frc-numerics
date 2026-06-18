@@ -1,7 +1,6 @@
-# Validation suite — *Finishing the Gauge*
+# Validation suite — *Standard-Model Interactions over Finite Substrate*
 
-This folder holds the computational verification for the paper *Finishing the Gauge:
-the Standard-Model Interactions over a Finite Substrate* (`../main.tex`). Every
+This folder holds the computational verification for the paper *Standard-Model Interactions over a Finite Substrate* (`../main.tex`). Every
 quantitative and algebraic claim in the paper is checked by one of the scripts below,
 in **exact arithmetic** wherever the claim is exact (integer, finite-field, or
 cyclotomic), and against the lattice Green's function or measured constants where the
