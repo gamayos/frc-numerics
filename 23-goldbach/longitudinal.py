@@ -14,7 +14,7 @@ Riemann Hypothesis (Weil's bound; Frobenius eigenvalues), the same structure FRC
 realisation is built on.
 
 Tests:
-  L1  the longitudinal object is genuinely Kloosterman: N(s) = #{x in F_P^x : x + x^{-1} = s}
+  L1  the longitudinal object is Kloosterman: N(s) = #{x in F_P^x : x + x^{-1} = s}
       is reconstructed exactly from the Kloosterman Fourier coefficients K(k,k;P).
   L2  Weil bound: |K(u,v;P)| <= 2 sqrt(P)  (square-root cancellation = function-field RH).
   L3  Frobenius / function-field-RH governance: the normalised traces K/sqrt(P) obey the
@@ -23,7 +23,7 @@ Tests:
   L4  averaged cancellation of  sum_{p<=C} K(m,n;p)  vs the trivial bound sum|K| and the
       square-root (random-walk) baseline sqrt(sum K^2).
 
-HONEST SCOPE.  L1-L3 confirm the mechanism is real and FRC-native: the longitudinal object is
+SCOPE.  L1-L3 confirm the mechanism is real and FRC-native: the longitudinal object is
 Kloosterman, square-root bounded, and governed by the function-field-RH/Frobenius structure
 the programme already realises.  L4 measures base-level averaging cancellation.  NONE of this
 proves binary Goldbach.  The cancellation L4 exhibits (complete Kloosterman sums summed over
