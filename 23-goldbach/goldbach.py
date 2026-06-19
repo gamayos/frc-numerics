@@ -129,12 +129,13 @@ for P in (10007, 40009):
        f"all <= 2*baseline |W|^2/P={int(base)}: no nontrivial Carrier symmetry of W")
 
 # --------------------------------------------------------------------------- G10
-print("# G10  parity datum: Liouville cancellation  (sum lambda)^2 <= 4M (exact integer)")
+print("# G10 [observation]  Liouville endpoint sum  |sum lambda| <= 2*sqrt(M) on listed shells")
 for P in (10007, 40009):
     M, W = window(P)
     s = sum(1 if sum(factorint(m).values()) % 2 == 0 else -1 for m in range(2, M + 1))
     ok("G10", s * s <= 4 * M,
-       f"P={P}: sum_2^M lambda(m) = {s}; (sum)^2={s*s} <= 4M={4*M} (square-root cancellation, exact)")
+       f"P={P}: sum_2^M lambda(m) = {s}; |sum|^2={s*s} <= 4M={4*M}, i.e. |L(M)|<=2*sqrt(M) "
+       f"(observed factorisation-parity diagnostic on this shell, not a shell-uniform input)")
 
 # --------------------------------------------------------------------------- G11
 print("# G11  exact mod-4 sector decomposition of the window count (integer)")
@@ -254,22 +255,36 @@ print("# G6/G7 [comparison]  von Mangoldt main-term tracking + exceptional-set b
 for P in (10007, 40009, 100003):
     M, evens, R, rho = R_and_rho(P)
     Re = R[evens]; bulk = evens >= M // 4
+    Lp = np.zeros(P)
+    for p in primerange(2, M + 1): Lp[p] = np.log(p)
+    Rpp = np.fft.ifft(np.fft.fft(Lp) ** 2).real
+    D = Re - Rpp[evens]                                          # prime-power contribution
     relmed = float(np.median(np.abs((Re[bulk] - rho[bulk]) / rho[bulk])))
-    V = float(np.sum((Re[bulk] - rho[bulk]) ** 2)); rho_min = float(rho[bulk].min())
-    frac = (V / rho_min ** 2) / int(bulk.sum()); actual = int(np.sum(Re <= 0))
+    Vrho = float(np.sum((Re[bulk] - rho[bulk]) ** 2))
+    delta = float(np.min(rho[bulk] - D[bulk]))                  # pointwise threshold min(rho-D)
+    bound = Vrho / delta ** 2; frac = bound / int(bulk.sum())
+    actual = int(np.sum(Rpp[evens] <= 0))
     ok("G6/G7", Re.min() > 0 and relmed < 0.05 and actual == 0 and frac < 0.05,
-       f"P={P}: R(n)>0; median rel fluct {relmed:.3f}<0.05; proven exceptions frac {frac:.4f}, "
-       f"actual 0  [continuum comparison: Montgomery-Vaughan almost-all]")
+       f"P={P}: R(n)>0; median rel fluct {relmed:.3f}<0.05; D-corrected exceptions <= {bound:.1f} "
+       f"(frac {frac:.4f}), actual 0  [continuum comparison: Montgomery-Vaughan almost-all]")
 
 # --------------------------------------------------------------------------- G9
-print("# G9 [comparison]  moment hierarchy -> one sup bound  max|rel|<1")
+print("# G9 [comparison]  prime-only moment hierarchy -> one sup bound  muG<1")
 for P in (10007, 40009, 100003):
     M, evens, R, rho = R_and_rho(P)
-    rel = np.abs(R[evens] - rho) / rho
-    mx = float(rel.max()); B4 = float(np.sum(rel ** 8))
-    ok("G9", mx < 1.0 and B4 < 1.0,
-       f"P={P}: max|R-rho|/rho={mx:.3f}<1 (boundary n=4); 8th-moment {B4:.3f}<1 certifies 0 exceptions "
-       f"[comparison]")
+    # prime-only von Mangoldt transform: primes only, no proper prime powers,
+    # so muG/B2 certify r(n)>0 rather than the prime-power-contaminated R(n)>0
+    Lp = np.zeros(P)
+    for p in primerange(2, M + 1): Lp[p] = np.log(p)
+    Rpp = np.fft.ifft(np.fft.fft(Lp) ** 2).real
+    Rpp_e = Rpp[evens]; D = R[evens] - Rpp_e
+    muG = float((np.abs(Rpp_e - rho) / rho).max())
+    eta = (np.abs(R[evens] - rho) + D) / rho
+    bulk = evens >= M // 4
+    B2 = float(np.sum(eta[bulk] ** 4)); maxDrho = float((D / rho).max())
+    ok("G9", muG < 1.0 and B2 < 1.0 and Rpp_e.min() > 0,
+       f"P={P}: muG=max|Rpp-rho|/rho={muG:.3f}<1 (n=6); D-corrected bulk B2={B2:.3f}<1; "
+       f"maxD/rho={maxDrho:.3f}; Rpp>0 all even [comparison]")
 
 # --------------------------------------------------------------------------- G14
 print("# G14  conservation exact (integer); gap-diagnosis [comparison]")
@@ -283,7 +298,8 @@ for P in (10007, 40009):
     gap = float(np.max(np.abs(S)[1:]) / np.abs(S[0]))
     ok("G14", consv and osc and gap > 0.5,
        f"P={P}: conservation sum_n r(n)=|W|^2={nW*nW} EXACT (integer); [comparison] S(k)^2 sign "
-       f"oscillates, no spectral gap sup|S|/|S(0)|={gap:.3f} (parity peak) -- mechanisms on |S|^2 side")
+       f"oscillates, top gap 1-sup|S|/|S(0)|={1-gap:.3f} too small to force positivity "
+       f"(near-half-cycle peak k=(P+-1)/2) -- mechanisms on |S|^2 side")
 
 # --------------------------------------------------------------------------- G15
 print("# G15 [comparison]  Friedlander-Iwaniec diagnostic: cancellation vs binary deficit")

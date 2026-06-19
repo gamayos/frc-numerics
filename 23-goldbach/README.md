@@ -3,7 +3,9 @@
 Exact-arithmetic verification of the quantitative claims in the manuscript
 (`../main.tex`). Every substrate-native claim is checked in **framed-rational**
 arithmetic — exact integer, rational, and cyclotomic computation, with no floating
-point, no tolerances, no limits, and no magnitude exceeding the Carrier `P`. The
+point, no tolerances, and no limits. Field elements are residues below the
+Subject-shell modulus `P`; derived integer aggregates (e.g. the additive energy
+`Σ r(n)²`) are exact and may exceed `P`, staying within the Carrier `Ω`. The
 classical second-moment analysis (which carries the transcendental von Mangoldt
 weight `log p`) is kept strictly separate as a labelled *continuum comparison*.
 
@@ -46,7 +48,8 @@ Part I framed-exact (integer/rational/cyclotomic, no floats); Part II continuum 
 
 **Part I — framed-exact (substrate-native).** Integer, rational (`fractions.Fraction`),
 and cyclotomic arithmetic only. No `numpy.fft`, no `numpy.exp/log/sqrt`, no floating-point
-tolerances, and no quantity larger than the Carrier `P`. The cyclotomic magnitudes are
+tolerances. Field elements are residues below the Subject-shell modulus `P`; exact derived
+aggregates may exceed `P` but stay within the Carrier `Ω`. The cyclotomic magnitudes are
 established through their exact ingredients rather than by floating evaluation:
 `|g(χ)|² = P` follows from the additive and multiplicative orthogonality relations
 (verified as exact bijections), and the Jacobi-sum form is confirmed to reproduce the
@@ -72,23 +75,24 @@ Tags `G1…G17` match the reproducibility appendix of the paper.
 - `G4` — the singular-series floor: the exact rational `∏_{p|n,p>2}(p−1)/(p−2) ≥ 1` (`= 1` iff a power of 2),
   and the major-term comet ratio `→ 2` (Proposition, *Exact floor*).
 - `G5` — the exact additive-energy identity `Σ r(n)² = Σ d(m)²` (Proposition, *Exact Parseval variance*).
-- `G8` — the no-symmetry lemma: no nontrivial Carrier automorphism fixes the prime window.
-- `G10` — the Liouville cancellation `(Σ λ(m))² ≤ 4M` (the parity datum).
+- `G8` — the no-symmetry lemma: the additive reflection has `W ∩ (−W) = ∅` (exact); the scaling/inversion overlaps sit at the random baseline (observed).
+- `G10` — the Liouville endpoint sum `|Σ λ(m)| ≤ 2√M` at the listed shells (observed factorisation-parity diagnostic, not shell-uniform).
 - `G11` — the exact mod-4 sector decomposition (Proposition, *Exact mod-4 decomposition*).
 - `G12` — the Gaussian `D₄` lift: split primes `p ≡ 1 (4)` are norms with a full equal-norm orbit.
-- `G13` — the quarter-turn symmetry: the prime-norm coefficient array is `Q₄`-invariant, so its
-  finite Fourier transform satisfies `S(iξ) = S(ξ)` identically.
+- `G13` — the quarter-turn symmetry on `V_P = F_P²`: the prime-norm indicator is `J`-invariant, so
+  `S₂(Jξ) = S₂(ξ)` identically (a symmetry of the lifted array).
 - `G16` — scale-periodic exactness: `|g(χ)|² = P` from the additive/multiplicative orthogonality bijections.
 - `G17` — the Jacobi-sum spectral form (Theorem): `r(n)` is reproduced exactly in `ℚ(ζ_{P−1})`,
   `|J|² = P`, and the reflection-even/odd sectors sum to `r(n)` with the even–even sector `≥ 0`.
 
 **Part II (continuum comparison):**
 
-- `G6/G7` — von Mangoldt main-term tracking and the finite Montgomery–Vaughan exceptional-set bound
-  (almost-all even `n` are sums of two primes).
-- `G9` — the moment-hierarchy reduction to one supremum bound, with the eighth-power certificate `B₄ < 1`.
+- `G6/G7` — von Mangoldt main-term tracking and the `D`-corrected Montgomery–Vaughan exceptional-set
+  bound with threshold `δ = min(ρ−D)` (almost-all even `n` are sums of two primes).
+- `G9` — the prime-only moment-hierarchy reduction: the supremum `μ_G = max|R_pp−ρ|/ρ = 0.909 < 1`
+  and the `D`-corrected bulk moment `B₂ < 1`.
 - `G14` — the exact conservation sum rule `Σ r(n) = |W|²` (integer); the oscillating multiplier and
-  absent spectral gap are the comparison diagnosis.
+  the insufficient top gap (`≈ 0.11`) are the comparison diagnosis.
 - `G15` — the Friedlander–Iwaniec diagnostic: square-root cancellation present, binary `L²`-mass deficit growing.
 - `G16b` — the Chebyshev flattening `Σ_{p≤M} log p / M → 1` (`log p` as the scale Jacobian).
 
@@ -96,7 +100,7 @@ Tags `G1…G17` match the reproducibility appendix of the paper.
 
 A mechanism probe for the non-linear (longitudinal, additive↔multiplicative) route:
 
-- `L1` — the longitudinal object is genuinely Kloosterman (exact reconstruction of `N(s)`).
+- `L1` — the longitudinal object is Kloosterman (exact reconstruction of `N(s)`).
 - `L2` — the Weil bound `|K| ≤ 2√P` (square-root cancellation = function-field RH).
 - `L3` — the normalised traces obey the Sato–Tate / Catalan moments `1, 2, 5` — the same Frobenius
   statistics the programme realises for the Riemann zeros.
@@ -108,7 +112,7 @@ question lives in the finer incomplete/bilinear regime and is open. This script 
 mechanism, not the conjecture; the non-linear development is carried further in the scale-domain
 companion.
 
-## Honest scope
+## Scope
 
 The suite verifies an **exact finite reformulation**, an **almost-all theorem** with explicit
 finite constants, and a **native spectral form** of the problem. It does **not** prove the binary
