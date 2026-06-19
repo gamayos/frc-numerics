@@ -82,8 +82,9 @@ Tags `G1…G17` match the reproducibility appendix of the paper.
 - `G13` — the quarter-turn symmetry on `V_P = F_P²`: the prime-norm indicator is `J`-invariant, so
   `S₂(Jξ) = S₂(ξ)` identically (a symmetry of the lifted array).
 - `G16` — scale-periodic exactness: `|g(χ)|² = P` from the additive/multiplicative orthogonality bijections.
-- `G17` — the Jacobi-sum spectral form (Theorem): `r(n)` is reproduced exactly in `ℚ(ζ_{P−1})`,
-  `|J|² = P`, and the reflection-even/odd sectors sum to `r(n)` with the even–even sector `≥ 0`.
+- `G17` — the Jacobi-sum spectral form (Theorem): `r(n)` is reproduced exactly in `ℚ(ζ_{P−1})`
+  (with `|J| = √P` only for `χ,χ′,χχ′` nontrivial, and the exact boundary terms otherwise); the
+  reflection-even/odd sectors at `P=101, n=20` sum to `r(n)` (`r_ee=3, r_oo=−1`), even–even `≥ 0`.
 
 **Part II (continuum comparison):**
 

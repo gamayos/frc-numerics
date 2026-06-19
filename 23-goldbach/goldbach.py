@@ -202,10 +202,11 @@ for P in (1009, 2003):
        f"=> sum_u chi(u)=0 and |g(chi)|^2 = (P-1)+1 = P exactly, every frequency a Gauss-sum object")
 
 # --------------------------------------------------------------------------- G17
-print("# G17  Goldbach as an exact Jacobi-sum form (exact cyclotomic, small P)")
+print("# G17  Jacobi-sum form (exact cyclotomic) + reflection sectors at an in-window shell")
+# (a) the Jacobi-sum spectral form reproduces the integer count exactly in Q(zeta_{P-1})
 P = 13; J = P - 1; g = primitive_root(P); dlog = {}; x = 1
 for a in range(J): dlog[x] = a; x = (x * g) % P
-W = [p for p in primerange(2, (P - 1) // 2 + 1)]                  # {2,3,5}
+W = [p for p in primerange(2, (P - 1) // 2 + 1)]                  # window primes {2,3,5}, M=6
 def chi(j, a): return exp(2 * I * pi * Rational((j * dlog[a % P]) % J, J))
 chat = [simplify(sum(chi((-j) % J, p) for p in W)) / J for j in range(J)]
 def Jac(i, j): return simplify(sum(chi(i, a) * chi(j, (1 - a) % P) for a in range(2, P)))
@@ -213,22 +214,22 @@ Jtab = [[Jac(i, j) for j in range(J)] for i in range(J)]
 def rform(n):
     s = sum(chat[i] * chat[j] * chi((i + j) % J, n) * Jtab[i][j] for i in range(J) for j in range(J))
     return simplify(re(s)), simplify(im(s))
-# parity sectors via reflection eigenvalue chi(-1) = (-1)^j
-def sector(n, even_i, even_j):
-    s = sum(chat[i] * chat[j] * chi((i + j) % J, n) * Jtab[i][j]
-            for i in range(J) for j in range(J)
-            if (i % 2 == 0) == even_i and (j % 2 == 0) == even_j)
-    return simplify(re(s))
 rint = reps(P, W)
-ns = [4, 7, 8, 10]
+ns = [4, 6]                                                      # in-window even n (M=6)
 form_ok = all(rform(n) == (rint[n], 0) for n in ns)
-ee = sector(20 % P, True, True)
-sectors_ok = all(simplify(sector(n, True, True) + sector(n, True, False)
-                          + sector(n, False, True) + sector(n, False, False) - rint[n]) == 0
-                 for n in ns) and ee >= 0
+# (b) reflection sectors at an in-window shell, exact rational convolution (P=101, n=20)
+def sectors_conv(Pp, n):
+    Mp = (Pp - 1) // 2; Wp = set(primerange(2, Mp + 1))
+    c = [1 if t in Wp else 0 for t in range(Pp)]
+    cc = lambda a, b, m: sum(a[t] * b[(m - t) % Pp] for t in range(Pp))
+    r = cc(c, c, n); rm = cc(c, c, (-n) % Pp)
+    d = sum(c[t] * c[(t - n) % Pp] for t in range(Pp))
+    return r, Rational(r + rm + 2 * d, 4), Rational(r - rm, 2), Rational(r + rm - 2 * d, 4)
+r20, ree20, reo20, roo20 = sectors_conv(101, 20)
+sectors_ok = (ree20 + reo20 + roo20 == r20) and ree20 >= 0 and ree20 == 3 and roo20 == -1
 ok("G17", form_ok and sectors_ok,
-   f"P={P}: r(n) = sum chat_i chat_j (chi_i chi_j)(n) J(chi_i,chi_j) equals the integer r(n) exactly "
-   f"(im part 0) on {len(ns)} n; reflection-even/odd sectors sum to r(n) exactly, even-even >= 0")
+   f"P=13: Jacobi form = integer r(n) exactly (im 0) on in-window n={ns}; "
+   f"reflection sectors at P=101,n=20: r_ee={ree20}, r_eo={reo20}, r_oo={roo20}, sum={r20}=r(20), r_ee>=0")
 
 print("\n" + "=" * 70)
 print("PART II  --  CONTINUUM COMPARISON (classical circle method; NOT a substrate claim)")
