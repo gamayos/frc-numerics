@@ -27,15 +27,27 @@ def hr(t): print("\n"+"="*70+"\n"+t+"\n"+"="*70)
 #      coherent   (amplitudes add):  g_eff = sum sqrt(a0 g_i) = sqrt(a0) * sum sqrt(g_i)
 #    boost = coherent/incoherent = sum sqrt(g_i) / sqrt(sum g_i) = sqrt(N).
 # ---------------------------------------------------------------------
-hr("1. Prop. born: coherent vs incoherent amplitude addition")
-print(f"  {'N':>3} {'incoh g_eff':>12} {'coh g_eff':>12} {'boost':>8} {'sqrt(N)':>8}")
-a0=1.0
-for N in (1,2,3,4,6,9):
-    gi=1.0/N*np.ones(N)               # N equal components, total g=1
-    incoh=np.sqrt(a0*gi.sum())
-    coh=np.sqrt(a0)*np.sqrt(gi).sum()
-    print(f"  {N:>3} {incoh:>12.4f} {coh:>12.4f} {coh/incoh:>8.4f} {np.sqrt(N):>8.4f}")
-print("  -> coherent boost = sqrt(N_eff) exactly (Prop. born). N_eff=4 -> factor 2.")
+hr("1. Coherence-matrix amplitude law (Prop. born, cross terms)")
+# g_amp^2/a0 = sum_i g_i + 2 sum_{i<j} sqrt(g_i g_j) Re C_ij     [eq:cohsum]
+#   C_ij=0 (mutually incoherent / Bullet gas)  -> g_amp^2 = sum g_i  (no boost)
+#   C_ij=1 (synchronised core)                 -> g_amp^2 = (sum sqrt g_i)^2
+#   N_eff = (sum sqrt g_i)^2 / sum g_i                            [eq:neff]
+def Neff(g):
+    g=np.asarray(g,float); return (np.sqrt(g).sum()**2)/g.sum()
+print(f"  {'components g_i':>26} {'N_eff=(Sum sqrt g)^2/Sum g':>28} {'sqrt(N_eff) boost':>18}")
+cases={
+ "4 equal":            [1,1,1,1],
+ "6 equal":            [1]*6,
+ "BCG-dominated 4:1:1":[4,1,1],
+ "1 dominant + 8 small":[8]+[1]*8,
+}
+for name,g in cases.items():
+    print(f"  {name:>26} {Neff(g):>28.3f} {np.sqrt(Neff(g)):>18.3f}")
+print("  -> full coherence (C_ij=1) gives N_eff=(Sum sqrt g)^2/Sum g, NOT N inserted by hand:")
+print("     equal components -> N_eff=N; a dominant BCG -> N_eff<N (the boost is suppressed).")
+print("     N_eff~4 (a few comparable coherent cores) -> sqrt(N_eff)~2, the factor of two.")
+print("     C_ij must come from the core's masses+dynamical state: the residual is a FALSIFIABLE")
+print("     CONJECTURE = sqrt(N_eff), not a theorem; the same law (C_ij->0) gives the Bullet offset.")
 
 # ---------------------------------------------------------------------
 # 2. Synchronisation sets WHERE the components are coherent: a pair locks
@@ -75,14 +87,18 @@ print("     supplies the core factor and decays to 1 by ~Mpc as the components d
 print("     matching the observed core-confined residual with NO added matter (the residual")
 print("     closes to ~1 in the core for N_core set by the cluster's coherent substructure).")
 
-hr("VERDICT (D5 of 32-dark)")
-print("""  REDUCED (A, reduce-and-resolve), not 'missing baryons':
-   * EXACT (part 1): the deep-regime registration is an amplitude (Prop. born),
-     so a source of N mutually-coherent components carries the coherent sum
-     sqrt(a0) sum sqrt(g_i) = sqrt(N) * smooth -- a sqrt(N_eff) boost, exact in
-     Z[i].  The core factor-2 IS sqrt(N_eff) with N_eff ~ 4 (BCG + a few major
-     coherent concentrations); it is not matter, it is the count of coherent
-     core components.  Same mechanism as the Bullet offset.
+hr("VERDICT (D5 of 32-dark) -- falsifiable CONJECTURE, not a theorem")
+print("""  REDUCED to one amplitude law (A), not 'missing baryons':
+   * the amplitude adds the components through the coherence matrix C_ij,
+     g_amp^2/a0 = sum g_i + 2 sum_{i<j} sqrt(g_i g_j) Re C_ij  [eq:cohsum].
+     C_ij->0 (decohered gas) => Bullet offset (selection); C_ij->1 (synchronised
+     core) => (sum sqrt g_i)^2, boost sqrt(N_eff), N_eff=(sum sqrt g)^2/sum g.
+     N_eff ~ 4 (a few comparable coherent cores) gives the factor of two.
+   * NOT a theorem: N_eff (equivalently C_ij) must be COMPUTED from the core's
+     component masses and dynamical state; until then the factor-2 closure is a
+     FALSIFIABLE CONJECTURE.  The single law unifies the Bullet selection and the
+     core addition -- the scalar self-coherence w_c alone does not give the
+     mutual cross terms; the matrix C_ij does.
    * radial shape (part 2, illustrative): synchronisation (gravity=sync) locks
      the core components (crossing time < Hubble time) and not the outskirts, so
      the boost is sqrt(N_eff) in the core and -> 1 by ~Mpc -- the observed
