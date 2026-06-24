@@ -4,7 +4,9 @@ Validates: Prop (exact static profile)         existence boundary r_* = sqrt(Gm)
            Prop (horizonless, operationally black)  r_f = 2Gm/ln(Omega);
            Prop (photon sphere and shadow)     r_ph = 2Gm, b_c = 2e Gm, delta = +4.63%;
            ringdown shift -4.4%; S/S_BH = ln^-2(Omega); echo delay ~ Omega (no echoes);
-           Sgr A* / M87* angular numbers.
+           Sgr A* / M87* angular numbers;
+           Prop (ISCO and accretion efficiency)  r_ISCO = (3+sqrt5) Gm,
+               efficiency 5.48% vs Schwarzschild 5.72%, Gm*Omega ratio 0.931.
 """
 import math
 import numpy as np
@@ -48,5 +50,25 @@ for name, M, D_kpc in (("Sgr A*", 4.297e6, 8.277), ("M87*", 6.5e9, 16.8e3)):
     gr, frc = 2*3*math.sqrt(3)*theta_g, 2*2*math.e*theta_g
     print(f"  {name}: shadow GR {gr:.1f} muas, FRC {frc:.1f} muas")
     if name == "Sgr A*" and not (52 < gr < 55 and 54 < frc < 57): ok = False
+
+# --- ISCO and accretion efficiency (exponential metric, dimensionless M = Gm/c^2 = 1) ---
+# circular orbits: rdot^2 = E^2 - W,  W = e^{-2/r} + L^2 e^{-4/r}/r^2 ; ISCO: W' = W'' = 0
+def _W(r, L2):  return math.exp(-2/r) + L2*math.exp(-4/r)/r**2
+def _L2(r):
+    h = 1e-4
+    dA = (math.exp(-2/(r+h)) - math.exp(-2/(r-h)))/(2*h)
+    dB = (math.exp(-4/(r+h))/(r+h)**2 - math.exp(-4/(r-h))/(r-h)**2)/(2*h)
+    return -dA/dB
+def _Wrr(r, L2):
+    h = 1e-4
+    return (_W(r+h, L2) - 2*_W(r, L2) + _W(r-h, L2))/h**2
+r_isco = 3 + math.sqrt(5)                       # exact closed form to verify
+L2 = _L2(r_isco); E = math.sqrt(_W(r_isco, L2)); L = math.sqrt(L2)
+MOm = L*math.exp(-4/r_isco)/(E*r_isco**2)       # Gm*Omega (M=1)
+eff = (1 - E)*100; ratio = MOm*6*math.sqrt(6)
+print(f"  ISCO r = (3+sqrt5) Gm = {r_isco:.4f} Gm,  |W''| = {abs(_Wrr(r_isco, L2)):.1e} (marginally stable)")
+print(f"  E/m = {E:.5f},  efficiency = {eff:.3f}% (Schwarzschild {(1-math.sqrt(8/9))*100:.3f}%),  "
+      f"Gm*Omega = {MOm:.5f}, ratio to Schwarzschild = {ratio:.4f}")
+if abs(eff - 5.479) > 0.02 or abs(ratio - 0.9308) > 0.005 or abs(_Wrr(r_isco, L2)) > 1e-3: ok = False
 
 print("PASS" if ok else "FAIL", "- strong field")

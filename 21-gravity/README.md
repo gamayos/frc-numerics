@@ -1,6 +1,6 @@
 # Numeric validation suite — *Gravitation as Phase Synchronisation over Finite Relational Substrate*
 
-Repository: <https://github.com/gamayos/frc-gravity-numerics>
+Repository: <https://github.com/gamayos/frc-numerics/tree/main/21-gravity>
 
 Independent numerical verification of every quantitative claim of the manuscript
 (`../main.tex`). Each script is self-contained, prints the computed values against
@@ -31,8 +31,8 @@ dominates. The twelve checks run in the order listed below.
 |---|---|---|
 | `validate_newton.py` | Lemma (stationary bias field); Theorem (Newtonian limit); Lemma (coherent additivity) | Exact lattice Green's function of Z³ via the Montroll–Bessel representation: 4πr·G(r) → 1 with the stated O(r⁻²) correction; potential power law r⁻¹ (hence force r⁻²); locked ensemble couples as m, unlocked as √m. |
 | `validate_ppn.py` | Prop. (full light deflection); Prop. (classical tests); Prop. (exact static profile, series) | Symbolic: Fermat deflection 4Gm/c²b in the index n = 1+2u; PPN β = γ = 1 from the exponential metric expansion; perihelion factor (2+2γ−β)/3 = 1; static-profile series Gm/r·(1+(Gm/r²)²/30). |
-| `validate_strongfield.py` | Prop. (exact static profile); Prop. (horizonless, operationally black); Prop. (photon sphere and shadow); area law; echo suppression | Slip-core boundary r\* = √(Gm); exact potential at the photon sphere; numerical extremum of b(r) = r·e^{2u}: r_ph = 2Gm, b_c = 2e·Gm; shadow deviation +4.6 %, ringdown −4.4 %; r_f = r_s/ln Ω, S/S_BH = ln⁻²Ω; echo delay factor Ω/ln²Ω (no observable echoes); Sgr A\*/M87\* angular diameters (53.3 → 55.7 µas; 39.7 → 41.5 µas). |
-| `validate_fp_gauge.py` | Eq. (discrete Fierz–Pauli functional); exact discrete gauge invariance | The four-term FP form on a periodic 3-d lattice with random fields: invariance under h → h + Δξ (symmetrised) to machine precision for **central** differences, and its **failure** for one-sided differences — confirming that the anti-self-adjointness Δᵀ = −Δ is what carries the continuum proof. |
+| `validate_strongfield.py` | Prop. (exact static profile); Prop. (horizonless, operationally black); Prop. (photon sphere and shadow); Prop. (innermost stable orbit and accretion efficiency); area law; echo suppression | Slip-core boundary r\* = √(Gm); exact potential at the photon sphere; numerical extremum of b(r) = r·e^{2u}: r_ph = 2Gm, b_c = 2e·Gm; shadow deviation +4.6 %, ringdown −4.4 %; ISCO at the isotropic radius r_ISCO = (3+√5)·Gm (marginal stability W′ = W″ = 0), accretion efficiency 1−E = 5.48 % vs Schwarzschild 5.72 %, ISCO orbital frequency Gm·Ω/c³ = 0.0633 (0.931× the Schwarzschild 1/6√6); r_f = r_s/ln Ω, S/S_BH = ln⁻²Ω; echo delay factor Ω/ln²Ω (no observable echoes); Sgr A\*/M87\* angular diameters (53.3 → 55.7 µas; 39.7 → 41.5 µas). |
+| `validate_fp_gauge.py` | Eq. (discrete Fierz–Pauli functional); exact discrete gauge invariance; Prop. (the (3+1) tensor) | The four-term FP form on a periodic **(3+1)** lattice with integer random fields: gauge invariance under h → h + Δξ (symmetrised) holds as an **exact integer identity** for **central** differences and **fails** for one-sided differences, confirming that the anti-self-adjointness Δᵀ = −Δ carries the proof. By Schwartz–Zippel an exact zero on random integer fields certifies the algebraic identity. Same four-frame signature as the uniqueness script. |
 | `validate_branch.py` | Theorem (nonlinear completion); Remark (where GR sits) | The Ward identity in the full nonlinear sine model: flux through every closed surface equals the enclosed demand to solver precision, for one and two sources at strong gradients, and the nonlinear deviation of the potential scales as m³ (no m² self-sourcing term). Symbolic: isotropic Schwarzschild is the exponential reading of the self-sourced ψ = 2 artanh(U/2) (exact identity), ψ is non-harmonic, and the Schwarzschild reading violates the composition law R(a+b)=R(a)R(b) that the exponential uniquely satisfies. |
 | `validate_fluxnoise.py` | Lemma (flux conservation under noise) | A driven, pinned Kuramoto chain in the statistically stationary regime: the time-averaged transport through every link equals the source demand, with and without drive noise. (The lemma's stationarity hypothesis is essential: overdriving the chain produces a running state, visible by raising `b` or the noise.) |
 | `validate_rar.py` | Prop. (floor acceleration); Cor. (turnaround) | a₀ = cH₀/2π for H₀ ∈ {67.4, 70, 73} against the SPARC fit 1.20 ± 0.24 × 10⁻¹⁰ m s⁻² (all within one systematic sigma); Local-Group turnaround radius (Gm/H²)^{1/3} ≈ 1.6 Mpc against the observed ~1 Mpc zero-velocity surface. |
@@ -60,8 +60,11 @@ The publication figures are regenerated from the same suite (`matplotlib` requir
 
 `fierz_pauli_uniqueness.py` proves, by the symbol/transversality method, that the
 discrete Fierz–Pauli functional is the **unique** adjacency-local gauge functional on
-the shell — the symmetric rank-2 analogue of the Maxwell uniqueness theorem. It is a
-longer symbolic run and is kept outside `run_all.py`; run it directly.
+the shell — the symmetric rank-2 analogue of the Maxwell uniqueness theorem. It runs in
+the same full (3+1) signature as `validate_fp_gauge.py`, so the gauge-invariance and
+uniqueness checks are dimensionally aligned with the displayed theory (the 2×2 mass shell
+to (3+1) tensor map, Prop. spacetime). It is a longer symbolic run and is kept outside
+`run_all.py`; run it directly.
 
 ## What is *not* validated here
 
