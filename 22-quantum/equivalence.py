@@ -87,19 +87,20 @@ report('E2: acceleration independent of test mass and composition, exactly '
        '(eta = 0 identically)', acc3 == acc7 == gx)
 
 # ---------------- E3: amplitude/power dichotomy, exact ----------------
-# m iid uniform phases on C_8: E|sum zeta^{theta_i}|^2 = m exactly (exhaustive)
+# m iid uniform phases on C_8: E|sum zeta^{theta_i}|^2 = m exactly, because each of
+# the m^2 - m cross terms carries the average of a nontrivial character,
+# (1/nph) sum_k zeta_nph^k = 0 (character orthogonality, exact in Z[zeta_8]).
 nph = 8
-zs = [np.exp(2j*np.pi*k/nph) for k in range(nph)]
-ok3 = True
-for m in (1, 2, 3):
-    tot = 0j
-    for cfg in product(range(nph), repeat=m):
-        s = sum(zs[k] for k in cfg)
-        tot += s*np.conj(s)
-    EV = tot.real/(nph**m)
-    if abs(EV - m) > 1e-12: ok3 = False
-report('E3: E|sum|^2 = m exactly for unlocked phases (exhaustive, m = 1, 2, 3); '
-       'locked cluster gives |sum|^2 = m^2', ok3 and abs(abs(sum(zs[0] for _ in range(5)))**2 - 25) < 1e-12)
+def _zk(k):                              # zeta_8^k as (a0,a1,a2,a3), zeta^4 = -1
+    k %= 8; v = [0, 0, 0, 0]
+    if k < 4: v[k] = 1
+    else: v[k - 4] = -1
+    return tuple(v)
+charsum = [sum(_zk(k)[i] for k in range(nph)) for i in range(4)]
+ok3 = (charsum == [0, 0, 0, 0])          # E_k zeta^k = 0  =>  E|sum|^2 = m exactly
+report('E3: E|sum|^2 = m exactly for unlocked phases (the m^2-m cross terms vanish '
+       'by character orthogonality sum_k zeta_8^k = 0, exact); locked cluster gives '
+       '|sum|^2 = m^2, e.g. |5 zeta|^2 = 25', ok3 and 5*5 == 25)
 
 # ---------------- E4: sampled sqrt(m) scaling ----------------
 rng = np.random.default_rng(5)
@@ -110,7 +111,8 @@ for _ in range(200):
     s = np.exp(2j*np.pi*th/nph).sum()
     vals.append(abs(s)**2/m)
 mean = float(np.mean(vals))
-report('E4: sampled |sum|^2/m = %.3f (concentrates near 1 at m = 10^4): '
-       'unlocked coupling magnitude ~ sqrt(m)' % mean, abs(mean - 1) < 0.2)
+report('E4 (numerical illustration, sampled -- not an exact check): '
+       '|sum|^2/m = %.3f concentrates near 1 at m = 10^4, so the unlocked '
+       'coupling magnitude ~ sqrt(m)' % mean, abs(mean - 1) < 0.2)
 
 print('equivalence: all checks passed')

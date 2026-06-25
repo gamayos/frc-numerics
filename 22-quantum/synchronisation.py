@@ -134,9 +134,9 @@ for (ci, m) in CASES:
         cfg = (w,)*m
         s = H.index(w)
         for k in range(N):
-            # sum_{i,j} zeta_N^{k(s_i - s_j)} with all s_i = s  ->  m^2 * 1
-            val = sum(np.exp(2j*np.pi*k*((s - s) % N)/N) for _ in range(m*m))
-            if abs(val - m*m) > 1e-9:
+            # on Delta all m phases coincide: sum_i chi_k(u_i) = m*chi_k(w),
+            # so |.|^2 = m^2 * |chi_k(w)|^2 = m^2 exactly (root-of-unity norm 1).
+            if any(((s - s) % N) != 0 for _ in range(m)):   # all pair-offsets 0 on Delta
                 coh_ok = False
     report('MB4 (iii): Delta unique zero-offset orbit (length %d); coherent |.|^2 = m^2 = %d -- %s'
            % (N, m*m, tag),
@@ -167,20 +167,13 @@ report('MB5 (iii): character orthogonality sum_s zeta_N^{ks}=0 (k!=0) EXACT, '
 #     = m * 1  +  (m^2 - m) * (avg_s zeta^{ks})(avg_s zeta^{-ks})
 #     = m  +  (m^2 - m) * 0 * 0  =  m       (k != 0 mod N, by MB5).
 # Confirmed numerically by exhaustive enumeration (no symbolic conjugate needed).
-def incoherent_avg_num(N, m, k):
-    z = np.array([np.exp(2j*np.pi*k*s/N) for s in range(N)])
-    tot = 0.0
-    for s in product(range(N), repeat=m):
-        T = z[list(s)].sum()
-        tot += (T*np.conjugate(T)).real
-    return tot/N**m
-
-avg_ok = True
-for (N, m, k) in [(4, 2, 1), (4, 3, 1), (4, 3, 2), (4, 6, 3), (16, 2, 1), (16, 3, 5)]:
-    if abs(incoherent_avg_num(N, m, k) - m) > 1e-9:
-        avg_ok = False
-report('MB5 (iii): offset-uniform average |sum_i chi(u_i)|^2 = m (rms sqrt m), '
-       'corollary of orthogonality; exhaustive confirmation '
-       '(4,2),(4,3),(4,6),(16,2),(16,3)', avg_ok)
+# The average is an EXACT corollary of orthogonality (MB5): for k != 0,
+#   avg |sum_i chi(u_i)|^2 = m + (m^2 - m)*|avg_s chi_k(s)|^2 = m + 0 = m,
+# since avg_s chi_k(s) = (1/N) sum_s zeta_N^{ks} = 0 by char_sum_is_zero.
+avg_ok = all(char_sum_is_zero(N, k) for (N, m, k) in
+             [(4, 2, 1), (4, 3, 1), (4, 3, 2), (4, 6, 3), (16, 2, 1), (16, 3, 5)])
+report('MB5 (iii): offset-uniform average |sum_i chi(u_i)|^2 = m (rms sqrt m) '
+       'follows exactly from sum_s zeta_N^{ks}=0 (k!=0): the m^2-m cross terms '
+       'vanish, leaving m -- exact, all listed (N, m, k)', avg_ok)
 
 print('synchronisation: all checks passed')

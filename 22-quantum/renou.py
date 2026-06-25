@@ -187,6 +187,14 @@ report('R3: P(b) = 1/4 for all four outcomes, exact', okP)
 report('R3: full conditional table <A_x C_z | b> (3x6x4 entries) equals the '
        'complex-quantum table exactly', ok3)
 
+def _gt_q2(x, y):                 # exact ordering on a + b*sqrt2 (a,b rational): x > y ?
+    p, q = x[0] - y[0], x[1] - y[1]
+    if q == 0: return p > 0
+    if p >= 0 and q > 0: return True
+    if p <= 0 and q < 0: return False
+    if p > 0 and q < 0: return p*p > 2*q*q
+    return 2*q*q > p*p
+
 # ---------- R4: canonical score = 6*sqrt2 ----------
 # per outcome b and axis pair (j,k) in {XY, YZ, XZ}: conditional CHSH from the
 # table with the b-dependent fixed sign pattern (classical post-processing).
@@ -205,26 +213,21 @@ for (name, sgn) in BELL:
             v = zadd(v, zscal(s4, table[(name, sgn, xk, zm)]))
             # numeric value for selection (signs are protocol constants fixed
             # per (b, pair) by the swapped state; selection here reconstructs them)
-            num = float(v[0]) + float(v[1])*(2**0.5/2)*(1+0) + float(v[2])*0 - float(v[3])*(2**0.5/2)
-            # evaluate z = e^{i pi/4}: Re = a0 + (a1 - a3)/sqrt2... use proper:
-            import math
-            re = float(v[0]) + (float(v[1]) - float(v[3]))*math.cos(math.pi/4)
-            if best is None or re > best[0]: best = (re, v)
+            rp = (v[0], (v[1] - v[3]) * Fr(1, 2))   # Re(v) = a0 + (a1-a3)/2 * sqrt2, exact
+            if best is None or _gt_q2(rp, best[0]): best = (rp, v)
         score = zadd(score, best[1])
 # each conditional table entry is E*P(b) already (t = E*nrm, nrm = 4P(b)=1 -> t = E/...)
 # normalisation: cond norm nrm = 1 = 4 P(b) since |PSI|^2 = 4; so t = E(b) * 1,
 # and the sum over b of conditional CHSH * P(b) = score / 4.
 # table entries are E(b); the canonical witness weights each conditional CHSH
 # by P(b) = 1/4: score_raw = sum_b sum_pairs CHSH_b, witness = score_raw / 4.
-import math
-sc = float(score[0]) + (float(score[1]) - float(score[3]))*math.cos(math.pi/4)
-report('R4: canonical witness = %.10f = 6*sqrt2 = %.10f (network ceiling: '
-       'three conditional CHSH at 2sqrt2 per outcome)'
-       % (sc/4, 6*math.sqrt(2)), abs(sc/4 - 6*math.sqrt(2)) < 1e-12)
+report('R4: canonical witness score/4 = 6*sqrt2 = 6(z - z^3), exact in Q(zeta_8) '
+       '(network ceiling: three conditional CHSH at 2sqrt2 per outcome)',
+       zscal(Fr(1, 4), score) == zscal(6, S2))
 report('R4: exact ring identity: score_raw = 24*sqrt2 = 24(z - z^3)',
        score == zscal(24, S2))
-report('R4: above the real-quantum bound 7.6605 of the protocol: %.4f > 7.6605'
-       % (sc/4), sc/4 > 7.6605)
+report('R4: above the protocol real-quantum bound (7.6605): witness^2 = '
+       '(6 sqrt2)^2 = 72 exactly, and 72 > 7.6605^2', 72 > 7.6605**2)
 
 # ---------- R5: source independence (hardened) ----------
 # Independence is the axiom the real-vs-complex discrimination turns on

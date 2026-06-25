@@ -27,7 +27,7 @@
 ##        assign different Born ratios (readout ambiguity demonstrated);
 ##   (G4) wrap quantisation: lift discrepancies are multiples of p.
 from fractions import Fraction as Fr
-from math import gcd, floor, log, ceil
+from math import gcd, floor, ceil
 
 def report(label, ok):
     print(('PASS ' if ok else 'FAIL ') + label)
@@ -75,7 +75,7 @@ report('G2: minimal integer-tally norm = 2^k (even) / 2^(k+1) (odd), exactly', o
 
 # ---------- G3 + G4: ceiling and wrap onset in the toy carrier F_641 ----------
 p = 641
-dstar = floor(log(p)/log(2))
+dstar = p.bit_length() - 1          # exact: floor(log2 p) without continuum log
 report('G3: toy ceiling d* = floor(log_2 641) = %d' % dstar, dstar == 9)
 ok3a, ok3b, ok4 = True, True, True
 for k in range(1, 12):
@@ -93,8 +93,8 @@ report('G3: sub-horizon depths have the unique window lift; past d* two valid '
 report('G4: lift discrepancies are multiples of p (wrap quantisation)', ok4)
 
 # ---------- the corpus numbers, recorded ----------
-dO  = floor(log(1e122)/log(2))
-dsO = floor(log(1e61)/log(2))
+dO  = (10**122).bit_length() - 1     # exact floor(log2 10^122), no continuum log/float
+dsO = (10**61).bit_length() - 1      # exact floor(log2 10^61)
 print('INFO corpus ceiling: window Omega ~ 1e122 -> d* = %d; window '
       'sqrt(Omega) ~ 1e61 -> d* = %d coherent splitting levels; single-shot '
       'probability resolution floor 1/p' % (dO, dsO))

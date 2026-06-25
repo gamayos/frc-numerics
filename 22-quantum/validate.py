@@ -1,8 +1,6 @@
 ## Exact arithmetic validation for "Quantum Observation in Finite Ring Continuum"
 ## Self-contained; integers only. Reproduces every numbered claim of the paper.
-import random
 from math import gcd, lcm
-random.seed(7)
 
 def order(a, p):
     x, k = 1, 0
@@ -77,7 +75,7 @@ report('157: drive eigenstates U psi_s = gO^s psi_s, all s',
                for u in HO) for s in range(nO)))
 
 # Measurement vectors v_{r,a} in the Z[i] ledger; random Gaussian-integer state
-psi  = {u: (random.randint(-9, 9), random.randint(-9, 9)) for u in HO}
+psi  = {u: ((i % 13) - 6, (i % 11) - 5) for i, u in enumerate(HO)}   # fixed state, no RNG
 red  = lambda z: (z[0] + ip * z[1]) % p                          # Z[i] -> F_p, i -> 28
 psip = {u: red(z) for u, z in psi.items()}
 

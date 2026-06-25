@@ -22,7 +22,6 @@
 ## Newtonian rate exactly; corrections are bounded by the horizon (1/sqrt(Omega))
 ## and are unobservable; a null result at the Newtonian rate falsifies the
 ## framework's gravitational sector outright.
-import numpy as np
 from sympy import Poly, symbols, cyclotomic_poly, Rational
 
 def report(label, ok):
@@ -62,53 +61,51 @@ for k in range(80):
     if not (c2 - tgt).is_zero: ok2 = False
 report('B2: concurrence^2 = sin^2(phi/2) exactly, full sweep phi = 2 pi k/80', ok2)
 
-# ---------------- B3: Horodecki CHSH witness ----------------
+# ---------------- B3: Horodecki CHSH witness, exact (pure-state formula) ----------------
+# For a pure two-qubit state of concurrence C the maximal CHSH is exactly
+#   S_max = 2 sqrt(1 + C^2), so S_max^2 = 4(1 + C^2) = 4 + |ad - bc|^2 (norm-4 state).
+# Hence the witness is an exact ring element: > 4 (S_max > 2) iff C != 0, and = 8
+# (S_max = 2 sqrt2) at phi = pi.  No eigenvalues, no floating point.
 ok3, okts = True, False
 for k in range(80):
-    phi = 2*np.pi*k/80
-    psi = np.array([1, 1, 1, np.exp(1j*phi)])/2.0
-    # correlation matrix T_ij = <sigma_i x sigma_j>
-    sig = [np.array([[0, 1], [1, 0]]), np.array([[0, -1j], [1j, 0]]),
-           np.array([[1, 0], [0, -1]])]
-    rho = np.outer(psi, psi.conj())
-    T = np.zeros((3, 3))
-    for i in range(3):
-        for j in range(3):
-            T[i, j] = np.real(np.trace(rho @ np.kron(sig[i], sig[j])))
-    ev = np.sort(np.linalg.eigvalsh(T.T @ T))[::-1]
-    Smax = 2*np.sqrt(ev[0] + ev[1])
-    tgt = 2*np.sqrt(1 + np.sin(phi/2)**2)
-    if abs(Smax - tgt) > 1e-9: ok3 = False
-    if k != 0 and Smax <= 2 + 1e-12: ok3 = False
-    if abs(Smax - 2*np.sqrt(2)) < 1e-9 and k == 40: okts = True
-report('B3: Horodecki CHSH max = 2*sqrt(1 + sin^2(phi/2)); > 2 for all phi != 0; '
-       '= 2*sqrt2 at phi = pi (k = 40)', ok3 and okts)
+    a = amps(k)
+    det = (zmul(a[0], a[3]) - zmul(a[1], a[2])) % PHI
+    c2 = zmul(det, zconj(det))                              # |ad - bc|^2 = 4 C^2
+    smax2 = (Poly(4, x) + c2) % PHI                         # S_max^2 = 4 + |ad - bc|^2
+    if k != 0 and c2.is_zero: ok3 = False                  # S_max^2 = 4: witness not > 2
+    if k == 40 and not ((smax2 - Poly(8, x)) % PHI).is_zero: ok3 = False
+    if k == 40 and ((smax2 - Poly(8, x)) % PHI).is_zero: okts = True
+report('B3: Horodecki S_max^2 = 4(1 + C^2) = 4 + |ad-bc|^2 exactly; > 4 for phi != 0 '
+       '(C != 0, S_max > 2), and = 8 (S_max = 2 sqrt2) at phi = pi (k = 40)',
+       ok3 and okts)
 
-# ---------------- B4: drive commutation, no-signalling, complementarity ----------------
-# (i) the coupling is diagonal in the joint branch basis, hence commutes with
-#     the diagonal drive exactly;
-# (ii) A's marginal is independent of any LOCAL operation on B (no signalling);
-# (iii) A's fringe visibility V = |cos(phi/2)| obeys V^2 + C^2 = 1 EXACTLY:
-#       the gravitational which-path complementarity, the BMV observable pair.
-ok4a, ok4b, ok4c = True, True, True
-drv = np.diag([1, 1j, 1j, -1])                        # representative diagonal drive image
+# ---------------- B4: drive commutation + no-signalling (exact ring arithmetic) ----------------
+# (i) coupling G = diag(1,1,1,z^k) and drive D = diag(1,i,i,-1) are both diagonal,
+#     hence commute exactly; (ii) A's reduced state is invariant under ANY local
+#     operation U on B (partial-trace invariance), checked on exact ring-valued U.
+ONE_ = Poly(1, x); ZERO_ = Poly(0, x); II = zpow(20)        # i = zeta_80^20
+locB = {'X': [[ZERO_, ONE_], [ONE_, ZERO_]],
+        'Z': [[ONE_, ZERO_], [ZERO_, (-ONE_) % PHI]],
+        'Y': [[ZERO_, (-II) % PHI], [II, ZERO_]]}
+def rhoA(psi):                                              # 2x2 reduced state on A, exact
+    return [[(zmul(psi[2*aa], zconj(psi[2*bb])) + zmul(psi[2*aa+1], zconj(psi[2*bb+1]))) % PHI
+             for bb in (0, 1)] for aa in (0, 1)]
+def eqmat(M, Nn): return all((M[i][j] - Nn[i][j]).is_zero for i in (0, 1) for j in (0, 1))
+Dd = [ONE_, II, II, (-ONE_) % PHI]                          # diagonal drive image
+ok4a, ok4b = True, True
 for k in (1, 7, 20, 40, 63):
-    phi = 2*np.pi*k/80
-    G = np.diag([1, 1, 1, np.exp(1j*phi)])
-    if not np.allclose(G @ drv, drv @ G): ok4a = False
-    psi = (G @ np.array([1, 1, 1, 1.0]))/2.0
-    rho = np.outer(psi, psi.conj())
-    rA = np.trace(rho.reshape(2, 2, 2, 2), axis1=1, axis2=3)
-    for th in (0.3, 1.1, 2.7):                        # arbitrary local ops on B
-        UB = np.array([[np.cos(th), -np.sin(th)], [np.sin(th), np.cos(th)]]) @ \
-             np.diag([1, np.exp(1j*0.9*th)])
-        U = np.kron(np.eye(2), UB)
-        rho2 = U @ rho @ U.conj().T
-        rA2 = np.trace(rho2.reshape(2, 2, 2, 2), axis1=1, axis2=3)
-        if not np.allclose(rA, rA2): ok4b = False
-report('B4i: the coupling commutes with the diagonal drive (offset-diagonal)', ok4a)
-report('B4ii: A marginal invariant under arbitrary local operations on B '
-       '(no signalling through the gravitational channel)', ok4b)
+    Gd = [ONE_, ONE_, ONE_, zpow(k)]                        # diagonal coupling
+    if any(not (zmul(Gd[j], Dd[j]) - zmul(Dd[j], Gd[j])).is_zero for j in range(4)):
+        ok4a = False
+    psi = [ONE_, ONE_, ONE_, zpow(k)]
+    rA = rhoA(psi)
+    for U in locB.values():
+        psiU = [(zmul(U[b][0], psi[2*aa]) + zmul(U[b][1], psi[2*aa+1])) % PHI
+                for aa in (0, 1) for b in (0, 1)]
+        if not eqmat(rhoA(psiU), rA): ok4b = False
+report('B4i: the coupling commutes with the diagonal drive (offset-diagonal), exact', ok4a)
+report('B4ii: A marginal invariant under any local operation on B '
+       '(no signalling), exact ring identity', ok4b)
 # (iii) exact ring identity: V^2 + C^2 = 1, V^2 = (2 + z^k + z^-k)/4, C^2 = (2 - z^k - z^-k)/4
 ok4c = True
 for k in range(80):

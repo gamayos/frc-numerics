@@ -8,9 +8,7 @@
 ##   (S4) super-window, the observed (lifted-shadow) Sorkin combination is always
 ##        an integer multiple of p: wrap deviations are quantised at the horizon,
 ##        and small nonzero kappa is forbidden at every scale.
-import random
 from math import gcd
-random.seed(11)
 
 def gm(z, w): return (z[0]*w[0] - z[1]*w[1], z[0]*w[1] + z[1]*w[0])
 def ga(z, w): return (z[0]+w[0], z[1]+w[1])
@@ -72,9 +70,12 @@ def hier(W, q, k, nslits):
             vals.append(tot)
     return vals
 
-wide   = lambda: (random.randint(-9, 9), random.randint(-9, 9))
-binary = lambda: (random.randint(0, 1), 0)
-deep   = lambda: (7*random.randint(-9, 9), 7*random.randint(-9, 9))
+_c = [0]                                            # deterministic counter, no RNG
+def _nxt():
+    _c[0] += 1; return _c[0]
+wide   = lambda: (((_nxt()*5) % 19) - 9, ((_nxt()*13) % 19) - 9)
+binary = lambda: (_nxt() % 2, 0)
+deep   = lambda: (7*(((_nxt()*5) % 19) - 9), 7*(((_nxt()*13) % 19) - 9))
 
 for (p, e, nO, tag) in [(157, 5, 12, '157/53/13'), (421, 2, 28, '421/61/29')]:
     W, q = sorkin_run(p, e, nO, 4, 4, coeff=wide)

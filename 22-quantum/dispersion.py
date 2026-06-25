@@ -161,8 +161,7 @@ report('D3: boost group law, exhaustive on the norm-one cycle (%d^2 products)' %
        ok3 and len(U1) == p + 1)
 
 # ---- covariance on spinor fields over Y = F_p^4, full norm-one cycle ----
-rng = np.random.default_rng(3)
-psi = rng.integers(0, p, size=(p, p, p, p, 4, 2)).astype(np.int64)
+psi = (np.arange(p*p*p*p*4*2).reshape(p, p, p, p, 4, 2).astype(np.int64) * 7 + 3) % p   # fixed field, no RNG
 ezs = np.eye(4, dtype=np.int64)
 
 def shift(f, vec):                      # f(z + vec)
