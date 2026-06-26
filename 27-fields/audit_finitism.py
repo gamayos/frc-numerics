@@ -1,3 +1,4 @@
+# framed-rational status: EXACT -- integer / modular-F_p / cyclotomic arithmetic; no float in any asserted check (float, if present, only formats an exact rational for display).
 """
 Finitism audit: re-verify the EM-1 / O1 load-bearing claims in EXACT arithmetic,
 with no random sampling, no FFT, no floating point, no transcendental functions.

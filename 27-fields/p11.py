@@ -1,3 +1,4 @@
+# framed-rational status: EXACT -- integer / modular-F_p / cyclotomic arithmetic; no float in any asserted check (float, if present, only formats an exact rational for display).
 """
 P11: the substrate residue  Omega = 5 (mod 12).
 

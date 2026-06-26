@@ -1,3 +1,4 @@
+# framed-rational status: EXACT -- integer / modular-F_p / cyclotomic arithmetic; no float in any asserted check (float, if present, only formats an exact rational for display).
 """
 Frontier Q1 resolved: the four roles = bosons (counting) + 3 fermion generations.
 

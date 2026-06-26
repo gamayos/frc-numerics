@@ -1,3 +1,4 @@
+# framed-rational status: EXACT -- integer / modular-F_p / cyclotomic arithmetic; no float in any asserted check (float, if present, only formats an exact rational for display).
 """
 P10: chirality selection -- which chirality (16 vs 16bar) the generation occupies.
 

@@ -1,3 +1,4 @@
+# framed-rational status: EXACT -- integer / modular-F_p / cyclotomic arithmetic; no float in any asserted check (float, if present, only formats an exact rational for display).
 """
 P3: the cell-local non-abelian SU(2) weak connection, exact over a finite field.
 

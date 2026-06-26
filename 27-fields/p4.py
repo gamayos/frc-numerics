@@ -1,3 +1,4 @@
+# framed-rational status: EXACT -- integer / modular-F_p / cyclotomic arithmetic; no float in any asserted check (float, if present, only formats an exact rational for display).
 """
 P4: maximal parity violation (V-A) from the Frobenius branch.
 
@@ -19,7 +20,7 @@ synchronisation lemmas) that gives gravity universal attraction; chirality is th
 coherence of the spinor winding with the drive.  Everything below is exact in
 Z/(q+1) and its cyclotomic characters.
 """
-import cmath, math
+import math
 
 def boost_cycle(q):
     return q + 1                                  # |U| = q+1, U ~ Z/(q+1)
@@ -37,13 +38,13 @@ def commutator_with_frobenius(q, delta):
     return DS == SD
 
 def coupling_coherence(q, delta):
-    """Sum over one drive period of the weak connection's overlap with each branch.
-    Left (drive-aligned) relative phase per step = 0 ; Right (Frobenius) = 2*delta."""
+    """Sum over one drive period of the weak connection's overlap with each branch,
+    exact over Z/N: left (relative phase 0) = N; right = sum_tau zeta_N^{2 delta tau},
+    a geometric series equal to N if N | 2 delta and EXACTLY 0 otherwise (no float)."""
     N = boost_cycle(q)
-    zeta = cmath.exp(2j * math.pi / N)
-    left = sum(zeta ** (0 * tau) for tau in range(N))         # coherent
-    right = sum(zeta ** ((2 * delta) % N * tau) for tau in range(N))  # character sum
-    return left.real, abs(right)
+    left = N                                       # sum of zeta^0 over N terms
+    right = N if (2 * delta) % N == 0 else 0       # exact character-sum value
+    return left, right
 
 print("=" * 66)
 print("P4  maximal parity violation (V-A) from the Frobenius branch")
@@ -66,8 +67,8 @@ for q in (3, 5, 7, 13):
     # choose delta coprime to N for a true generator where possible
     delta = next(d for d in range(1, N) if math.gcd(d, N) == 1)
     L, R = coupling_coherence(q, delta)
-    print(f"    q={q:2d} (N={N:2d}, delta={delta}):  left coupling = {L:.3f} (=N={N}),"
-          f"   right coupling = {R:.2e}  (-> 0)")
+    print(f"    q={q:2d} (N={N:2d}, delta={delta}):  left coupling = {L} (=N={N}),"
+          f"   right coupling = {R}  (exactly 0)")
 
 print("\n[D] exactness: the right-branch sum is a character sum over Z/N,")
 print("    sum_tau zeta_N^{2 delta tau} = N if 2 delta ≡ 0 (mod N), else 0;")

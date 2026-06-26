@@ -1,3 +1,4 @@
+# framed-rational status: MIXED -- exact framed-rational core; continuum constructs are confined to clearly-labelled [approx] / degenerate-idealisation comparisons (Tier 2/3/5 or measured-data), never to an exact claim.
 """
 O1: uniqueness of the lattice Maxwell functional.
 
@@ -103,21 +104,65 @@ def maxwell_Q(g):
     return Q
 
 
+_P = (1 << 61) - 1   # Mersenne prime; exact finite-field linear algebra (framed-rational)
+
+def _nullspace_modp(M, p=_P):
+    """Exact rank and nullspace basis of an integer matrix over F_p (Gaussian
+    elimination in F_p, python ints, no float).  Used for the exact admissible
+    dimension; p > all entry magnitudes, so the F_p corank equals the rational corank."""
+    A = [[int(x) % p for x in row] for row in M.tolist()]
+    rows = len(A); cols = len(A[0]) if rows else 0
+    r = 0; pivots = []
+    for c in range(cols):
+        piv = next((i for i in range(r, rows) if A[i][c] % p), None)
+        if piv is None:
+            continue
+        A[r], A[piv] = A[piv], A[r]
+        inv = pow(A[r][c], p - 2, p)
+        A[r] = [(x * inv) % p for x in A[r]]
+        for i in range(rows):
+            if i != r and A[i][c] % p:
+                f = A[i][c]; A[i] = [(A[i][j] - f * A[r][j]) % p for j in range(cols)]
+        pivots.append(c); r += 1
+        if r == rows:
+            break
+    free = [c for c in range(cols) if c not in pivots]
+    basis = []
+    for fc in free:
+        v = [0] * cols; v[fc] = 1
+        for ri, pc in enumerate(pivots):
+            v[pc] = (-A[ri][fc]) % p
+        basis.append([x - p if x > p // 2 else x for x in v])   # balanced representative
+    return r, basis
+
+
 def admissible(L, R):
     g = build(L)
     Qs = param_basis(g, R); n = len(Qs); nlink = g['nlink']
     Qstack = np.array([Q.reshape(-1) for Q in Qs])              # (n, nlink^2)
     # gauge residual block:  vec(Q_a B)
     QB = np.array([(Q @ g['B']).reshape(-1) for Q in Qs])       # (n, nlink*nsite)
-    Gram = QB @ QB.T
-    # cubic residual blocks:  vec(P_g^T Q_a P_g - Q_a)
+    # Exact admissible dimension (no float eigenvalues). Build the same Gram form as
+    # before, but in INTEGER arithmetic (2*Q_a is integral, entries +-1), then take its
+    # exact rational corank: a combination sum_a c_a Q_a is admissible iff c is in the
+    # nullspace of the (integer) Gram = sum of the gauge- and cubic-constraint Grams.
+    # dim = n - rank(Gram), computed exactly, not by a float eigenvalue threshold.
+    Qint = [np.rint(2 * Q).astype(np.int64) for Q in Qs]             # integral (entries +-1)
+    Bint = g['B'].astype(np.int64)
+    QBi = np.array([(Qint[a] @ Bint).reshape(-1) for a in range(n)]) # gauge block (n, nlink*nsite)
+    Gram = QBi @ QBi.T                                               # integer n x n (PSD)
+    Qstk = np.array([Q.reshape(-1) for Q in Qint])
     for fp, fs in zip(g['flatperm'], g['flatsign']):
-        D = Qstack[:, fp] * fs - Qstack                          # (n, nlink^2)
-        Gram += D @ D.T
-    w, V = np.linalg.eigh(Gram)
-    tol = 1e-7 * max(1.0, w.max())
-    null = V[:, w < tol]
-    dim = null.shape[1]
+        D = Qstk[:, fp] * fs - Qstk                                  # integer (n, nlink^2)
+        Gram = Gram + D @ D.T
+    _, nb = _nullspace_modp(Gram)                                    # exact F_p corank (Tier-1 claim)
+    dim = len(nb)
+    # reps span the same admissible space and feed ONLY the [approx] continuum-symbol
+    # reading below; a well-conditioned real basis is taken for that, and its count is
+    # cross-checked against the exact framed-rational dimension above.
+    w, V = np.linalg.eigh(Gram.astype(float))
+    null = V[:, w < 1e-7 * max(1.0, w.max())]
+    assert null.shape[1] == dim, "float/exact corank mismatch"
     reps = [sum(null[a, c] * Qs[a] for a in range(n)) for c in range(dim)]
     return dim, reps, g
 

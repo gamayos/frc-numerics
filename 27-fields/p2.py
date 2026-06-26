@@ -1,3 +1,4 @@
+# framed-rational status: MIXED -- exact framed-rational core; continuum constructs are confined to clearly-labelled [approx] / degenerate-idealisation comparisons (Tier 2/3/5 or measured-data), never to an exact claim.
 """
 P2: the order-one coefficient of the bare electromagnetic coupling.
 
