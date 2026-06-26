@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 # =====================================================================
-#  make_figures.py -- consolidated, de-duplicated dark-sector figures.
+#  make_figures.py -- dark-sector figures.
 #
-#  Replaces the redundant 3-panel cons2_rar_btfr (RAR|BTFR|rotcurve) and
-#  the overlapping cons3_interpolation (RAR|angle).  The RAR appeared
-#  twice and the BTFR panel was "just a slope".  New, non-redundant set:
+#  The figure set:
 #
 #   fig_rar.pdf        (phenomenology):  RAR (with the rational-alt knee
 #                       and both asymptotes)  |  exponential-disk rotation curve

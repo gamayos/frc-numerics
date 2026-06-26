@@ -104,7 +104,7 @@ print(f"""
      * its exact value reduces to the matched cross-scale running of the
        weak coupling (Conjecture 4.2), the SAME Omega-hard residue as the
        strong Lambda_QCD (D6) and the absolute fermion masses (E5/B7).
-     * => v is Omega-HARD, not sub-horizon-closeable. The earlier 'not
-       Omega-hard' tag is corrected: the RATIO/rho=1/photon-kernel are the
-       comprehensible small residues; the absolute scale v is Omega-hard.
+     * => v is Omega-HARD, not sub-horizon-closeable: the RATIO/rho=1/photon-kernel
+       are the comprehensible small residues, while the absolute scale v is
+       Omega-hard.
 """)

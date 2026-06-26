@@ -188,7 +188,7 @@ for q,gprim in ((13,2),(5,2)):
         print("     ord:", e)
 
 hr("SUMMARY")
-print("""CLOSED (now exact, float-free, from the finite action -- not imported):
+print("""CLOSED (exact, float-free, derived from the finite action):
   * the propagating mass operator = Hessian of the gauged-Higgs action S_rho
     at the drive-broken vacuum  (Theorem 4.7 quadratic form, Remark 6.5 step);
   * spectrum {0 (photon), M_W^2 x2, M_Z^2} with the photon the EXACT kernel
@@ -198,7 +198,7 @@ print("""CLOSED (now exact, float-free, from the finite action -- not imported):
   * the drive (Thm 6.4) and the Higgs-stabiliser pictures compose to the same
     spectrum; mass = transfer-operator winding rate (bridge B6).
 
-RESIDUE (now a single number, was 'the W,Z spectrum'):
+RESIDUE (a single number):
   * the overall scale v -- the Higgs-vacuum amplitude on the non-split cycle.
     Fixes the absolute M_W; everything else (ratio, rho, photon kernel) forced.
     Tied to Omega via the same running that carries sin^2 thetaW 3/8 -> 0.231.

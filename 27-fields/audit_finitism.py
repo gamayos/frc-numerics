@@ -1,18 +1,15 @@
 # framed-rational status: EXACT -- integer / modular-F_p / cyclotomic arithmetic; no float in any asserted check (float, if present, only formats an exact rational for display).
 """
-Finitism audit: re-verify the EM-1 / O1 load-bearing claims in EXACT arithmetic,
-with no random sampling, no FFT, no floating point, no transcendental functions.
-Each part replaces a continuum construct used in the original scripts and confirms
-the answer is unchanged.
+Finitism cross-check: the EM-1 / O1 load-bearing claims established in EXACT
+arithmetic, with no random sampling, no FFT, no floating point, no transcendental
+functions. Each part stands in an exact construct -- integer F_p, cyclotomic Z[i],
+or rational -- so no claim depends on a continuum step.
 
-  A. Gauge invariance & superselection -- exact integers, exhaustive over a basis
-     (replaces the random sampling in em1_prototype.py).
+  A. Gauge invariance & superselection -- exact integers, exhaustive over a basis.
   B. Lattice Coulomb Green's function on the L=4 torus -- exact rationals via the
-     quarter-turn DFT in Z[i] (replaces the float FFT solve).
-  C. O1 admissible-space dimension -- exact integer rank of the integer Gram
-     (replaces the float SVD with tolerance).
-  D. Wilson action -- exact cyclotomic value 1 - Re(zeta_M^F) in Q(zeta_M)
-     (replaces the float cosine).
+     quarter-turn DFT in Z[i].
+  C. O1 admissible-space dimension -- exact integer rank of the integer Gram.
+  D. Wilson action -- exact cyclotomic value 1 - Re(zeta_M^F) in Q(zeta_M).
 """
 import itertools
 from fractions import Fraction as Fr
@@ -90,7 +87,7 @@ def partB(L=4):
 
 # ----------------------------------------------------------------------
 # C. O1 admissible-space dimension: EXACT integer rank of the integer Gram
-#    (replaces float SVD with a 1e-7 tolerance).
+#    (integer Gaussian elimination over F_p).
 # ----------------------------------------------------------------------
 def _rank_mod_p(Aint, p):
     """Exact rank of an integer matrix over the prime field F_p (vectorised, finite)."""
@@ -143,7 +140,7 @@ def partD():
 
 if __name__ == "__main__":
     print("=" * 70)
-    print("FINITISM AUDIT -- exact re-verification of EM-1 / O1 claims")
+    print("FINITISM CROSS-CHECK -- exact verification of EM-1 / O1 claims")
     print("=" * 70)
 
     worst, const_ok, ns = partA(L=4)

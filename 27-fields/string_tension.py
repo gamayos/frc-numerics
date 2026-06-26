@@ -195,7 +195,7 @@ check("centre = Z_3 (norm-one cube roots of unity; 3 | q+1)",
 # =====================================================================
 print("="*72)
 print(f"RESULT: {sum(PASS)}/{len(PASS)} checks pass")
-print("D6b: the string tension sigma(beta) is now computed in finite units --")
+print("D6b: the string tension sigma(beta) is computed in finite units --")
 print("exact for U(1),Z_N (qcd.py) and 2T (closed form here), resolved-window")
 print("series for SU(3).  The remaining strong-sector residue is the PHYSICAL")
 print("value of beta (= the cross-scale running fixing Lambda_QCD = sqrt(sigma)),")

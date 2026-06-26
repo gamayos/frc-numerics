@@ -4,7 +4,7 @@
 
 This folder holds the computational verification for *Standard-Model Interactions over Finite Substrate* (`../main.tex`). The scripts are standalone, deterministic, take no input, and print a human-readable verdict; all exit non-zero on any failed check.
 
-## Framed-rational discipline (and audit)
+## Framed-rational discipline
 
 Every script carries a one-line `# framed-rational status:` banner at the top, in one of three classes:
 
@@ -14,12 +14,12 @@ Every script carries a one-line `# framed-rational status:` banner at the top, i
 
 This is the corpus rule: an exact claim lives in finite, finite-field, or cyclotomic arithmetic; the continuum enters only as an explicitly labelled profinite/degenerate-idealisation approximation, and no realized magnitude exceeds `Ω`.
 
-**Audit result (this pass).** All 28 scripts run and pass. Two scripts that asserted an *exact* claim through a floating-point step were reframed to be genuinely framed-rational:
+**Status.** All 28 scripts run and pass. The two scripts that carry an *exact* claim establish it directly in framed-rational arithmetic, with the continuum reading held as a labelled `[approx]`:
 
-- `enumerate_maxwell.py` — the Maxwell-uniqueness **dimension** was read from `numpy.linalg.eigh` (float eigenvalues, thresholded). It is now the exact corank of the integer constraint Gram over `𝔽_p` (Gaussian elimination in a large prime field, balanced lift); the continuum dispersion-symbol reading that classifies the operator as the transverse projector is kept, clearly, as the `[approx]` part (and its basis count is cross-checked against the exact corank).
-- `p4.py` — the V−A character cancellation `Σ_τ ζ_N^{2δτ}` was evaluated with `cmath` (float, `abs(·)≈0`). It is now the exact geometric-series value: `N` if `N∣2δ`, else exactly `0`, in integer arithmetic (no `cmath`).
+- `enumerate_maxwell.py` — the Maxwell-uniqueness **dimension** is the exact corank of the integer constraint Gram over `𝔽_p` (Gaussian elimination in a large prime field, balanced lift); the continuum dispersion-symbol reading that classifies the operator as the transverse projector is the labelled `[approx]` part, with its basis count cross-checked against the exact corank.
+- `p4.py` — the V−A character cancellation `Σ_τ ζ_N^{2δτ}` is the exact geometric-series value: `N` if `N∣2δ`, else exactly `0`, in integer arithmetic.
 
-`audit_finitism.py` remains the standing cross-check that the load-bearing EM / O1 claims do not secretly depend on a float or continuum step.
+`audit_finitism.py` is the standing cross-check that the load-bearing EM / O1 claims rest on integer/cyclotomic arithmetic, with no float or continuum step.
 
 Class counts: **EXACT 15, MIXED 11, [APPROX] 2.**
 
@@ -48,7 +48,7 @@ All scripts exit 0 and complete in seconds.
 
 | script | status | paper result | what it verifies | arithmetic |
 |---|---|---|---|---|
-| `em1_prototype.py` | MIXED | EM ledger (Table); charge & Coulomb props | finite U(1): gauge-invariant plaquette flux and winding charge (**exact integers**); Coulomb coefficient vs the lattice Green's function and the EM-repels/gravity-attracts sign (`[approx]` continuum reading). Superseded for exactness by `audit_finitism.py`. | integer + lattice solve | numpy |
+| `em1_prototype.py` | MIXED | EM ledger (Table); charge & Coulomb props | finite U(1): gauge-invariant plaquette flux and winding charge (**exact integers**); Coulomb coefficient vs the lattice Green's function and the EM-repels/gravity-attracts sign (`[approx]` continuum reading). The exact integer/cyclotomic form of these claims is in `audit_finitism.py`. | integer + lattice solve | numpy |
 | `enumerate_maxwell.py` | MIXED | O1 uniqueness theorem | the admissible adjacency-local gauge+hypercubic quadratic space is **dim 2** (exact `𝔽_p` corank of the constraint Gram); the continuum symbol splits it into one Maxwell transverse-projector operator + one irrelevant `O(k⁴)` artifact (`[approx]` dispersion reading) | exact `𝔽_p` rank (+`[approx]` symbol) | numpy, sympy |
 | `correspondence.py` | [APPROX] | Thm 4.x finite-window correspondence | the finite→compact correspondence (Thm `thm:corr`): abelian inclusion (A, exact), `q=3` `2T⊂SU(2)` embedding (B, exact), gauge invariance (D, exact), low-curvature Yang–Mills (C), window residue (E), area law (F), character lift (G), finite quadrature (H) — the C/E/F/G/H blocks are the continuum-comparison layer | exact (A,B,D) + continuum-comparison | numpy |
 | `o2_numbers.py` | MIXED | bare-coupling prop | the EM coupling as phase-channel capacity: the `α_bare = 1/4π` bookkeeping (the `4π` a labelled continuum-comparison constant) and the `10³⁶` EM/gravity hierarchy as a reading of `Ω` | rational + continuum-comparison | — |
@@ -75,7 +75,7 @@ All scripts exit 0 and complete in seconds.
 | `p10.py` | EXACT | chirality-selection prop | the orientation-flip `𝕚 ↦ −𝕚` invariance: absolute handedness is a relabelling with no frame-independent meaning | exact (integer) | — |
 | `p11.py` | EXACT | substrate-residue prop | `Ω ≡ 5 (mod 12)` as the CRT conjunction of `4∣Ω−1` and `3∣Ω+1`, Dirichlet density `1/4` | exact | sympy |
 | `missing_rank.py` | EXACT | colour-rank prop | the rank-tower `U(1),SU(2),SU(3)` forcing and the `PSU(3,5)` kinematics on the smallest admissible shell, by exact count | exact (integer) | — |
-| `audit_finitism.py` | EXACT | §Finitism | re-runs the load-bearing EM/O1 claims with no random sampling, no FFT, no float, no transcendentals: gauge identity exhaustive, rank = 2, Wilson action cyclotomic, Green's function `= 257/7680` on the `L=4` `ℤ[i]` torus | exact (`ℤ, 𝔽_p, ℚ(ζ_M), ℤ[i]`) | numpy, sympy |
+| `audit_finitism.py` | EXACT | §Finitism | establishes the load-bearing EM/O1 claims with no random sampling, no FFT, no float, no transcendentals: gauge identity exhaustive, rank = 2, Wilson action cyclotomic, Green's function `= 257/7680` on the `L=4` `ℤ[i]` torus | exact (`ℤ, 𝔽_p, ℚ(ζ_M), ℤ[i]`) | numpy, sympy |
 
 ## Representative expected output
 
