@@ -124,7 +124,7 @@ Fm = sp.Matrix(3,3, lambda j,k: w**(j*k)) / sp.sqrt(3)
 mod2 = [sp.simplify(sp.Abs(Fm[j,k])**2) for j in range(3) for k in range(3)]
 must("D.trimaximal", all(sp.simplify(m-sp.Rational(1,3))==0 for m in mod2),
      "|F_jk|^2 = 1/3 for all 9 entries (trimaximal), exact")
-# Jarlskog J = Im(F00 F11 conj(F01) conj(F10)) = Im(omega)/3? compute exactly
+# Jarlskog J = Im(F00 F11 conj(F01) conj(F10)) = Im(omega)/9 = 1/(6 sqrt3); compute exactly
 J = sp.im(sp.simplify(Fm[0,0]*Fm[1,1]*sp.conjugate(Fm[0,1])*sp.conjugate(Fm[1,0])))
 Jmax = 1/(6*sp.sqrt(3))
 must("D.maxCP", sp.simplify(sp.Abs(J)-Jmax)==0,
