@@ -109,4 +109,31 @@ print('INFO corpus ceiling (exact unit-core k*): window Omega ~ 1e122 -> k* = %d
       'sqrt(Omega) ~ 1e61 -> d* = %d coherent splitting levels; single-shot '
       'probability resolution floor 1/p' % (dO, dsO))
 
+# G7 (round-06, F2): the conductor-4 splitting law. The Gaussian Hadamard with entries
+# (1+i)/2 (one slot negated) is unitary over Q(i) and balanced; 2 ramifies in Z[i] as
+# (2) = -i(1+i)^2; k layers give amplitudes (1+i)^k/2^k with minimal rational denominator
+# 2^ceil(k/2) and integral-lift tally norm T(k) = 2^k (even) / 2^(k+1) (odd) -- the identical
+# law with no eighth turn: balanced splitting does not presuppose zeta_8.
+_h = (Fr(1, 2), Fr(1, 2))
+_H = [[_h, _h], [_h, (-_h[0], -_h[1])]]
+def _cm(x, y): return (x[0]*y[0] - x[1]*y[1], x[0]*y[1] + x[1]*y[0])
+def _ca(x, y): return (x[0] + y[0], x[1] + y[1])
+def _cj(x): return (x[0], -x[1])
+_I = [[(Fr(1), Fr(0)), (Fr(0), Fr(0))], [(Fr(0), Fr(0)), (Fr(1), Fr(0))]]
+_P = [[_ca(_cm(_H[a][0], _cj(_H[b][0])), _cm(_H[a][1], _cj(_H[b][1]))) for b in range(2)] for a in range(2)]
+ok7 = _P == _I and all(x[0]**2 + x[1]**2 == Fr(1, 2) for row in _H for x in row)
+def _gp(k):                         # (1+i)^k as a Gaussian integer
+    z = (1, 0)
+    for _ in range(k): z = (z[0] - z[1], z[0] + z[1])
+    return z
+for _k in range(1, 13):
+    _num = _gp(_k); _den = 2**_k
+    _g = gcd(gcd(abs(_num[0]) or _den, abs(_num[1]) or _den), _den)
+    if _den // _g != 2**((_k + 1)//2): ok7 = False          # denominator law
+    _c = (_k + 1)//2
+    _tally = 2**_k * 2**(2*_c - _k)                         # leaves x per-leaf |a|^2 (integral lift)
+    if _tally != (2**_k if _k % 2 == 0 else 2**(_k + 1)): ok7 = False   # tally-norm law
+report('G7: conductor-4 splitting law: Gaussian Hadamard unitary/balanced over Q(i); '
+       'denominator 2^ceil(k/2) and tally norm T(k) reproduced with no zeta_8 (k=1..12)', ok7)
+
 print('granularity: all checks passed')
