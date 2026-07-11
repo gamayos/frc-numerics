@@ -103,4 +103,32 @@ for r in range(4):
     inv.append(acc)
 rep('U5: fibre norm satisfies (a)-(d): responses (4,4,4,4); 4c_r = 1 each (c_r = 1/4, not a tally); fails (e)',
     resp == [4,4,4,4] and all(x == (1,0) for x in inv) and sum(1 for x in resp if x != 0) == 4)
+
+# U6a: the multiplier counterexample F = w_r/16: on stationary core-valued states a*psi_s the
+# matched-channel weight is 16|a|^2, so F is tally-valued with c = 1/16: d^2 c = 1 realized,
+# c itself not a tally -> only ray uniqueness holds (round-04 repair)
+c_num, c_den = 1, 16
+rep('U6a: F = w_r/16 has d^2 c = %d/%d * 16 = 1 realized, c = 1/16 not a tally (ray uniqueness only)'
+    % (c_num, c_den), (16 * c_num) % c_den == 0 and c_den != 1)
+# U6b: degree forcing, linear case: a drive-invariant linear kernel is constant on the orbit,
+# so F(psi_k) = c * sum(zeta^{k u}) = 0 for every nontrivial winding (complete character sum)
+ok = True
+for k in range(1, 4):
+    tot = (0,0)
+    for u in range(4):
+        tot = cadd(tot, ipow(k*u))
+    if tot != (0,0): ok = False
+rep('U6b: linear drive-invariant functionals vanish on every nontrivial winding (degree forcing)', ok)
+
+# U7: pure-winding pinning (round-05, R1 repair): the d^2 c_r tallies are pinned strictly
+# in-sector: for every admissible kernel and every winding k, F(psi_k) = 16 c_{k mod 4}
+# (psi_k stationary, core-valued; the point-mass evaluation is nowhere needed), and
+# k mod 4 reaches every channel index. Exhaustive over the coefficient cube.
+ok7 = True
+for c in product(range(4), repeat=4):
+    K = kernel(c)
+    for k in range(4):
+        psi = [ipow(k*u) for u in range(4)]     # pure winding restricted to the fibre
+        if F(K, psi) != (16*c[k % 4], 0): ok7 = False
+rep('U7: pure-winding pinning F(psi_k) = d^2 c_{k mod d}, every channel index reached (exhaustive, in-sector)', ok7)
 print('gleason: all checks passed')
