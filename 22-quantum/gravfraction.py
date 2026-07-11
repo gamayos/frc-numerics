@@ -81,4 +81,53 @@ s_sync = sector_sum(sync, a);  n_sync = norm2(s_sync)
 s_spr  = sector_sum(spread, a); n_spr = norm2(s_spr)
 rep('F4: |sync sum|^2 = m^2 = 16 exactly; complete spread sum = 0',
     n_sync == [16]+[0]*7 and all(x == 0 for x in s_spr))
+
+# F5: the reduced channel Gamma = chi_inc * zeta^{m_c a}: per fixed offset configuration
+# the branch factor is zeta^{m_c a} * prod(offset-rotated); ensemble average over the
+# spread sector factorises exactly: avg_config(branch) = zeta^{m_c a} * avg(spread factors)
+a = 3; mc = 2
+spread_offsets = [0, 4, 8, 12]          # complete C_4 spread: chi_inc = 0
+partial = [0, 0, 4, 8]                  # nonuniform thermal-like distribution
+def ensemble_avg(offsets_list, a, mc):
+    tot = [0]*8
+    for sft in offsets_list:
+        term = zmul(zpow_unit(mc*a), zpow_unit(a*sft))
+        tot = zadd(tot, term)
+    return tot
+lhs = ensemble_avg(spread_offsets, a, mc)
+chi = sector_sum(spread_offsets, a)      # = 0 here
+rhs = zmul(zpow_unit(mc*a), chi)
+rep('F5: Gamma factorises exactly: ensemble avg = zeta^{m_c a} * chi_inc (complete spread: both zero)',
+    lhs == rhs)
+# F6: nonuniform thermal distribution: 0 < |chi_inc|^2 < m^2, factorisation still exact
+lhs2 = ensemble_avg(partial, a, mc)
+chi2 = sector_sum(partial, a)
+rhs2 = zmul(zpow_unit(mc*a), chi2)
+n2 = norm2(chi2)
+rep('F6: nonuniform thermal chi_inc: factorisation exact and 0 < |chi|^2 < m^2 (|chi|^2 coords %s)' % n2,
+    lhs2 == rhs2 and any(x != 0 for x in n2) and n2 != [16]+[0]*7)
+
+# F7: the mixed complementarity identity, exact in the ring: with 4C^2 = (1-G)(1-Gbar),
+# 4V^2 = (1+G)(1+Gbar): V^2 + C^2 = (1 + |G|^2)/2 identically; pure |G|=1 gives 1.
+def comp_check(Gvec):
+    one = [1]+[0]*7
+    Gc = conj(Gvec)
+    m1 = zmul(zadd(one, zscale(Gvec,-1)), zadd(one, zscale(Gc,-1)))  # (1-G)(1-Gbar) = 4C^2
+    m2 = zmul(zadd(one, Gvec), zadd(one, Gc))                        # (1+G)(1+Gbar) = 4V^2
+    lhs = zadd(m1, m2)                                                # 4(V^2+C^2)
+    n2  = zmul(Gvec, Gc)                                              # |G|^2
+    rhs = zadd(zscale(one,2), zscale(n2,2))                           # 2(1+|G|^2)
+    return lhs == rhs
+ok7 = all(comp_check(zpow_unit(e)) for e in range(16))                # pure instances |G|=1
+half = [0]*8; half[0] = 1  # G = 1 (trivial) covered; a mixed instance: G = (1+zeta)/2 not integer-ring; use G = zeta + zeta^-1 form scaled? keep ring: G = zeta^a + zeta^b (|G|<2 mixed, ring element)
+mixed = zadd(zpow_unit(1), zpow_unit(6))
+ok7b = comp_check(mixed)
+rep('F7: 4(V^2+C^2) = 2(1+|Gamma|^2) as a ring identity (all pure phases + a mixed ring instance)',
+    ok7 and ok7b)
+# F8: pure-limit concurrence: 4C^2 = (1-zeta^e)(1-zeta^-e) = 2 - (zeta^e + zeta^-e): two-way, exact
+e = 3
+one = [1]+[0]*7
+m1 = zmul(zadd(one, zscale(zpow_unit(e),-1)), zadd(one, zscale(zpow_unit(-e),-1)))
+expect = zadd(zscale(one,2), zscale(zadd(zpow_unit(e), zpow_unit(-e)), -1))
+rep('F8: pure-channel 4C^2 = 2 - (zeta^e + zeta^-e) exactly (the sin^2 chart reading)', m1 == expect)
 print('gravfraction: all checks passed')

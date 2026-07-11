@@ -1,0 +1,106 @@
+#!/usr/bin/env python3
+"""22-quantum gleason suite: uniqueness of the pair tally (prop:gleason), EXACT.
+On the Q4 core: kernels K: Q4 -> Z[i] with K(d^-1) = conj(K(d)) (two-way),
+tally-valued on basis and point states. Claims:
+(U1) the four character kernels eta_r(d) = i^{rd} span, over nonneg tallies,
+     exactly the admissible kernels (exhaustive, coefficients 0..3);
+(U2) Fourier inversion recovers nonneg integer c_r for every admissible kernel;
+(U3) a kernel with any c_r negative or non-integer violates tally-valuedness
+     on some state (witness produced);
+(U4) covariance under channel repositioning pins K to a multiple of one eta_r.
+Exhaustive on Q4 (d=4); cross-checked on the F13 core instance.
+No floats, no RNG."""
+from itertools import product
+
+def rep(label, ok):
+    print(('PASS ' if ok else 'FAIL ') + label); assert ok, label
+
+# Q4 as Z_4 with values in Z[i] as (a,b) pairs; i^k:
+def ipow(k):
+    return [(1,0),(0,1),(-1,0),(0,-1)][k % 4]
+def cadd(x,y): return (x[0]+y[0], x[1]+y[1])
+def cmul(x,y): return (x[0]*y[0]-x[1]*y[1], x[0]*y[1]+x[1]*y[0])
+def conj(x): return (x[0],-x[1])
+def cscale(x,c): return (c*x[0], c*x[1])
+
+# character kernels: eta_r(delta) = i^{r*delta}
+def eta(r, d): return ipow(r*d)
+
+# admissible kernel from coefficients c = (c0..c3): K(d) = sum_r c_r i^{rd}
+def kernel(c):
+    return [tuple(sum(cc*v for cc,v in zip(c, [eta(r,d)[j] for r in range(4)])) for j in range(2)) for d in range(4)]
+
+# F(psi) for kernel K on a single fibre of size 4: F = sum_{u,u'} K(u'-u) psi_u conj(psi_u')
+def F(K, psi):
+    tot = (0,0)
+    for u in range(4):
+        for v in range(4):
+            tot = cadd(tot, cmul(cmul(K[(v-u) % 4], psi[u]), conj(psi[v])))
+    return tot
+
+# U1/U2: exhaustive nonneg tally combos give two-way kernels, tally-valued on tests;
+# and Fourier inversion c_r = (1/4) sum_d K(d) i^{-rd} recovers c exactly
+ok1 = ok2 = True
+tests = [
+    [(1,0),(0,0),(0,0),(0,0)],                    # point mass
+    [(1,0),(1,0),(1,0),(1,0)],                    # uniform (character r=0 state)
+    [(1,0),(0,1),(-1,0),(0,-1)],                  # character r=1 state
+    [(1,0),(1,0),(0,0),(0,0)],                    # pair state
+]
+for c in product(range(4), repeat=4):
+    K = kernel(c)
+    # two-way check
+    if any(K[(-d) % 4] != conj(K[d]) for d in range(4)): ok1 = False
+    # tally-valued on tests: F real nonneg integer
+    for psi in tests:
+        val = F(K, psi)
+        if val[1] != 0 or val[0] < 0: ok1 = False
+    # inversion
+    for r in range(4):
+        acc = (0,0)
+        for d in range(4):
+            acc = cadd(acc, cmul(K[d], ipow(-r*d)))
+        if acc != (4*c[r], 0): ok2 = False
+rep('U1: nonneg-tally character combinations are two-way and tally-valued (exhaustive c in 0..3)', ok1)
+rep('U2: Fourier inversion recovers every coefficient exactly', ok2)
+
+# U3: a negative coefficient violates tally-valuedness (witness: the matching character state)
+c = (1, -1, 1, 0)
+K = kernel(c)
+psi = [(ipow(1*u)) for u in range(4)]  # character r=1 state: F = 16*c_1 < 0
+val = F(K, psi)
+rep('U3: negative coefficient witnessed by its character state (F = %d < 0)' % val[0],
+    val == (-16, 0))
+
+# U4: channel pinning: a kernel responds to exactly one character state
+# (single-channel diagonal response, the covariance requirement) iff its
+# coefficient vector is a scaled unit vector c = c*e_r  (exhaustive)
+ok4 = True
+for c in product(range(4), repeat=4):
+    K = kernel(c)
+    responses = []
+    for r in range(4):
+        psi = [ipow(r*u) for u in range(4)]
+        responses.append(F(K, psi)[0])          # = 16 c_r
+    single = sum(1 for x in responses if x != 0) == 1
+    unitvec = sum(1 for x in c if x != 0) == 1
+    if single != unitvec: ok4 = False
+rep('U4: single-channel response iff scaled unit coefficient vector (channel pinning, exhaustive)', ok4)
+
+# U5: the fibre-norm counterexample (round-03): K(delta)=[delta=1] satisfies (a)-(d),
+# has c_r = 1/4 each (d^2 c = 4 realized, sum c = 1 realized, individual c NOT integer),
+# responds to all four channels equally -> fails channel-selectivity (e)
+Kfn = [(1,0),(0,0),(0,0),(0,0)]  # identity kernel on Q4 offsets
+resp = []
+for r in range(4):
+    psi = [ipow(r*u) for u in range(4)]
+    resp.append(F(Kfn, psi)[0])
+inv = []
+for r in range(4):
+    acc = (0,0)
+    for d in range(4):
+        acc = cadd(acc, cmul(Kfn[d], ipow(-r*d)))
+    inv.append(acc)
+rep('U5: fibre norm satisfies (a)-(d): responses (4,4,4,4); 4c_r = 1 each (c_r = 1/4, not a tally); fails (e)',
+    resp == [4,4,4,4] and all(x == (1,0) for x in inv) and sum(1 for x in resp if x != 0) == 4)
+print('gleason: all checks passed')

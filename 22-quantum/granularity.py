@@ -75,27 +75,37 @@ report('G2: minimal integer-tally norm = 2^k (even) / 2^(k+1) (odd), exactly', o
 
 # ---------- G3 + G4: ceiling and wrap onset in the toy carrier F_641 ----------
 p = 641
-dstar = p.bit_length() - 1          # exact: floor(log2 p) without continuum log
-report('G3: toy ceiling d* = floor(log_2 641) = %d' % dstar, dstar == 9)
+dstar = p.bit_length() - 1          # bit-length label: floor(log2 p) without continuum log
+# exact ceiling: largest k with the minimal tally norm W(k) below the window (unit core)
+def W(k): return 2**k if k % 2 == 0 else 2**(k+1)
+kstar = max(k for k in range(1, 12) if W(k) < p)
+report('G3: exact unit-core ceiling k* = max{k : W(k) < 641} = %d (bit-length label %d)' % (kstar, dstar),
+       kstar == 8 and dstar == 9)
+kstar8 = max(k for k in range(1, 12) if 8*W(k) < p)
+report('G3b: Bell-core (d=8) ceiling k* = max{k : 8 W(k) < 641} = %d' % kstar8, kstar8 == 6)
 ok3a, ok3b, ok4 = True, True, True
 for k in range(1, 12):
-    W = 2**k if k % 2 == 0 else 2**(k+1)               # total tally at depth k
-    wplus = W//2 + 2**(k//2)                           # representative pattern
-    if k <= dstar and W < p:
+    Wk = W(k)                                          # total tally at depth k
+    wplus = Wk//2 + 2**(k//2)                           # representative pattern
+    if k <= kstar and Wk < p:
         if not (wplus < p): ok3a = False               # unique window lift
-    if W > p:
+    if Wk > p:
         sh = wplus % p
         lift1, lift2 = sh, sh + p
         if lift2 - lift1 != p: ok4 = False
-        if Fr(lift1, W) == Fr(lift2, W): ok3b = False  # Born ratios differ
+        if Fr(lift1, Wk) == Fr(lift2, Wk): ok3b = False  # Born ratios differ
 report('G3: sub-horizon depths have the unique window lift; past d* two valid '
        'lifts give different Born ratios (ambiguity onset)', ok3a and ok3b)
 report('G4: lift discrepancies are multiples of p (wrap quantisation)', ok4)
 
 # ---------- the corpus numbers, recorded ----------
-dO  = (10**122).bit_length() - 1     # exact floor(log2 10^122), no continuum log/float
-dsO = (10**61).bit_length() - 1      # exact floor(log2 10^61)
-print('INFO corpus ceiling: window Omega ~ 1e122 -> d* = %d; window '
+def kceil(window):                   # exact unit-core ceiling: max k with W(k) < window
+    k = 1
+    while W(k + 1) < window or W(k + 2) < window:
+        k += 1
+    return max(kk for kk in range(1, k + 3) if W(kk) < window)
+dO, dsO = kceil(10**122), kceil(10**61)
+print('INFO corpus ceiling (exact unit-core k*): window Omega ~ 1e122 -> k* = %d; window '
       'sqrt(Omega) ~ 1e61 -> d* = %d coherent splitting levels; single-shot '
       'probability resolution floor 1/p' % (dO, dsO))
 

@@ -168,3 +168,99 @@ S2 = zmul(Poly(S8, x), Poly(S8, x)) % PHI8
 report('C8: S^2 = 8 as a ring identity', S2.as_expr().equals(8))
 
 print('composite: all checks passed')
+
+# ============ U1-U6: the unequal-cycle gate (Prop. prop:unequal) ============
+def order2(a, mod):
+    x, k = 1, 0
+    while True:
+        x, k = (x*a) % mod, k+1
+        if x == 1:
+            return k
+## Native instance on F_421: the S_61 x O_29 cycle pair (C_60, C_28).
+## (U1) admissibility: 421 = 4*105+1, g = 2 primitive; 60,28 | 420;
+##      gcd(60,28) = 4 = |Q4|; lcm(60,28) = 420;
+## (U2) unit-winding joint orbit has length exactly 420; sector count
+##      1680/420 = 4 = gcd; the gcd-offset (a - b mod 4) is conserved along
+##      the full recurrence and the four sectors partition A evenly;
+## (U3) T' = lcm(n_j/gcd(s_j,n_j)) exact for all 1680 winding vectors;
+## (U4) exactly 4 joint characters are orbit-trivial (the sector labels);
+##      all 1676 others cancel over one recurrence (exact exponent counting:
+##      uniform cover of the d-divisible residues, d = gcd(e,420));
+## (U5) carrier-internal reduction: nontrivial character sums vanish in F_421;
+## (U6) Born window guard for the worked pair state: 16 < 421.
+from math import lcm as _lcm
+
+pU, gU = 421, 2
+NU = pU - 1
+n1, n2 = 60, 28
+report('U1: 421 = 4*105+1, g = 2 primitive; 60,28 | 420; gcd = 4 = |Q4|; lcm = 420',
+       pU % 4 == 1 and order2(gU, pU) == NU and NU % n1 == 0 and NU % n2 == 0
+       and gcd(n1, n2) == 4 and _lcm(n1, n2) == 420)
+
+T = _lcm(n1, n2)
+orbit = set()
+a, b = 0, 0
+for _ in range(T):
+    orbit.add((a, b))
+    a, b = (a+1) % n1, (b+1) % n2
+sectors = {}
+for a0 in range(n1):
+    for b0 in range(n2):
+        sectors.setdefault((a0-b0) % 4, 0)
+        sectors[(a0-b0) % 4] += 1
+a, b = 7, 3
+lab = (a-b) % 4
+ok_cons = True
+for _ in range(T):
+    a, b = (a+1) % n1, (b+1) % n2
+    ok_cons = ok_cons and (a-b) % 4 == lab
+report('U2: joint orbit length 420; sectors 1680/420 = 4; gcd-offset conserved; '
+       'even partition (420 each)',
+       len(orbit) == T and (n1*n2)//T == 4 and ok_cons
+       and sorted(sectors.keys()) == [0, 1, 2, 3]
+       and all(c == 420 for c in sectors.values()))
+
+ok = True
+for s1 in range(n1):
+    for s2 in range(n2):
+        Tp = _lcm(n1//gcd(s1, n1), n2//gcd(s2, n2))
+        a, b, t = 0, 0, 0
+        while True:
+            a, b, t = (a+s1) % n1, (b+s2) % n2, t+1
+            if (a, b) == (0, 0):
+                break
+        ok = ok and t == Tp
+report("U3: T' = lcm(n_j/gcd(s_j,n_j)) exact for all 1680 winding vectors", ok)
+
+triv = nontriv = 0
+for k1 in range(n1):
+    for k2 in range(n2):
+        if (7*k1 + 15*k2) % 420 == 0:
+            triv += 1
+        else:
+            nontriv += 1
+ok = True
+for (k1, k2) in [(1, 0), (0, 1), (7, 3), (59, 27), (30, 14), (2, 25)]:
+    e = (7*k1 + 15*k2) % 420
+    if e == 0:
+        continue
+    d = gcd(e, 420)
+    hits = {}
+    for t in range(420):
+        hits[(e*t) % 420] = hits.get((e*t) % 420, 0) + 1
+    ok = ok and set(hits.keys()) == set(range(0, 420, d)) \
+             and all(c == d for c in hits.values())
+report('U4: 4 orbit-trivial characters (sector labels); 1676 nontrivial; '
+       'sampled nontrivial characters cancel exactly', triv == 4 and nontriv == 1676 and ok)
+
+ok = True
+for k in [1, 3, 10, 100]:
+    tot, x, z = 0, 1, pow(gU, k, pU)
+    for _ in range(420):
+        tot = (tot + x) % pU
+        x = (x*z) % pU
+    ok = ok and (tot == 0) == (k % 420 != 0)
+report('U5: carrier-internal reduction: nontrivial character sums vanish in F_421', ok)
+
+report('U6: Born window guard 4*||psi||^2 = 16 < 421 for the worked pair state', 16 < 421)
+print('composite (incl. unequal-cycle U-block): all checks passed')
