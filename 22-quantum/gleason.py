@@ -111,14 +111,21 @@ c_num, c_den = 1, 16
 rep('U6a: F = w_r/16 has d^2 c = %d/%d * 16 = 1 realized, c = 1/16 not a tally (ray uniqueness only)'
     % (c_num, c_den), (16 * c_num) % c_den == 0 and c_den != 1)
 # U6b: degree forcing, linear case: a drive-invariant linear kernel is constant on the orbit,
-# so F(psi_k) = c * sum(zeta^{k u}) = 0 for every nontrivial winding (complete character sum)
+# so F(psi_k) = c * sum(zeta^{k u}) = 0 for every nontrivial winding (complete character sum);
+# and on the trivial winding, tally-valuedness on both psi_0 and i*psi_0 forces c = 0:
+# linearity gives F(i psi_0) = i * F(psi_0) = 4ci, outside the tally cone unless c = 0
+# (round-06-2 completion of the linear exclusion).
 ok = True
 for k in range(1, 4):
     tot = (0,0)
     for u in range(4):
         tot = cadd(tot, ipow(k*u))
     if tot != (0,0): ok = False
-rep('U6b: linear drive-invariant functionals vanish on every nontrivial winding (degree forcing)', ok)
+for c in range(1, 5):                       # nonzero multipliers: F(i psi_0) = (0, 4c), never a tally
+    val = cmul((0, 1), (4*c, 0))            # i * F(psi_0)
+    if val[1] == 0 and val[0] >= 0: ok = False
+rep('U6b: linear exclusion complete: vanishing on nontrivial windings, and on the trivial '
+    'winding F(i psi) = i F(psi) leaves the tally cone unless c = 0', ok)
 
 # U7: pure-winding pinning (round-05, R1 repair): the d^2 c_r tallies are pinned strictly
 # in-sector: for every admissible kernel and every winding k, F(psi_k) = 16 c_{k mod 4}
@@ -131,4 +138,43 @@ for c in product(range(4), repeat=4):
         psi = [ipow(k*u) for u in range(4)]     # pure winding restricted to the fibre
         if F(K, psi) != (16*c[k % 4], 0): ok7 = False
 rep('U7: pure-winding pinning F(psi_k) = d^2 c_{k mod d}, every channel index reached (exhaustive, in-sector)', ok7)
+
+# U8 (round-06, F3): the spanning step that transfers drive-invariance from values to kernel.
+# The restricted windings on a fibre form the core DFT matrix, invertible over Q(i)
+# (det = -16i on Q4), so they span every function on the fibre and polarization pins the
+# kernel: two admissible kernels agreeing on all F(psi) values agree entrywise.
+from fractions import Fraction as _Fr
+import itertools as _it
+_M = [[ipow(r*u) for u in range(4)] for r in range(4)]
+_det = (_Fr(0), _Fr(0))
+for _perm in _it.permutations(range(4)):
+    _inv = sum(1 for a in range(4) for b in range(a+1, 4) if _perm[a] > _perm[b])
+    _term = (_Fr((-1)**_inv), _Fr(0))
+    for _r in range(4):
+        _e = _M[_r][_perm[_r]]
+        _term = (_term[0]*_e[0] - _term[1]*_e[1], _term[0]*_e[1] + _term[1]*_e[0])
+    _det = (_det[0] + _term[0], _det[1] + _term[1])
+ok8 = _det == (_Fr(0), _Fr(-16))
+# polarization transfer: exhaustively, two admissible kernels with equal responses on all
+# pure windings (and their pairwise Gaussian combinations psi_k + psi_k', psi_k + i psi_k')
+# are identical
+def _resp(K):
+    out = []
+    for k in range(4):
+        psi = [ipow(k*u) for u in range(4)]
+        out.append(F(K, psi))
+    for k in range(4):
+        for kp in range(k+1, 4):
+            p1 = [cadd(ipow(k*u), ipow(kp*u)) for u in range(4)]
+            p2 = [cadd(ipow(k*u), cmul((0, 1), ipow(kp*u))) for u in range(4)]
+            out.append(F(K, p1)); out.append(F(K, p2))
+    return out
+_seen = {}
+for c in product(range(3), repeat=4):
+    K = kernel(c)
+    key = tuple(_resp(K))
+    if key in _seen and _seen[key] != tuple(K): ok8 = False
+    _seen[key] = tuple(K)
+rep('U8: spanning/polarization: core DFT det = -16i (invertible); equal responses on the '
+    'admissible class force equal kernels (exhaustive)', ok8)
 print('gleason: all checks passed')
