@@ -237,6 +237,7 @@ log(f"p==1(4), 5<p<3000: some frame g with g^(i_t) == -(!p)^(-1) exists for {sol
 log(f"Pearson correlation between angular address of i_t and of the wall residue: {num/den:+.4f}")
 log("=> solvability is gcd-coincidence noise, no invariant identification; the two objects are distinct projections.")
 
-with open("/home/claude/frc_e/results.txt", "w") as f:
+import os
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "results.txt"), "w") as f:
     f.write("\n".join(OUT) + "\n")
 log(); log("results written to results.txt")

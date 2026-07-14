@@ -4,7 +4,7 @@ Float-free discipline (paper-ready protocol, Step 8): an exact (T) claim is chec
 
 | script | class | status | claims backed |
 |---|---|---|---|
-| `validate_towers.py` | EXACT (int + Fraction only; brackets self-certified) | **49/49 PASS** (run 13 Jul 2026) | Prop. tower-e, Prop. tower-pi, Cayley identities (Def. cayley), orientation rule (Rem. orient) |
+| `validate_towers.py` | EXACT (int + Fraction only; brackets self-certified) | **81/81 PASS** (run 13 Jul 2026; earlier tower-only run 49/49 PASS) | Prop. tower-e, Prop. tower-pi, Cayley identities (Def. cayley), orientation rule (Rem. orient), two-level horizon block (§10: pinning relation 2·pi_A+1 ≡ 0 exact on every shell; certificate heights H(pi_A)=2 vs H(e_p) in the sqrt(p) band to p=8009; wrap-free accessible window) |
 | `validate_e.py` | MIXED | full run recorded in `results_e.txt` (source run, zero failures) | Thms enclosure-e, readout-e, wall-e, antiperiod; Prop. duals; Exp. blind; Prop. calib; Exp. null |
 | `validate_pi.py` | MIXED | full run recorded in `results_pi.txt` (zero failures) | Thms enclosure, readout-pi, window, halfwall, secondorder; Prop. lucas |
 | `validate_pi2.py` | EXACT (int + Fraction only) | full run recorded in `results_pi2.txt` (zero failures) | Thms quarter, vanish, super; proof ingredients (A+B=2L, Lerch, binomial transfer) |

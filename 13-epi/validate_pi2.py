@@ -50,7 +50,14 @@ def euler_mod(p, upto):
         s = sum(comb(2*n, 2*j) * E[2*j] for j in range(n))
         E[2*n] = (-s) % p
     return E
-for p in [q for q in sieve(240) if q >= 5]:
+def bernoulli_upto(N):
+    """Exact Bernoulli numbers B_0..B_N via sum C(n+1,k) B_k = 0."""
+    B = [Fraction(0)] * (N + 1); B[0] = Fraction(1)
+    for n in range(1, N + 1):
+        B[n] = -sum(Fraction(comb(n+1, k)) * B[k] for k in range(n)) / (n + 1)
+    return B
+BERN = bernoulli_upto(297)
+for p in [q for q in sieve(300) if q >= 5]:
     m = (p-1)//2
     sig = sum(Fraction(comb(2*k, k), (2*k+1)*16**k) for k in range(m))
     num, den = sig.numerator, sig.denominator
@@ -58,16 +65,20 @@ for p in [q for q in sieve(240) if q >= 5]:
     T3 = (num//(p*p)) % p * pow(den % p, -1, p) % p
     E = euler_mod(p, p-3)[p-3]
     r = T3 * pow(E, -1, p) % p if E % p else None
-    rows.append((p, T3, E, r))
-log(f"  sigma == 0 (mod p^2) for all 5 <= p < 240: {'PASS' if ok2 else 'FAIL'}")
+    Bpm3 = BERN[p-3]
+    bmod = Bpm3.numerator % p * pow(Bpm3.denominator % p, -1, p) % p
+    law = (-1)**((p+1)//2) * bmod % p * pow(36, -1, p) % p
+    rows.append((p, T3, E, r, law))
+log(f"  sigma == 0 (mod p^2) for all 5 <= p < 300: {'PASS' if ok2 else 'FAIL'}")
+okB3 = all(T3 == law for _, T3, _, _, law in rows)
+log(f"  third-order Bernoulli law sigma/p^2 == (-1)^((p+1)/2) B_(p-3)/36 (mod p), 5<=p<300: "
+    f"{'PASS' if okB3 else 'FAIL'} ({len(rows)} primes)  [mod-p^3 reading of Sun Conj. 5.1 + Wolstenholme refinement]")
 log("  third-order invariant T3 := sigma/p^2 mod p vs Euler number E_(p-3):")
-log("  p, T3, E_(p-3), T3/E: " + str(rows[:10]))
-# candidate constants for T3/E per residue class
+log("  p, T3, E_(p-3), T3/E: " + str([(p, t, e, r) for p, t, e, r, _ in rows[:10]]))
 from collections import Counter
 c1 = Counter(); c3 = Counter()
-for p, T3, E, r in rows:
+for p, T3, E, r, _ in rows:
     if r is None: continue
-    # test r against small rationals u/v mod p
     found = None
     for uu in range(-8, 9):
         for vv in range(1, 9):
@@ -96,20 +107,25 @@ for p in [q for q in sieve(500) if q >= 5]:
     if H != (-2*q2) % p: okl = False
 log(f"  Lerch: H_((p-1)/2) == -2 q_p(2) (mod p): {'PASS' if okl else 'FAIL'}")
 okI = True
-for m in range(1, 15):
+for m in range(1, 61):
     L = sum(Fraction(comb(m, j)*(-1)**j, 2*j+1) for j in range(m+1))
-    if L != Fraction(4**m * math.factorial(m)**2, math.factorial(2*m+1)): okI = False
-log(f"  L_m = sum binom(m,j)(-1)^j/(2j+1) = 4^m (m!)^2/(2m+1)!: {'PASS' if okI else 'FAIL'}")
+    if L != Fraction(4**m * math.factorial(m)**2, math.factorial(2*m+1)):
+        okI = False
+log(f"  L_m = sum binom(m,j)(-1)^j/(2j+1) = 4^m (m!)^2/(2m+1)!, m<=60: {'PASS' if okI else 'FAIL'}")
 okB = True
-for m in range(1, 12):
+for m in range(1, 61):
     y = Fraction(-1, 4)
     B = sum(comb(m, k)*y**k/(k+m+1) for k in range(m+1))
     A = sum(comb(m, k)*y**k/(2*k+1) for k in range(m+1))
     L = sum(Fraction(comb(m, j)*(-1)**j, 2*j+1) for j in range(m+1))
+    def F(s):
+        return sum(Fraction(comb(m, j)*(-1)**j) * s**(2*j+1) / (2*j+1) for j in range(m+1))
     if A + B != 2*L: okB = False
-log(f"  key identity A_m + B_m = 2 L_m over Q: {'PASS' if okB else 'FAIL'}")
+    if A != 2*(F(Fraction(1, 2)) - F(Fraction(0))): okB = False
+    if B != 2*(F(Fraction(1)) - F(Fraction(1, 2))): okB = False
+    if L != F(Fraction(1)) - F(Fraction(0)): okB = False
+log(f"  key identity A_m + B_m = 2 L_m over Q, via formal-antiderivative bookkeeping, m<=60: {'PASS' if okB else 'FAIL'}")
 
-# ---- [D] blind-range Euler congruence and refined revival residue
 log(); log("[D] BLIND-RANGE AND REVIVAL REFINEMENTS")
 okU = True
 for p in [q for q in sieve(80) if q >= 5]:
@@ -128,5 +144,6 @@ for p in [5, 7, 11, 13, 29, 37]:
     if lhs != (8 + 16*p*(2*q2 - 1)) % (p*p): okR = False
 log(f"  first revival v_p == 8 + 16p(2q_p(2)-1) (mod p^2): {'PASS' if okR else 'FAIL'}  [via Wolstenholme]")
 
-with open("/home/claude/frc_e/results_pi2.txt", "w") as f:
+import os
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "results_pi2.txt"), "w") as f:
     f.write("\n".join(OUT) + "\n")

@@ -52,6 +52,9 @@ log(f"(a) Wallis pair: v_n < pi < w_n for n=1..300: {'PASS' if encl else 'FAIL'}
     f"exact width identity w-v=w/(2n+1): {'PASS' if ident else 'FAIL'}; strict monotonicity: {'PASS' if mono else 'FAIL'}")
 v50, w50 = vw(50)
 log(f"    example n=50: width = {float(w50-v50):.4e} ~ pi/101 = {math.pi/101:.4e}  (O(1/n) rate)")
+# p=13 showcase residue line (round-01: anchors the manuscript's displayed line)
+p13_line = [pow(16, n, 13) * pow(n * pow(math.comb(2*n, n), 2, 13) % 13, -1, 13) % 13 for n in range(1, 7)]
+log(f"    p=13 residue line [w_n]_13, n=1..6: {p13_line} " + ("PASS" if p13_line == [4, 5, 10, 9, 6, 11] else "FAIL"))
 
 # Machin chain: M_N with both arctans truncated at N
 def machin(N):
@@ -197,9 +200,12 @@ def T_mod(p):
     return s
 zero_all = True; tested = 0
 for p in sieve(3000):
+    if p == 3:
+        if T_mod(p) == 0: zero_all = False; log("  T(3) == 0 (expected nonzero: sole exception)!")
+        continue
     if T_mod(p) != 0: zero_all = False; log(f"  T({p}) != 0 !")
     tested += 1
-log(f"T(p) := sum_(k=0)^(m-1) C(2k,k)/((2k+1)16^k) == 0 (mod p) for all odd primes 5<=p<3000 (p=3 is the sole exception): {'PASS' if zero_all else 'FAIL'}")
+log(f"T(p) := sum_(k=0)^(m-1) C(2k,k)/((2k+1)16^k) == 0 (mod p) for all odd primes 5<=p<3000 (p=3 is the sole exception, T(3)={T_mod(3)}): {'PASS' if zero_all else 'FAIL'} ({tested} primes)")
 
 # second order: sigma/p mod p, pattern hunt
 def euler_numbers_mod(p, upto):
@@ -255,6 +261,7 @@ for p in [13, 101, 1009, 10007]:
     log(f"  p={p:6d}: Gauss sum = {re:.6f} + {im:.2e} i;  sqrt(p) = {math.sqrt(p):.6f}  (class: +sqrt(p) if p==1 mod 4, +i*sqrt(p) if p==3 mod 4)")
 log("angle of -1 on the multiplicative circle: 2pi * (2t)/(4t) = pi exactly, every frame, both chiralities.")
 
-with open("/home/claude/frc_e/results_pi.txt", "w") as f:
+import os
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "results_pi.txt"), "w") as f:
     f.write("\n".join(OUT) + "\n")
 log(); log("results written to results_pi.txt")
