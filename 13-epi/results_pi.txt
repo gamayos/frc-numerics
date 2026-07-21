@@ -3,6 +3,7 @@
 ========================================================================
 (a) Wallis pair: v_n < pi < w_n for n=1..300: PASS; exact width identity w-v=w/(2n+1): PASS; strict monotonicity: PASS
     example n=50: width = 3.1261e-02 ~ pi/101 = 3.1105e-02  (O(1/n) rate)
+    p=13 residue line [w_n]_13, n=1..6: [4, 5, 10, 9, 6, 11] PASS
 (b) Machin chain: minimal N with float(M_N) == IEEE-double(pi): N = 10
     error bound |M_N - pi| < 17/((2N+3) 5^(2N+3)) for N=2..39: PASS
     100-decimal-digit determination at N = 71
@@ -45,7 +46,7 @@ p=13: legible w-scales in [13,169): 36/156 = 0.231 (prediction ((2t+1)/p)^2-ish 
 [5] ARCSIN(1/2) CHAIN WALL: T(p) and second order
 ========================================================================
   T(3) != 0 !
-T(p) := sum_(k=0)^(m-1) C(2k,k)/((2k+1)16^k) == 0 (mod p) for ALL 429 odd primes p<3000: FAIL
+T(p) := sum_(k=0)^(m-1) C(2k,k)/((2k+1)16^k) == 0 (mod p) for all odd primes 5<=p<3000 (p=3 is the sole exception, T(3)=1): PASS (428 primes)
 second-order invariant T2(p) := (sigma/p) mod p, sigma the exact rational partial sum:
    p | T2 | E_(p-3) | q_p(2) | a (p=a^2+b^2) | T2/E | T2/q2
    5 |   0 |     4 |    3 |     (1, 2) |    0 |    0
