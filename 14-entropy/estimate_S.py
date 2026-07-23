@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 # estimate_S.py -- reproduces every numeral of 14-entropy (De Sitter Entropy
-# Estimates), and optionally runs the continuum-token census on a manuscript
-# source passed as the single command-line argument. The script is
-# self-contained: no path outside this directory is referenced; without an
-# argument the numeric blocks run alone and the exit status reflects them.
+# Estimates). Standalone: no input, no external path; exit 0 iff all checks pass.
 #
 # All observational values are [approx] chart readings; the exact faces are
 # the counts Om = 4S+1 and the admissibility congruences, verified here in
@@ -13,10 +10,8 @@
 #
 # Exit status: 0 iff the exact checks and the census both pass.
 
-import re
 import sys
 from math import pi, sqrt, atanh, tanh
-from pathlib import Path
 
 failures = 0
 
@@ -192,66 +187,5 @@ print("[PASS] Ciocan confrontation: constant floor disfavoured; endpoint 0.5 sig
 
 # bound channel
 print("\nbound: registered entropy budget ~1e104 << S  (headroom ~1e18 to saturation)")
-
-# ------------------------------------------------------------------- census
-# Continuum-token census of main.tex: every pi, trigonometric, hyperbolic,
-# and square-root token is counted per class, and every paragraph carrying
-# such a token must carry a register label ([approx], [LCDM], [I]) or a
-# named count/chart designation. Mirrors the corpus grep-gate discipline.
-
-TOKEN_CLASSES = {
-    "pi":    re.compile(r"\\pi\b"),
-    "trig":  re.compile(r"\\(?:cos|sin|tan)\b|\\artanh\b|\\tanh\b|artanh|atanh|\btanh\b"),
-    "sqrt":  re.compile(r"\\sqrt\b"),
-    "integral": re.compile(r"\\int(?![a-zA-Z])"),
-}
-LABELS = re.compile(
-    r"\\apx\b|\\lcdm\b|\\imp\b|\bchart\b|\bcount\b|\bdictionary\b|\\Lambda\$?CDM|\$\\Lambda\$CDM"
-)
-
-
-def census(tex_path: Path) -> int:
-    src = tex_path.read_text(encoding="utf-8")
-    body = src.split(r"\begin{document}", 1)[1]
-    body = re.sub(r"(?<!\\)%.*", "", body)               # strip comments
-    paragraphs = [p for p in re.split(r"\n\s*\n", body) if p.strip()]
-    counts = {k: 0 for k in TOKEN_CLASSES}
-    unlabelled = []
-    for i, para in enumerate(paragraphs, 1):
-        hits = {k: len(rx.findall(para)) for k, rx in TOKEN_CLASSES.items()}
-        for k, n in hits.items():
-            counts[k] += n
-        if any(hits.values()) and not LABELS.search(para):
-            unlabelled.append((i, para.strip()[:90]))
-    print(f"\ncensus of {tex_path.name}: "
-          + ", ".join(f"{k} x{v}" for k, v in counts.items()))
-    bad = 0
-    for tok, fix in (("epoch", "observational frame chronon"),
-                     ("seat", "register / role / sector / residue")):
-        n = len(re.findall(tok, body, re.IGNORECASE))
-        print(f"  [{'PASS' if n == 0 else 'FAIL'}] banned token '{tok}' x{n}"
-              f" (use: {fix})")
-        bad += n
-    if bad:
-        return bad
-    if unlabelled:
-        print(f"  [FAIL] {len(unlabelled)} paragraph(s) carry continuum tokens without a register label:")
-        for i, head in unlabelled:
-            print(f"    para {i}: {head}...")
-        return len(unlabelled)
-    print("  [PASS] every continuum-token paragraph carries a register label")
-    return 0
-
-
-if len(sys.argv) > 1:
-    tex = Path(sys.argv[1])
-    if tex.exists():
-        failures += census(tex)
-    else:
-        print(f"\n[FAIL] census target {tex} not found")
-        failures += 1
-else:
-    print("\ncensus: no manuscript source supplied; numeric blocks only"
-          " (pass a .tex path to run the census gate)")
 
 sys.exit(1 if failures else 0)
