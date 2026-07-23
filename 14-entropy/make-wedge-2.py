@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The registrable wedge -- companion figure for the s-estimation note.
+"""The registrable triangle -- companion figure for the s-estimation note.
 
 Exact layer: the audit identities are asserted before drawing (algebraic
 identities; float tolerance documents CODATA rounding).  Display layer
@@ -29,7 +29,7 @@ tP = lP / c                            # identity anchor; CODATA agrees to 1e-7
 rH_L = 1.659e26                        # Lambda face (channel 1)
 rows = [  # (label, r_H [m], cluster) from the note, Sec. 3; 4a gauge (excluded)
     ("1", 1.659e26, "L"), ("2a", 1.27e26, "R"), ("2b", 1.33e26, "R"),
-    ("3", 1.19e26, "R"), ("4a", 1.27e26, "G"), ("4b", 1.61e26, "L"),
+    ("3", 1.19e26, "R"), ("4a", 1.29e26, "G"), ("4b", 1.64e26, "L"),
 ]
 S_L = pi * (rH_L / lP) ** 2
 
@@ -38,7 +38,7 @@ t_oct = pi / 4 * rH_L / c
 assert abs(t_oct - sqrt(pi) / 4 * sqrt(S_L) * tP) / t_oct < 1e-12
 mean_R = sum(r for _, r, k in rows if k == "R") / 3    # evidence rows only
 mean_L = sum(r for _, r, k in rows if k == "L") / 2
-assert abs((mean_L / mean_R) ** 2 - 1.68) < 0.02      # two-cluster ratio on S
+assert abs((mean_L / mean_R) ** 2 - 1.71) < 0.02      # two-cluster ratio on S (Valcin IV rows)
 assert abs(1 / sqrt(0.685) - 1.208) < 0.002           # chart-identity r_H split
 # entailed rate from the octant + measured Lambda (round-02 F1)
 from math import tanh
@@ -75,7 +75,7 @@ ax.text(3, 39, "over-closed (horizon)", fontsize=8.5, color=SOFT,
         ha="center", style="italic", rotation=0)
 ax.text(-19, -42, "delocalised (no registration)", fontsize=8.5, color=SOFT,
         ha="center", style="italic")
-ax.text(13.5, -9, "the registrable wedge", fontsize=11.5, color="0.45",
+ax.text(13.5, -9, "the registrable triangle", fontsize=11.5, color="0.45",
         ha="center")
 
 # Planck apex and the totality point
@@ -177,8 +177,9 @@ print(f"[PASS] constrained k=3: rho~ = {10 ** b_c13:.2e} kg/m^3; over-closure ba
       f" ({band[0]:.2e} .. {band[-1]:.2e}) Msun across the four fit variants")
 assert abs(pos["electron"][1] - (log10(hbar / c) - pos["electron"][0])) < 0.01
 assert abs(pos["Sgr A*"][1] - (pos["Sgr A*"][0] - log10(2 * G / c**2))) < 0.01
-print(f"[PASS] diagonal: k = {k_fit:.4f} (13 mid-wedge), coefficient "
-      f"rho~ = {10 ** b_fit:.2e} kg/m^3; sensitivity k = {k_full:.4f} (15 incl. walls)")
+print(f"[PASS] diagonal: k = {k_fit:.4f} (13 mid-wedge), intercept "
+      f"{10 ** b_fit:.2e} at the metre pivot (density units only at k = 3); "
+      f"sensitivity k = {k_full:.4f} (15 incl. walls)")
 print(f"[PASS] boundaries: Compton entry R = {10 ** x_lo:.2e} m; "
       f"over-closure exit M = {M_exit:.2e} Msun")
 print(f"[PASS] wall residents on-wall to <0.01 dex: electron (Compton, "
@@ -288,7 +289,7 @@ ax2.annotate("registered-rate cluster", (1.26, 0.035), ha="center", va="bottom",
              fontsize=8.5, color=MID)
 ax2.annotate(r"$\Lambda$-face cluster", (1.635, 0.035), ha="center", va="bottom",
              fontsize=8.5, color=MID)
-ax2.annotate(r"cluster split on $r_H$: the ladder--CMB split (Hubble tension); entailed rate $H_0=67.4\pm0.5$",
+ax2.annotate(r"cluster split on $r_H$: the ladder--CMB split (Hubble tension); entailed rate $H_0=67.4\pm0.7$",
              (1.425, 1.05), ha="center", fontsize=8.5, color=INK,
              annotation_clip=False)
 ax2.set_xlim(1.1, 1.75)

@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
-# estimate_S.py -- reproduces every numeral of 14-entropy (Estimating the
-# de Sitter Entropy), and runs the continuum-token census on main.tex.
+# estimate_S.py -- reproduces every numeral of 14-entropy (De Sitter Entropy
+# Estimates), and optionally runs the continuum-token census on a manuscript
+# source passed as the single command-line argument. The script is
+# self-contained: no path outside this directory is referenced; without an
+# argument the numeric blocks run alone and the exit status reflects them.
 #
 # All observational values are [approx] chart readings; the exact faces are
 # the counts Om = 4S+1 and the admissibility congruences, verified here in
@@ -78,8 +81,9 @@ a0, da0 = 1.20e-10, sqrt(0.02**2 + 0.24**2) * 1e-10   # SPARC knee, sys-dominate
 rows.append(("3", "rotation curves a0", c / (2 * pi * a0 / c)))
 sigma["3"] = da0 / a0
 
-# 4. stellar ages through age = horizon distance (Valcin et al. 2025)
-t_star, dt = 13.39 * Gyr, sqrt(0.10**2 + 0.23**2) / 13.39
+# 4. stellar ages through age = horizon distance (Valcin et al. 2026, IV;
+# one vintage rule: the superseding release everywhere, no mixing)
+t_star, dt = 13.61 * Gyr, sqrt(0.25**2 + 0.23**2) / 13.61
 rows.append(("4a", "stellar age, raw ct [gauge]", c * t_star))
 rows.append(("4b", "stellar age, octant (4/pi)ct", (4 / pi) * c * t_star))
 sigma["4a"] = sigma["4b"] = dt
@@ -100,8 +104,17 @@ print(f"\nconcordance (5 evidence readings, gauge 4a excluded): sqrt(S) ="
       f" {min(sq.values()):.2e} .. {max(sq.values()):.2e}"
       f"  (+/- {half:.1f}% half-range about the mean)")
 print(f"on S itself: full-range spread = factor {fac:.2f}")
-assert abs(half - 16.6) < 0.5 and abs(fac - 1.94) < 0.05
+assert abs(half - 16.5) < 0.5 and abs(fac - 1.94) < 0.05
 print("[PASS] concordance: +/-17% half-range, factor 1.9 on S")
+
+CONV = ["1", "2a", "2b"]                       # conventional channels alone
+sqc = {k: sqrt(Svals[k]) for k in CONV}
+mcv = sum(sqc.values()) / len(sqc)
+half_cv = 100 * (max(sqc.values()) - min(sqc.values())) / 2 / mcv
+fac_cv = (max(sqc.values()) / min(sqc.values())) ** 2
+print(f"conventional channels alone: +/- {half_cv:.1f}% half-range, factor {fac_cv:.2f}")
+assert abs(half_cv - 13.9) < 0.5 and abs(fac_cv - 1.72) < 0.03
+print("[PASS] conventional-only statistic: +/-14%, factor 1.7")
 
 # the two-cluster ratio is the chart identity (H_rate/H0)^2 / OmL -- the
 # definition of OmL read on the rows, NOT framework content (round-02 F1).
@@ -135,27 +148,33 @@ print("saturation test (fit-independent): oldest-object ages cap at (pi/4) r_H/c
 # OmL = tanh^2(3pi/8) from the octant + measured Lambda => H0 = H_L/tanh(3pi/8)
 H_L = sqrt(Lam * c ** 2 / 3) * Mpc / 1e3          # km/s/Mpc [approx]
 H0_ent = H_L / tanh(3 * pi / 8)
-dH0 = H0_ent * 0.016 / 2                          # from the ~1.6% Lambda error
+dH0_indep = H0_ent * 0.5 * sqrt((2 * 0.54 / 67.36) ** 2 + (0.0073 / 0.685) ** 2)
+# independent-error approximation (+/-0.65); the fit's full covariance is NOT
+# propagated here (H0 and OmL are generally positively correlated, so the
+# independent figure is not conservative). Quoted and computed at +/-0.7.
+dH0 = 0.7
 sig_shoes = (73.0 - H0_ent) / sqrt(1.0 ** 2 + dH0 ** 2)
 sig_trgb = (69.8 - H0_ent) / sqrt(1.7 ** 2 + dH0 ** 2)
 sig_planck = (67.36 - H0_ent) / sqrt(0.54 ** 2 + dH0 ** 2)
 print(f"\nentailed rate: H_Lambda = {H_L:.1f} => H0 = {H0_ent:.1f} +/- {dH0:.1f} km/s/Mpc"
       f"  (Planck {abs(sig_planck):.1f} sigma; TRGB {abs(sig_trgb):.1f} sigma;"
       f" Cepheid {abs(sig_shoes):.1f} sigma)")
-assert abs(H0_ent - 67.4) < 0.15 and abs(sig_shoes - 5.0) < 0.15 and abs(sig_trgb - 1.4) < 0.1
-print("[PASS] entailed H0 = 67.4 +/- 0.5: tension resolves toward CMB/TRGB;"
-      " Cepheid ladder 5.0 sigma adverse, in plain view")
+assert abs(H0_ent - 67.4) < 0.15 and abs(dH0_indep - 0.65) < 0.03
+assert abs(sig_shoes - 4.6) < 0.1 and abs(sig_trgb - 1.3) < 0.1
+print("[PASS] entailed H0 = 67.4 +/- 0.7 (independent-error approx. +/-0.65,"
+      " full covariance not propagated): Cepheid 4.6 sigma adverse, in plain view")
 
 # temporal-face confrontation: octant bound vs Valcin et al. 2026 (IV) [LCDM]
 t_oct = (pi / 4) * sqrt(3.0 / Lam) / c / Gyr
 dv = sqrt(0.25 ** 2 + 0.23 ** 2)
 sig_gc = (t_oct - 13.61) / dv
 sig_tu = (t_oct - 13.81) / dv
-print(f"\noctant bound {t_oct:.2f} Gyr vs Valcin IV: oldest population {sig_gc:+.2f} sigma,"
-      f" inferred cosmic age {sig_tu:+.2f} sigma (approached; saturated; nowhere violated)")
+print(f"\noctant bound {t_oct:.2f} Gyr vs Valcin IV (one vintage everywhere):"
+      f" oldest population {sig_gc:+.2f} sigma below (fit-independent, carries P2);"
+      f" prior-dependent inferred age {sig_tu:+.2f} sigma (straddles within 0.1 sigma)")
 assert abs(sig_gc - 0.53) < 0.05 and abs(sig_tu + 0.06) < 0.05
-print("[PASS] Valcin IV confrontation: population 0.5 sigma below the bound;"
-      " cosmic age on it (0.06 sigma)")
+print("[PASS] Valcin IV: population 0.5 sigma below the bound; inferred age a"
+      " prior-dependent consistency, statistically consistent with saturation")
 
 # floor-running confrontation: MUSE-DARK III (Ciocan et al. 2026) [LCDM]
 Om_m = 0.315
@@ -168,8 +187,8 @@ print(f"\nfloor running: a0(z=1) predicted {a0_pred:.2f}e-10 vs measured 2.38+/-
       f" ({sig_end:.1f} sigma with anchor systematics); linear rate predicted"
       f" {slope_pred:.2f} vs 1.59+/-0.10 e-10/z ({sig_slope:.1f} sigma pre-systematics)")
 assert abs(sig_end - 0.5) < 0.1 and abs(sig_slope - 3.0) < 0.1
-print("[PASS] Ciocan confrontation: constant floor dead; endpoint 0.5 sigma;"
-      " linear rate ~3 sigma open")
+print("[PASS] Ciocan confrontation: constant floor disfavoured; endpoint 0.5 sigma;"
+      " linear rate ~3 sigma open (95% bands read at face value)")
 
 # bound channel
 print("\nbound: registered entropy budget ~1e104 << S  (headroom ~1e18 to saturation)")
@@ -224,11 +243,15 @@ def census(tex_path: Path) -> int:
     return 0
 
 
-tex = Path(__file__).resolve().parent.parent / "main.tex"
-if tex.exists():
-    failures += census(tex)
+if len(sys.argv) > 1:
+    tex = Path(sys.argv[1])
+    if tex.exists():
+        failures += census(tex)
+    else:
+        print(f"\n[FAIL] census target {tex} not found")
+        failures += 1
 else:
-    print(f"\n[FAIL] {tex} not found; census not run")
-    failures += 1
+    print("\ncensus: no manuscript source supplied; numeric blocks only"
+          " (pass a .tex path to run the census gate)")
 
 sys.exit(1 if failures else 0)
