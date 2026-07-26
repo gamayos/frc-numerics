@@ -1,11 +1,11 @@
-// Subject-shell dynamics verification for 3-phase (instance checks: verify-233.js).
+// Subject-shell dynamics verification for 5-phase (instance checks: verify-233.js).
 // F13 sphere and frame, zonal theorem, coefficient plane K = F13[w]/(w^2-2) = F169.
 // Every check is integer arithmetic. Any FAIL exits nonzero.
 'use strict';
 let fails = 0;
 const ok = (name, cond) => { console.log((cond ? 'PASS ' : 'FAIL ') + name); if (!cond) fails++; };
 
-const P = 13, OM = 173, S = 43;
+const P = 13, OM = 233, S = 58;
 const mod = (a, m) => ((a % m) + m) % m;
 const pwm = (b, e, m) => { b = mod(b, m); e = mod(e, m - 1);
   let r = 1; while (e > 0) { if (e & 1) r = (r * b) % m; b = (b * b) % m; e >>>= 1; } return r; };
@@ -94,7 +94,7 @@ ok('norm-one torus N1 has order p + 1 = 14', n1 === 14);
 ok('split cycle meets N1 in {1, -1} alone', knorm([1,0]) === 1 && knorm([12,0]) === 1 &&
    ORB.filter(x => knorm([x,0]) === 1).length === 2);
 ok('alpha_fwd = -2^{-1} i w = 4w', mod(-inv13(2) * I13, P) === 4);
-ok('the Carrier counts the plane: |K| = 169 < 173, spare 4', 169 < OM && OM - 169 === 4);
+ok('the Carrier counts the plane: |K| = 169 < 233, spare 64', 169 < OM && OM - 169 === 64);
 
 // ---- 5. the Cayley kinetic example: order 13 over F169 (ex:cayley-13) ----
 // H = -(T + T^{-1} - 2I) on H(F13), alpha = w. U = (I - wH)^{-1}(I + wH).

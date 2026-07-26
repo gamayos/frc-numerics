@@ -1,36 +1,102 @@
-# 4-phase: Schrödinger dynamics as finite arithmetic symmetry shell rotation
+# 5-phase: Schrödinger dynamics as finite arithmetic symmetry shell rotation
 
 Single-file interactive visualisation: `index.html`. No dependencies.
-External verification: `verify-233.js` (44 instance checks) and
-`verify-f13.js` (25 dynamics checks), both node, all passing.
+External verification: `verify-233.js` (60 instance checks, including an
+end-to-end comparison against the deployed page) and `verify-f13.js`
+(25 dynamics checks), both node, all passing.
 
-The correction over 3-phase: the state is not a point on the ring. The
-wavefunction is an instantaneous, space-like object: the residue vector
-of the frame's prime great circle, displayed as the comb on the
-shell. The instance, the panels, and the fold doctrine carry over from
-3-phase unchanged; what is new is the comb and its exact laws.
+The wavefunction is an instantaneous, space-like object: the residue
+vector of the frame's prime great circle, displayed as the comb on the
+shell [1, 2]. The instance is the minimal complete pair (13, 233).
+
+## Revisions in 5-phase
+
+This episode revises 4-phase in response to an independent external
+evaluation. Every adopted finding was re-verified by exact arithmetic.
+
+- The fold notation is corrected. The page wrote x = i^r g^s with
+  g = 2; with r = dlog(x) mod 4 and s = dlog(x) mod 3 this fails at
+  eight of the twelve exponents. The CRT fold is x = i^r 3^s with
+  3 = g^4 the rung base, and the page now says so everywhere. The
+  division form (remainders g^s, s < 3) is a distinct, also-exact
+  naming and is verified separately.
+- The animated operator is stated exactly. One step is the basis-label
+  permutation P2|a> = |2a>: unitary, order 12, origin fixed; in
+  component form the drive pullback (P2 psi)(a) = psi(2^{-1} a), the
+  operator D of the zonal theorem [2]. The scalar reading 2I is not
+  the operator content: the register vector is isotropic (sum of
+  a^2 = 0 mod 13, the zonal theorem's own isotropy of the winding
+  lines), and unitarity is carried by the permutation. The free
+  evolution is not a Cayley step of any Hamiltonian with
+  Frobenius-fixed spectrum [2]; the interacting Cayley sector
+  U = (I - wH)^{-1}(I + wH) is machine-verified off-screen (exact
+  unitarity, order 13) and enters the display with the Object.
+- The mode statement is sharpened. No Object mode winding is present;
+  the fixed shell winding numbers kappa = 3 and S = 58 remain. Read as
+  a K-valued function the comb is g^tau chi_1: the identity register
+  is the shell's fundamental character, and Object modes are k != 1
+  selections read against it.
+- The transport is stated as a quotient [3]. F13 is not inside F233
+  and C12 is not a subgroup of C232: the two phase charts register
+  through the one common C4 class quotient (gcd(12, 232) = 4), each
+  shell lifting the class in its own core Q4. The joint clock is the
+  fibre product C696 = C12 x_{C4} C232: the trajectory
+  tau -> (tau mod 12, tau mod 232) visits every class-compatible pair
+  exactly once, verified.
+- The admissibility predicate is strengthened. The octant completion
+  needs S = 2 (mod 4): the octant sits at chart exponent S/2, odd
+  precisely then. S even alone admits Omega = 257 (S = 64), whose
+  octant sits in the even classes; the guard is a verifier check. The
+  full predicate is S = 2 (mod 4), S = 1 (mod 3), Omega = 5 (mod 12),
+  p^2 < Omega, jointly Omega = 41 (mod 48). The scan of (169, 233) is
+  unchanged and (13, 233) stays jointly minimal.
+- The verification layer is repaired. The core Q4 check is now a real
+  computation (it was a stated constant). verify-f13.js is ported to
+  the current Carrier (233, 58); it carried the former pair (173, 43).
+  A new end-to-end section reads index.html and compares the deployed
+  ORB, INV, WCLS, WRNG tables, the register labels, the fold notation,
+  and the episode self-label against recomputation, so the page and
+  the verifiers can no longer agree by duplication.
+- The clock is wall-time exact. The tick rate is speed/5 steps per
+  second on every display, independent of the refresh rate; throttled
+  tabs resume without a step burst. The states remain discrete.
+- Accessibility: the canvases carry descriptions, the view buttons
+  carry pressed-state semantics, and the caption bands use the
+  higher-contrast ink.
+
+One recommendation of the evaluation is declined, with the reason on
+the page: the suggestion to retitle away from Schrödinger dynamics
+identifies the Schrödinger propagator with the Cayley step. That
+inverts the manuscript's own structure [2]: the zonal theorem is
+titled "the free evolution is the drive", the sector corollary proves
+the free evolution is not a Cayley step, and the shell reading tags
+Schrödinger dynamics as the exact zonal evolution. The evaluation's
+own repair, the permutation P2, is component-for-component the drive
+pullback D, so the animated rotation is the manuscript's free
+Schrödinger operator acting on basis labels.
 
 ## The instance: (13, 233), jointly minimal
 
-- Subject F13 with frame (tau; 0, 1, 2): kappa = 3, i = -g^3 = 5, pi = 6,
-  e = 6, Q4 = {1, 5, 12, 8}. Minimal in its slot: kappa = 1 gives p = 5,
-  which is its own Q4 core; kappa = 2 gives 9, composite; kappa = 3 gives
-  13, prime.
-- Carrier F233, S = 58, the first complete configuration above p^2 = 169:
-  S even, S = 1 (mod 3), Omega = 5 (mod 12), p^2 < Omega. The scan of
-  (169, 233) leaves nothing: 173 and 181 fail S even (43, 45), 193 fails
+- Subject F13 with frame (tau; 0, 1, 2): kappa = 3, i = -g^3 = 5,
+  pi = 6, e = 6, Q4 = {1, 5, 12, 8} [1]. Minimal in its slot:
+  kappa = 1 gives p = 5, its own Q4 core; kappa = 2 gives 9,
+  composite; kappa = 3 gives 13, prime.
+- Carrier F233, S = 58, the first complete configuration above
+  p^2 = 169: S = 2 (mod 4), S = 1 (mod 3), Omega = 5 (mod 12),
+  p^2 < Omega; jointly Omega = 41 (mod 48). The scan of (169, 233)
+  leaves nothing: 173 and 181 fail S even (43, 45), 193 fails
   S = 1 (mod 3) (48), 197 and 229 fail S even (49, 57).
-- The complete register, bit-verified: G = 116, c = 74 (c^2 = 117 =
-  2S+1 = 2^{-1}), hbar = 144 = 2*72 (72^2 = 58), h = 89 = -hbar,
-  k_B = 124 (k_B^2 = 231), with the one gauge bit selecting c = 74
-  through k_B c = h (the branch -c = 159 would give k_B(-c) = hbar).
-  S even puts Omega = 1 (mod 8), so the octant exists: zeta_8 = 97,
-  zeta_8^2 = h.
-- Declared Carrier chart g = 78 = 3^{-1} (the reframing gauge), under
-  which hbar = g^{-S} = g^174 and the drive runs clockwise with hbar at
-  the top cardinal.
+- The complete register, bit-verified [1]: G = 116, c = 74 (c^2 =
+  117 = 2S+1 = 2^{-1}), hbar = 144 = 2*72 (72^2 = 58), h = 89 =
+  -hbar, k_B = 124 (k_B^2 = 231), with the one gauge bit selecting
+  c = 74 through k_B c = h. S even puts Omega = 1 (mod 8), so the
+  octant exists: zeta_8 = 97, zeta_8^2 = h.
+- The Carrier is a timeless torsor: no generator, no origin [1]. The
+  ring display uses the Subject's declared chart (78 = 3^{-1}, the
+  reframing gauge), under which hbar sits at the top cardinal and the
+  registration sweeps one tick per chronon, clockwise.
 
-## The wavefunction comb (the content of this episode)
+## The wavefunction comb
 
 The wavefunction is space-like: an instantaneous configuration, not a
 history. Its seat is the frame's prime great circle, the additive line
@@ -39,140 +105,100 @@ twelve units. The state at chronon tau is the whole residue vector
 
     psi_tau(a) = a * g^tau,   a in F13,
 
-not any single component of it. The drive multiplies every component at
-once: psi_{tau+1} = g * psi_tau, the zonal theorem of 8-dirac read on
+not any single component of it. The drive multiplies every component
+at once: psi_{tau+1} = g * psi_tau, the zonal theorem of [2] read on
 the full circle instead of one orbit point.
 
-The display: the comb on the shell, integrated in the left view.
-Each cell of the great circle carries the 4-state phase vector i^r of
-its registered residue, r = dlog(x) mod 4 in the F4 fold x = i^r * g^s.
-The arrow is orthogonal to the meridian fiber. The phase is a fiber
-datum: it displaces nothing along the space-like base, so the arrow
-carries no component along the meridian. The transverse plane at each
-cell is spanned by the two directions orthogonal to the fiber: the
-surface radial and the latitude tangent (the zonal direction). The
-imaginary axis is zonal, because the class is a shell operation:
-i = g^9, nine drive steps, one counterclockwise quarter along the
-latitudes. The real axis is the one direction orthogonal to both zonal
-and meridional: the radial. The four states: radial out (1), zonal
-counterclockwise (i), radial in (-1), zonal clockwise (-i). Drawn in
-3D and projected through the same linear map as every node
-(orthographic, so the direction is exact; foreshortening never reaches
-zero). The tint completes the registration: each arrow is coloured by
-its rung s = dlog(x) mod 3, in the three fibre colours of the phase
+The display: the comb on the shell, integrated in the left view. Each
+cell of the great circle carries the 4-state phase vector i^r of its
+registered residue, r = dlog(x) mod 4 in the F4 fold x = i^r 3^s [1].
+The arrow is orthogonal to the meridian fiber: the phase is a fiber
+datum and carries no component along the space-like base. The
+transverse plane is spanned by the surface radial (the real axis) and
+the latitude tangent (the imaginary axis; zonal, because i = g^9 acts
+as the drive quarter along the latitudes [2]). The four states: radial
+out (1), zonal counterclockwise (i), radial in (-1), zonal clockwise
+(-i). The tint completes the registration: each arrow is coloured by
+its rung s = dlog(x) mod 3 in the three fibre colours of the phase
 panel, and since (r, s) determines the residue, direction and tint
-together display the complete value of every cell. The unit cell's
-tint is the lit fibre alpha = tau mod 3. Per chronon the tint advances
-one rung as the direction advances one quarter: the diagonal law,
-visible on the comb itself. The pole cell holds 0, ringed gold, no arrow: the meridians
-converge there and the latitude shrinks to a point, so the origin has
-no fiber plane; its fixedness and its phaselessness are one fact. The
-comb never hides: cells on the far side of the sphere draw dim.
+together display the complete value of every cell. The pole cell holds
+0, ringed gold, no arrow: the origin has no fiber plane; its fixedness
+and its phaselessness are one fact.
 
-The exact laws of the comb, all verified:
-
-- The class profile. r(a) for a = 1..12 is 0,1,0,2,1,1,3,3,0,2,3,2, and
-  the classes equipartition: exactly three cells per class.
-- The rung profile. s(a) for a = 1..12 is 0,1,1,2,0,2,2,0,2,1,1,0, the
-  rungs equipartition (four cells per rung), and the twelve (r, s)
-  pairs are distinct: the arrow's direction and tint read the whole
-  value.
-- The rigid turn. r(a * g^tau) = r(a) + tau (mod 4): one drive step is
-  a global phase, every arrow turns one quarter about its meridian
-  fiber at once, i^tau on the whole comb. The comb corkscrews around
-  the space-like circle: the transverse-wave picture of the continuum
-  recovered exactly, Re radial, Im zonal.
-- The rate law. Per chronon the comb makes a quarter fiber-turn while
-  the frame sweeps 30 degrees about the polar axis. Over one shell
-  period the frame makes one turn and the comb makes kappa = 3: the
-  winding rate, mass, visible as arrow speed.
-- The antipode law. r(-a) = r(a) + 2: the fiber half-turn, -x = i^2 x.
-  Opposite cells sit two quarters apart in their fiber planes; in
-  ambient terms the zonal states land exactly parallel and the radial
-  states are mirrored through the horizontal plane.
-- Space-like completeness. At every tau the comb cells 0, a g^tau,
-  -a g^tau register all thirteen residues exactly once: the
-  instantaneous slice always holds the whole field.
-
-In the Carrier view the comb rides the sweeping frame meridian over the
-standing residues; in the Subject view it stands on the static meridian
-while the residues evolve under it. One wavefunction, two charts.
-
-The right panel is unchanged and re-scoped: its inner tags are the
-fold-table occupancy on the exponent cycle, the time-like reading of
-the same step (one depth per (r, s) cell, the diagonal law), and the
-shared clock registers the comb's one transported datum, the class r.
-The hand is the unit component's lift i^tau.
-
-The vector is residue-valued: the registration layer. K-valued
-amplitudes on these thirteen cells, and with them superposition and the
-mode ladder, enter the series when an Object contributes a mode.
+The exact laws of the comb, all verified: the class profile
+0,1,0,2,1,1,3,3,0,2,3,2 with three cells per class; the rung profile
+0,1,1,2,0,2,2,0,2,1,1,0 with four cells per rung and the twelve (r, s)
+pairs distinct; the rigid turn r(a g^tau) = r(a) + tau (the global
+phase, one quarter on every arrow per chronon); the rate law (kappa =
+3 fiber turns per shell period against one frame turn: mass as the
+winding rate); the antipode law r(-a) = r(a) + 2 (the fiber half-turn:
+zonal states parallel, radial states mirrored); and space-like
+completeness (the instantaneous slice holds all thirteen residues at
+every tau).
 
 ## The panels
 
-Left, the shell: the F13 arithmetic symmetry sphere of 8-dirac Figure 1,
-with the Carrier/Subject view toggle and now the wavefunction comb on
-the frame's prime great circle. Carrier view: the residues stand, the
-frame turns clockwise, one step per chronon, the comb riding it.
-Subject view: the frame stands, the residues evolve x -> gx, slot
-(m, a) reading a * g^{m + tau}, the comb standing with the frame.
-M0 blue, M_kappa red, L1 green, L4 = L_{kappa+1} purple, the comb gold.
-Exact states only, no interpolation.
+Left, the shell: the F13 arithmetic symmetry sphere of [2], Figure 1,
+with the Subject/Carrier view toggle and the wavefunction comb on the
+frame's prime great circle. Subject view (default): the frame stands,
+the residues evolve x -> gx, the comb standing with the frame. Carrier
+view: the residues stand, the frame turns clockwise, one step per
+chronon, the comb riding it. M0 blue, M_kappa red, L1 green, L4
+purple. Exact states only, no interpolation.
 
-Right, the phase on the F4 fold, per 00:F4, unchanged:
-
-- The shared Q4 clock at the centre: the class r = tau mod 4, one
-  quarter per chronon, one clock for both shells.
-- The twelve depth tags inside the Subject ring: the fold-table
-  occupancy, one depth per (r, s) cell, moving with the drive; the
-  unit's tag ringed. The time-like reading of the same step.
-- The Subject (kappa = 3 odd) folds as a true product: 2 = i * 3, one
-  oriented quarter-turn times one rung per chronon. The fold hand lifts
-  the unit component's class to the exact core residue i^tau, walking
-  1, 5, 12, 8. The twelve nodes are tinted by fibre and the current
-  fibre alpha = tau mod 3 is lit.
-- The Carrier (S = 58 even) has no product: sign-blind crossing classes
-  (1, -1 in class 0; hbar and h together in class 2), the octant
-  zeta_8 = 97 carrying the odd classes. The ring shows the 232 exact
-  ticks, cardinals gold, octant ticks purple, the current crossing class
-  combed brighter, rotating one tick per chronon.
-- Mass is the winding rate: per own period the phase winds the core
-  kappa = 3 times (Subject) against S = 58 times (Carrier); per chronon
-  both advance the one shared quarter, the [i hbar] composition.
+Right, the phase on the F4 fold, per 00:F4 [1]: the shared Q4 clock
+(the class r = tau mod 4, one clock for both shells); the fold-table
+tags (one depth per (r, s) cell, the time-like reading of the same
+step); the Subject's product fold 2 = i * 3 with the fold hand walking
+i^tau = 1, 5, 12, 8; the Carrier's sign-blind classes with the octant
+zeta_8 = 97 carrying the odd classes; and mass as the winding rate,
+kappa = 3 vs S = 58 windings per own period.
 
 ## Time
 
 The chronon tau is a cycle position: the shell returns every 12, the
-Carrier every 232, the pair recurs at lcm(12, 232) = 696, where the
-counter wraps. The transport invariant is S = 2 (mod 4). The display
-never interpolates: every frame drawn is an exact state.
+Carrier every 232, and the joint clock is the fibre product
+C696 = C12 x_{C4} C232, where the counter wraps. The transport
+invariant is S = 2 (mod 4) [3]. The display never interpolates: every
+frame drawn is an exact state, stepped on the wall clock.
 
 ## Honesty constraints
 
-No Object, no winding parameter, no Born claims: the mode spectrum, the
+No Object, no mode winding, no Born claims: the winding ladder, the
 plane waves, and the dispersion enter the series when an Object
-contributes a mode. The exact claims here are the rotation, the fold,
-the comb laws (profile, equipartition, the rigid turn, the antipode,
-completeness), the fold-table laws (occupancy, bijection, the
-diagonal), the unitarity, and the periods.
+contributes a k != 1 selection. The exact claims here are the
+rotation, the fold, the comb laws, the fold-table laws, the operator
+statement (P2 = the drive pullback), the unitarity, and the periods.
+Probability enters the series later, through registration counting [3].
 
 ## Verification
 
-verify-233.js: the joint minimality (both slots, with the full scan),
-the complete admissibility predicate, the bit-verified register with the
-gauge bit, the chart orientation on g = 78, the octant, the transport,
-the F4 fold (product on F13 with the drive-step factorisation; division-
-unique on both shells; no product on F233 with the parity obstruction;
-octant completion; sign-blindness), the winding rates, the fold-table
-section (the dlog table, the occupancy law at every tau, the bijection
-onto the twelve fold cells at every tau, the diagonal law, the fixed
-origin), and the wavefunction-comb section (the class profile,
-equipartition, the rigid turn at every tau, the antipode law,
-space-like completeness at every tau, the zonal action i = g^9 with
-9 = -3 (mod 12), the fiber half-turn at the antipode, and the tint
-section: the rung profile, rung equipartition, and the distinctness of
-the twelve (r, s) pairs).
-verify-f13.js: the frame congruences, the sphere node rule, the rotation
-and re-registration laws, the zonal theorem, dispersion and isotropy,
-nu = g = 2, |N^1| = 14, alpha_fwd = 4w, and the order-13 Cayley example
-as full matrix arithmetic over F169 with exact unitarity.
+verify-233.js (60 checks): the joint minimality with the full scan and
+the strengthened predicate (S = 2 (mod 4), the Omega = 257 guard,
+Omega = 41 (mod 48)); the bit-verified register with the gauge bit and
+the real core-Q4 computation; the Subject's declared chart and its
+orientation; the octant; the transport; the F4 fold (the product on
+F13, division-unique naming on both shells, no product on F233, octant
+completion, sign-blindness); the winding rates; the fold-table laws;
+the comb laws; the tint laws; the operator section (P2 bijection and
+order, register-vector isotropy, the zonal eigenrelation D chi_k =
+g^{-k} chi_k for all windings, and the animated step as D^{-1} on the
+comb); the fibre-product clock; and the end-to-end deployed-label
+comparison against index.html.
+verify-f13.js (25 checks, on the current pair 233/58): the frame
+congruences, the sphere node rule, the rotation and re-registration
+laws, the zonal theorem, dispersion and isotropy, nu = g = 2,
+|N^1| = 14, alpha_fwd = 4w, and the order-13 Cayley example as full
+matrix arithmetic over F169 with exact unitarity.
+
+## References
+
+[1] Akhtman, Y. Relativistic Algebra over Finite Ring Continuum.
+    Axioms 2025, 14, 636.
+    https://doi.org/10.3390/axioms14080636
+[2] Akhtman, Y. Schrödinger and Dirac Dynamics over Finite Substrate.
+    Preprints 2025, 2025101486.
+    https://doi.org/10.20944/preprints202510.1486.v3
+[3] Akhtman, Y.; Voether, E. Quantum Observation over Finite
+    Relational Substrate. Preprints 2026, 2026061160.
+    https://doi.org/10.20944/preprints202606.1160.v2
