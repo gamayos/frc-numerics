@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FRC Lab · 4-phase · The state is a vector on the great circle</title>
+<title>FRC Lab · 4-phase · Schrödinger dynamics as finite arithmetic symmetry shell rotation</title>
 <style>
   :root{
     --surface:#1a1a19; --panel:#212120; --edge:#33322f;
@@ -16,11 +16,14 @@
   h1{font-size:19px; font-weight:600; letter-spacing:.2px}
   .sub{color:var(--ink2); margin-top:4px; font-size:13px}
   .wrap{max-width:1100px; margin:0 auto}
-  .panels{display:flex; gap:14px; margin-top:16px; flex-wrap:wrap; align-items:flex-start}
+  .panels{display:flex; gap:14px; margin-top:16px; flex-wrap:wrap; align-items:stretch}
   .panel{flex:1 1 480px; background:var(--panel); border:1px solid var(--edge);
          border-radius:10px; padding:12px}
   .panel h2{font-size:13px; font-weight:600; color:var(--ink2);
             text-transform:uppercase; letter-spacing:.8px; margin-bottom:8px}
+  .trow{display:flex; align-items:center; justify-content:space-between;
+        height:30px; margin-bottom:8px}
+  .trow h2{margin-bottom:0}
   canvas{width:100%; height:auto; display:block; border-radius:6px}
   .readout{display:flex; justify-content:space-between; margin-top:8px;
            font-size:13px; color:var(--ink2); flex-wrap:wrap; gap:4px}
@@ -52,15 +55,15 @@
 </head>
 <body data-palette="#3987e5,#c98500">
 <div class="wrap">
-  <h1>The state is a vector on the great circle</h1>
+  <h1>Schrödinger dynamics as finite arithmetic symmetry shell rotation</h1>
   <div class="sub">4-phase · the minimal complete pair <b>(13, 233)</b> · no Object · the state is the
     residue vector of the frame's great circle: twelve components and the fixed origin, folding on
     x = i<sup>r</sup>&middot;g<sup>s</sup> (00:F4)</div>
 
   <div class="panels">
     <div class="panel">
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px">
-        <h2 id="sphTitle" style="margin-bottom:0">The shell · the Subject view</h2>
+      <div class="trow">
+        <h2 id="sphTitle">The shell · the Subject view</h2>
         <div style="display:flex; gap:8px">
           <button id="vSub" class="vbtn on">Subject view</button>
           <button id="vCar" class="vbtn">Carrier view</button>
@@ -80,7 +83,9 @@
       </div>
     </div>
     <div class="panel">
-      <h2 style="display:flex; align-items:center; min-height:30.7px">The phase · the F4 fold</h2>
+      <div class="trow">
+        <h2>The phase · the F4 fold</h2>
+      </div>
       <canvas id="rings" width="1040" height="1064"></canvas>
       <div class="readout">
         <span>fold (00:F4): x = i<sup>r</sup>&middot;g<sup>s</sup> · both shells share the class

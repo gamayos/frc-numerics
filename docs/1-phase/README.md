@@ -1,4 +1,4 @@
-# 4-phase: the state is a vector on the great circle
+# 4-phase: Schrödinger dynamics as finite arithmetic symmetry shell rotation
 
 Single-file interactive visualisation: `index.html`. No dependencies.
 External verification: `verify-233.js` (44 instance checks) and
