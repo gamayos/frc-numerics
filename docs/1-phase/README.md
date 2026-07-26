@@ -196,9 +196,11 @@ matrix arithmetic over F169 with exact unitarity.
 [1] Akhtman, Y. Relativistic Algebra over Finite Ring Continuum.
     Axioms 2025, 14, 636.
     https://doi.org/10.3390/axioms14080636
+    
 [2] Akhtman, Y. Schrödinger and Dirac Dynamics over Finite Substrate.
     Preprints 2025, 2025101486.
     https://doi.org/10.20944/preprints202510.1486.v3
+    
 [3] Akhtman, Y.; Voether, E. Quantum Observation over Finite
     Relational Substrate. Preprints 2026, 2026061160.
     https://doi.org/10.20944/preprints202606.1160.v2
