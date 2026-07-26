@@ -1,4 +1,4 @@
-# 5-phase: Schrödinger dynamics as finite arithmetic symmetry shell rotation
+# Schrödinger dynamics as finite arithmetic symmetry shell rotation
 
 Single-file interactive visualisation: `index.html`. No dependencies.
 External verification: `verify-233.js` (60 instance checks, including an
