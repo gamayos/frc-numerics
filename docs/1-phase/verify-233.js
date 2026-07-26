@@ -100,7 +100,31 @@ ok('sign-blindness: crossing classes of the core are even only: 1,-1 in class 0;
    'hbar (exp 174) and h (exp 58) both in class 2', (232-S) % 4 === 2 && S % 4 === 2);
 ok('the octant carries the odd classes: exp(zeta_8) = 29 = 1 (mod 4)', 29 % 4 === 1);
 
-// ---- 6. the shared clock and the winding rates ----
+// ---- 6. the state vector on the great circle ----
+{
+  const DLOG = {}; let x = 1;
+  for (let j = 0; j < 12; j++){ DLOG[x] = j; x = (x * 2) % P; }
+  ok('dlog table: dlog(2) = 1, dlog(5) = 9, dlog(12) = 6', DLOG[2] === 1 && DLOG[5] === 9 && DLOG[12] === 6);
+  let occOK = true, bijOK = true, diagOK = true;
+  for (let tau = 0; tau < 12; tau++){
+    const cells = new Set();
+    for (let a = 1; a < 13; a++){
+      const j = mod(DLOG[a] + tau, 12);                 // the component's position
+      if ((a * pwm(2, tau, P)) % P !== pwm(2, j, P)) occOK = false;   // sits on its value
+      const r = j % 4, sr = j % 3;
+      cells.add(r + ',' + sr);
+      const j2 = mod(j + 1, 12);
+      if ((j2 % 4) !== ((r + 1) % 4) || (j2 % 3) !== ((sr + 1) % 3)) diagOK = false;
+    }
+    if (cells.size !== 12) bijOK = false;
+  }
+  ok('occupancy: the depth-a component sits on its value a g^tau, all tau', occOK);
+  ok('bijection: the twelve components fill the twelve (r, s) fold cells, all tau', bijOK);
+  ok('diagonal law: each component advances one class and one rung per chronon', diagOK);
+  ok('the origin component is fixed: 0 * g = 0', (0 * 2) % P === 0);
+}
+
+// ---- 7. the shared clock and the winding rates ----
 // the registrable class r = tau mod 4 on both shells: lockstep by construction;
 // windings around the core per own period: kappa and S
 ok('winding per own period: 12/4 = 3 = kappa (Subject), 232/4 = 58 = S (Carrier): '+
@@ -108,5 +132,71 @@ ok('winding per own period: 12/4 = 3 = kappa (Subject), 232/4 = 58 = S (Carrier)
 // the Subject fold hand walks i^tau on core residues
 ok('fold hand residues: i^tau = 1, 5, 12, 8', [0,1,2,3].every(t =>
    pwm(I13, t, P) === [1,5,12,8][t]));
+
+// ---- 8. the wavefunction comb on the great circle ----
+// The wavefunction is space-like: the residue vector of the frame's prime
+// great circle (the additive line through 0), each cell carrying the 4-state
+// phase i^r of its residue, r = dlog(x) mod 4 in the fold x = i^r * g^s.
+{
+  const DLOG = {}; let x = 1;
+  for (let j = 0; j < 12; j++){ DLOG[x] = j; x = (x * 2) % P; }
+  const cls = a => DLOG[a] % 4;
+  // the display table WCLS of index.html
+  const WCLS = [0,1,0,2,1,1,3,3,0,2,3,2];
+  ok('class profile: r(a) = dlog(a) mod 4 for a = 1..12 is 0,1,0,2,1,1,3,3,0,2,3,2',
+     WCLS.every((r, k) => cls(k + 1) === r));
+  const count = [0,0,0,0];
+  for (let a = 1; a < 13; a++) count[cls(a)]++;
+  ok('equipartition: exactly three cells per class', count.every(c => c === 3));
+  let rigid = true;
+  for (let tau = 0; tau < 12; tau++)
+    for (let a = 1; a < 13; a++)
+      if (cls((a * pwm(2, tau, P)) % P) !== (cls(a) + tau) % 4) rigid = false;
+  ok('the rigid turn: r(a g^tau) = r(a) + tau, all a, all tau: '+
+     'one step is the global phase i^tau, one quarter on every arrow', rigid);
+  let anti = true;
+  for (let a = 1; a < 13; a++)
+    if (cls(P - a) !== (cls(a) + 2) % 4) anti = false;
+  ok('the antipode law: r(-a) = r(a) + 2: the opposite ray runs two quarters ahead', anti);
+  let complete = true;
+  for (let tau = 0; tau < 12; tau++){
+    const seen = new Set([0]);
+    for (let a = 1; a <= 6; a++){
+      seen.add((a * pwm(2, tau, P)) % P);
+      seen.add((a * pwm(2, tau + 6, P)) % P);
+    }
+    if (seen.size !== 13) complete = false;
+  }
+  ok('space-like completeness: at every tau the comb cells 0, a g^tau, -a g^tau '+
+     'register all thirteen residues exactly once', complete);
+  // The arrow is orthogonal to the meridian fiber: a fiber datum, no
+  // component along the space-like base. The transverse plane is spanned by
+  // the surface radial (the real axis) and the latitude tangent (the
+  // imaginary axis). The imaginary axis is zonal because the class is a
+  // shell operation: i = g^9, nine drive steps along the latitudes.
+  ok('the imaginary direction is zonal: i = g^9 (nine drive steps along the '+
+     'latitudes), 9 = -3 (mod 12): one counterclockwise quarter', pwm(2, 9, P) === I13 && (9 + 3) % 12 === 0);
+  // The antipode is the fiber half-turn: -x = i^2 x, so opposite cells sit
+  // two quarters apart in their fiber planes (zonal states parallel, radial
+  // states mirrored through the horizontal plane).
+  let par = true;
+  for (let a = 1; a < 13; a++)
+    if ((cls(P - a) * 90 + 180) % 360 !== (cls(a) * 90) % 360) par = false;
+  ok('the fiber half-turn: q(-a) = q(a) + 180 (mod 360), all a: opposite '+
+     'cells sit two quarters apart in the fiber plane', par);
+  // The tint: each arrow is coloured by its rung s = dlog(x) mod 3. Direction
+  // and tint together display the complete fold (r, s), hence the whole value.
+  const rng = a => DLOG[a] % 3;
+  const WRNG = [0,1,1,2,0,2,2,0,2,1,1,0];
+  ok('rung profile: s(a) = dlog(a) mod 3 for a = 1..12 is 0,1,1,2,0,2,2,0,2,1,1,0',
+     WRNG.every((v, k) => rng(k + 1) === v));
+  const rcount = [0,0,0];
+  for (let a = 1; a < 13; a++) rcount[rng(a)]++;
+  ok('rung equipartition: exactly four cells per rung', rcount.every(c => c === 4));
+  const pairs = new Set();
+  for (let a = 1; a < 13; a++) pairs.add(cls(a) + ',' + rng(a));
+  ok('the complete display: (r, s) determines the residue, the twelve pairs '+
+     'are distinct: direction and tint read the whole value', pairs.size === 12);
+}
 
 process.exit(fails ? 1 : 0);
