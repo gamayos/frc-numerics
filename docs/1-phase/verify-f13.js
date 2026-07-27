@@ -1,4 +1,4 @@
-// Subject-shell dynamics verification for 5-phase (instance checks: verify-233.js).
+// Subject-shell dynamics verification for 3-phase (instance checks: verify-233.js).
 // F13 sphere and frame, zonal theorem, coefficient plane K = F13[w]/(w^2-2) = F169.
 // Every check is integer arithmetic. Any FAIL exits nonzero.
 'use strict';

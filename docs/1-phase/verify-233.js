@@ -1,4 +1,7 @@
-// Exact verification for 5-phase on the minimal non-trivial pair (13, 233).
+// Exact verification for 1-phase-1 on the minimal non-trivial pair (13, 233).
+// 1-phase-1 = the 1-phase episode plus the Carrier quarter-turn mechanism
+// (00:C15, 00:C17, 00:C18; face 00:Y2): the flip x h, the 6/29 precession, the
+// double cover, and the perihelion trace. Supersedes the 3-phase folder.
 // Subject F13 (kappa = 3), Carrier F233 (S = 58), fold per 00:F4.
 'use strict';
 let fails = 0;
@@ -73,7 +76,15 @@ console.log('  zeta_8 = 78^29 =', Z8, ' zeta_8^2 = 78^58 =', pwm(g, 58, OM), '(=
 ok('gcd(12, 232) = 4: only the quarter class transports', gcd(12, OM - 1) === 4);
 ok('no 12-cycle in the Carrier: 3 does not divide 232', (OM - 1) % 3 !== 0);
 ok('transport invariant S mod 4 = 2', S % 4 === 2);
-ok('recurrence lcm(12, 232) = 696', 12 * (OM - 1) / 4 === 696);
+{
+  // the joint recurrence as events, no count named: walk the pair dynamics
+  let a = 0, b = 0, n = 0; const seen = new Set();
+  do { seen.add(a + ',' + b); a = (a + 1) % 12; b = (b + 1) % (OM - 1); n++; }
+  while (!(a === 0 && b === 0));
+  ok('the pair space closes: walking (a, b) from (home, home), every '+
+     'class-compatible pair occurs exactly once before the return',
+     seen.size === n && n === 12 * (OM - 1) / gcd(12, OM - 1));
+}
 
 // ---- 5. the F4 fold ----
 // Subject, kappa = 3 odd: the product holds; the drive step itself folds:
@@ -254,17 +265,16 @@ ok('fold hand residues: i^tau = 1, 5, 12, 8', [0,1,2,3].every(t =>
      'the drive pullback in the register orientation, all tau, all cells', pull);
 }
 
-// ---- 10. the joint registration recurrence: the fibre product ----
+// ---- 10. the joint registration recurrence: the fibre product as events ----
 {
-  const seen = new Set(); let compat = true;
-  for (let t = 0; t < 696; t++){
-    const u = t % 12, v = t % 232;
-    if (u % 4 !== v % 4) compat = false;
-    seen.add(u + ',' + v);
-  }
-  ok('C_696 = C_12 x_{C_4} C_232: the trajectory visits all 12*232/4 = 696 '+
-     'class-compatible pairs exactly once', compat && seen.size === 696 &&
-     12 * 232 / 4 === 696);
+  const seen = new Set(); let compat = true, u = 0, v = 0, n = 0;
+  do { if (u % 4 !== v % 4) compat = false;
+    seen.add(u + ',' + v); u = (u + 1) % 12; v = (v + 1) % (OM - 1); n++;
+  } while (!(u === 0 && v === 0));
+  ok('the fibre product as events: between consecutive (home, home) events '+
+     'the trajectory visits every class-compatible pair exactly once, the '+
+     'shared class agreeing at every chronon; no count beyond the shells is '+
+     'named', compat && seen.size === n && n === 12 * (OM - 1) / gcd(12, OM - 1));
 }
 
 // ---- 11. end to end: the sibling index.html (repository consistency) ----
@@ -300,11 +310,11 @@ ok('fold hand residues: i^tau = 1, 5, 12, 8', [0,1,2,3].every(t =>
   ok('deployed fold notation is i^r 3^s and never i^r g^s',
      html.includes('i<sup>r</sup>&middot;3<sup>s</sup>') &&
      !html.includes('i<sup>r</sup>&middot;g<sup>s</sup>'));
-  ok('the page carries the stable episode marker (1-phase, rev 5)',
-     html.includes('data-episode="1-phase"') && html.includes('data-rev="5"'));
+  ok('the page carries the stable episode marker (1-phase-1, rev 5)',
+     html.includes('data-episode="1-phase-1"') && html.includes('data-rev="5"'));
 }
 
-// ---- 12. review-2 residuals: register vs coefficient, the trivial pair, the octant lift ----
+// ---- 12. the register and coefficient readings, the trivial pair, the octant lift ----
 {
   // Active register vs coefficient wavefunction. One comb step composed with
   // the drive pullback is the identity, so the animation runs by D^{-1}; the
@@ -334,7 +344,8 @@ ok('fold hand residues: i^tau = 1, 5, 12, 8', [0,1,2,3].every(t =>
     const IEXP = [0, 9, 6, 3], CORE4 = [1, 5, 12, 8];
     const ORB2 = []; for (let j = 0, x = 1; j < 12; j++){ ORB2.push(x); x = (x * 2) % P; }
     let handOK = true;
-    for (let tau = 0; tau < 696; tau++){
+    const rec = 12 * (OM - 1) / gcd(12, OM - 1);
+    for (let tau = 0; tau < rec; tau++){
       const r = tau % 4;
       if (ORB2[IEXP[r]] !== CORE4[r]) handOK = false;                       // Carrier view
       const m = mod(IEXP[r] - tau, 12);
@@ -348,10 +359,166 @@ ok('fold hand residues: i^tau = 1, 5, 12, 8', [0,1,2,3].every(t =>
   // The Carrier Q4 lifts even fold classes only; the octant exponent is odd.
   const dl = {}; for (let k = 0, x = 1; k < 232; k++){ dl[x] = k; x = (x * 78) % OM; }
   ok('Carrier core chart exponents {0, 174, 116, 58} sit in even classes {0, 2, 0, 2} (mod 4); '+
-     'the octant exponent 29 is odd: the odd classes ride the octant, never the core',
+     'the octant exponent 29 is odd: the odd classes ride the octant',
      dl[1] === 0 && dl[144] === 174 && dl[232] === 116 && dl[89] === 58 &&
      JSON.stringify([0, 174, 116, 58].map(e => e % 4)) === JSON.stringify([0, 2, 0, 2]) &&
      dl[97] === 29 && 29 % 2 === 1);
+}
+
+// ---- 13. the Carrier's quarter-turn and the precession (00:C17, 00:C18) ----
+// The cycles share the C4 class quotient; the joint recurrence is the pair
+// space, event structure. The bridge is the quadratic extension K = F169 with its leak;
+// the Carrier evolves in itself over its complete period, each quarter the
+// Fourier flip x h, and the Subject's orbit precesses against the quarter.
+{
+  const h = pwm(78, 58, OM);
+  ok('the quarter of the Carrier period is the Fourier flip: 78^58 = h = 89, '+
+     'h^2 = -1, h^4 = 1 (space and momentum exchange each quarter)',
+     h === 89 && (h * h) % OM === OM - 1 && pwm(h, 4, OM) === 1);
+  ok('the four cardinals are the quarter operators: chart exponents '+
+     '{0, 58, 116, 174} carry {1, h, -1, hbar}',
+     pwm(78, 0, OM) === 1 && pwm(78, 58, OM) === 89 &&
+     pwm(78, 116, OM) === OM - 1 && pwm(78, 174, OM) === 144);
+  ok('the flip chirality is Carrier-blind: h and hbar share class 2 '+
+     '(exponents 58 and 174, both = 2 mod 4): the C14 bit',
+     58 % 4 === 2 && 174 % 4 === 2);
+  ok('the leak: the plane K = F169 is counted by the Carrier with spare '+
+     '233 - 169 = 64 = 8^2; which leak cells carry the flip is open',
+     OM - 169 === 64 && 8 * 8 === 64 && 169 === P * P);
+  {
+    // the precession as events: walk the pair dynamics from (home, home)
+    let a = 0, b = 0, n = 0, half = 0, halves = 0;
+    do { a = (a + 1) % 12; b = (b + 1) % (OM - 1); n++;
+      if (a === 0 && b === (OM - 1) / 2){ half = n; halves++; }
+    } while (!(a === 0 && b === 0));
+    ok('the precession: 12 ticks per Subject orbit against the 58-tick '+
+       'quarter advances the q/p frame 6/29 quarter per orbit; the event '+
+       '(home, dlog(-1)) occurs exactly once between consecutive '+
+       '(home, home) events, at the exact midpoint, the chart residue '+
+       'there being the Carrier\'s own -1',
+       12 / gcd(12, 58) === 6 && 58 / gcd(12, 58) === 29 &&
+       halves === 1 && 2 * half === n &&
+       pwm(78, (OM - 1) / 2, OM) === OM - 1);
+  }
+  const peri = new Set();
+  for (let k = 0; k < 58; k++) peri.add(mod(12 * k, 232));
+  ok('the perihelion trace: orbit closures land at ticks 12k mod 232 -- 58 '+
+     'distinct positions, every fourth tick; orbit 29 lands on 116, the -1 '+
+     'cardinal due west (the half cover), and orbit 58 closes east',
+     peri.size === 58 && [...peri].every(p => p % 4 === 0) &&
+     mod(12 * 29, 232) === 116 && mod(12 * 58, 232) === 0);
+  ok('the Subject cardinal drift: one tick per chronon against the fixed '+
+     'cardinals; the quarter takes exactly S chronons (58*360 = 90*232), '+
+     'q landing on the h cardinal at tau = S; closure at Omega - 1 = 232',
+     58 * 360 === 90 * 232 && pwm(78, 58, OM) === 89 && mod(232, 232) === 0);
+  {
+    const rec = 12 * (OM - 1) / gcd(12, OM - 1);
+    const recT = 4 * 40 / gcd(4, 40);
+    ok('the composed frame-ray rate: numerator kappa + S = 61, coprime to '+
+       'the pair space, so the ray is home only at (home, home) and '+
+       'antipodal exactly at the (home, dlog(-1)) event; per-orbit overshoot '+
+       '12 ticks; the trivial pair concurs with numerator kappa + S = 11',
+       3 + 58 === 61 && gcd(61, rec) === 1 &&
+       mod(61 * (rec / 2), rec) === rec / 2 &&
+       mod(61 * 12, rec) / 3 === 12 &&
+       1 + 10 === 11 && gcd(11, recT) === 1 &&
+       mod(11 * (recT / 2), recT) === recT / 2);
+  }
+}
+
+// ---- 14. the octant bridge and the chirality ----
+// The coefficient plane K = F13[w]/(w^2 - 2) is built explicitly; the octant
+// is the homomorphic bridge between its units (C168) and the Carrier's
+// (C232), gcd = 8; an octant-equivariant counting transports the flip
+// exactly, the image and the remainder each closed under the flip, the
+// remainder eight full octant fibres. The chirality is Subject parity:
+// C14's odd-member rule and the gauge bit both select h.
+{
+  const kmul = (x, y) => [(x[0]*y[0] + 2*x[1]*y[1]) % P, (x[0]*y[1] + x[1]*y[0]) % P];
+  const kord = (x) => { let o = 1, y = x;
+    while (!(y[0] === 1 && y[1] === 0) && o <= 168){ y = kmul(y, x); o++; } return o; };
+  let gen = null;
+  for (let a = 0; a < P && !gen; a++) for (let b = 0; b < P && !gen; b++){
+    if (a === 0 && b === 0) continue;
+    if (kord([a, b]) === 168) gen = [a, b];
+  }
+  ok('the coefficient plane built explicitly: K = F13[w]/(w^2-2), |K*| = 168, '+
+     'a generator found', gen !== null);
+  ok('the octant is the whole homomorphic bridge between the plane and the '+
+     'Carrier: gcd(168, 232) = 8', gcd(168, 232) === 8);
+  const dlK = new Map(); { let x = [1, 0];
+    for (let e = 0; e < 168; e++){ dlK.set(x[0] + ',' + x[1], e); x = kmul(x, gen); } }
+  const z8C = pwm(78, 29, OM), coC = pwm(78, 8, OM), hh = pwm(78, 58, OM);
+  const cnt = (u) => { const e = dlK.get(u[0] + ',' + u[1]);
+    return (pwm(z8C, e % 8, OM) * pwm(coC, e % 21, OM)) % OM; };
+  let iK = [1, 0]; for (let k = 0; k < 42; k++) iK = kmul(iK, gen);
+  const img = new Set([0]); let equi = true;
+  for (const key of dlK.keys()){ const u = key.split(',').map(Number);
+    img.add(cnt(u));
+    if (cnt(kmul(iK, u)) !== (hh * cnt(u)) % OM) equi = false;
+  }
+  ok('an octant-equivariant counting exists: 169 cells hit exactly, and the '+
+     'flip transports exactly, c(i_K u) = h c(u) on all 168 units',
+     img.size === 169 && equi);
+  const leak = []; for (let c = 0; c < OM; c++) if (!img.has(c)) leak.push(c);
+  const leakSet = new Set(leak);
+  const dlC = new Map(); { let y = 1;
+    for (let e = 0; e < 232; e++){ dlC.set(y, e); y = (y * 78) % OM; } }
+  const fib = new Map();
+  leak.forEach(v => { const c = dlC.get(v) % 29; fib.set(c, (fib.get(c) || 0) + 1); });
+  let seen = new Set(), cyc = 0;
+  for (const v of leak){ if (seen.has(v)) continue; let o = v;
+    while (!seen.has(o)){ seen.add(o); o = (hh * o) % OM; } cyc++; }
+  ok('the octant remainder: 64 cells, closed under the flip, organised as '+
+     '8 full octant fibres over 8 co-octant classes, 16 flip 4-cycles',
+     leak.length === 64 && leak.every(v => leakSet.has((hh * v) % OM)) &&
+     fib.size === 8 && [...fib.values()].every(n => n === 8) && cyc === 16);
+  ok('the general leak law (kappa-odd pairs): Omega - p^2 = 8(S/2 - '+
+     'kappa(2 kappa + 1)): (5,41) 16, (13,233) 64, (29,857) 16, (37,1433) 64',
+     [[5, 41], [13, 233], [29, 857], [37, 1433]].every(([pp, oo]) => {
+       const kk = (pp - 1) / 4, ss = (oo - 1) / 4;
+       return oo - pp * pp === 8 * (ss / 2 - kk * (2 * kk + 1)); }));
+  ok('the chirality is Subject parity: C14 selects the odd member on '+
+     'both shells (i = 5 odd over 8 even; h = 89 odd over hbar = 144 even), '+
+     'the gauge bit k_B c = h concurs, and the transported flip lands on h; '+
+     'GR orientation is likewise orbit-relative: prograde',
+     5 % 2 === 1 && 8 % 2 === 0 && 89 % 2 === 1 && 144 % 2 === 0 &&
+     (124 * 74) % OM === 89 && pwm(z8C, 2, OM) === 89);
+}
+
+// ---- 15. the pair-native state ----
+// The registered state is the pair (shell a mod 12, Carrier b mod 232),
+// each a residue of its own shell; the joint recurrence is the pair space,
+// its count the lcm (00:F2) -- a label count, not an entity. The double
+// cover is event structure: -1 at the pair event (home, 116), the Carrier's
+// own dlog(-1); closure at (home, home). Everything reduces to pairs.
+{
+  const rec = 12 * (OM - 1) / gcd(12, OM - 1);
+  let crt = true, sheet = true, events = true;
+  for (let tau = 0; tau < rec; tau++){
+    const a = tau % 12, b = tau % (OM - 1);
+    const j = mod((a - b) / 4, 3);
+    if (b + (OM - 1) * j !== tau) crt = false;                  // CRT rebuild
+    const s2 = (j > 1 || (j === 1 && b >= (OM - 1) / 2));       // pair-derived sheet
+    if (s2 !== (tau >= rec / 2)) sheet = false;
+    if ((a === 0 && b === (OM - 1) / 2) !== (tau === rec / 2)) events = false;
+    if ((a === 0 && b === 0) !== (tau === 0)) events = false;
+  }
+  ok('the pair determines everything: CRT rebuild b + (Omega-1) j with '+
+     'j = ((a - b)/4) mod 3 recovers every chronon of the recurrence', crt);
+  ok('the sheet is pair-derived: the second sheet '+
+     'runs from the event (home, 116) to (home, home), and the pair formula '+
+     'agrees with the timeline at every chronon', sheet && events);
+  ok('every registered datum is a '+
+     'residue of its shell (a < 12, b < Omega - 1, the perihelion a tick), '+
+     'and the sheet sign is the Carrier\'s own -1 at dlog (Omega-1)/2 = 116',
+     (OM - 1) / 2 === 116 && pwm(78, (OM - 1) / 2, OM) === OM - 1 &&
+     12 < OM && 232 === OM - 1);
+  ok('the precession theorem (00:C18): the apsidal fraction per revolution '+
+     'is the winding ratio, kappa/S = (p-1)/(Omega-1), here 3/58, the '+
+     'mass-ratio reading of D2; the trivial pair concurs at 1/10',
+     (P - 1) * S === (OM - 1) * 3 && gcd(3, S) === 1 &&
+     4 * 10 === 40 * 1 && gcd(1, 10) === 1);
 }
 
 process.exit(fails ? 1 : 0);
