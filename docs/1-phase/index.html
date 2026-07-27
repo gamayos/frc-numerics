@@ -3,8 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="google-site-verification" content="fL72b0l_WncbkoP5dhRQeHLBd-8DTd7tl-0itpOdHrQ" />
-<title>Finite Ring Cosmology Lab: Schrödinger dynamics as finite arithmetic symmetry shell rotation</title>
+<title>Finite Ring Cosmology Lab: Schrödinger dynamics as (13,233) shell rotation</title>
 <style>
   :root{
     --surface:#1a1a19; --panel:#212120; --edge:#33322f;
@@ -29,7 +28,7 @@
   .readout{display:flex; justify-content:space-between; margin-top:8px;
            font-size:13px; color:var(--ink2); flex-wrap:wrap; gap:4px}
   .readout b{color:var(--ink); font-weight:600}
-  .bridge{width:100%; text-align:center; margin-top:10px; padding:9px 14px;
+  .bridge{width:100%; text-align:left; margin-top:10px; padding:9px 14px;
           background:var(--panel); border:1px solid var(--edge); border-radius:10px;
           font-size:13px; color:var(--ink2)}
   .bridge b{color:var(--ink)}
@@ -57,12 +56,12 @@
   .refs a{color:#6f9fd8; text-decoration:none}
 </style>
 </head>
-<body data-palette="#3987e5,#c98500">
+<body data-palette="#3987e5,#c98500" data-episode="1-phase" data-rev="5">
 <div class="wrap">
-  <h1>FRC Lab: Schrödinger dynamics as finite arithmetic symmetry shell rotation</h1>
-  <div class="sub">the minimal complete Subject, Carrier pair <b>(13, 233)</b> · no Object · the state is the
+  <h1>FRC Lab: Schrödinger dynamics as unitary shell rotation</h1>
+  <div class="sub">minimal non-trivial pair <b>(13, 233)</b> · no Object · the state is the
     residue vector of the frame's great circle: twelve components and the fixed origin, folding on
-    x = i<sup>r</sup>&middot;3<sup>s</sup>, 3 = g&#8308; (00:F4) [1] · the free evolution is the
+    x = i<sup>r</sup>&middot;q<sup>s</sup>, q = g&#8308; [1] · the free evolution is the
     drive [2]</div>
 
   <div class="panels">
@@ -74,14 +73,14 @@
           <button id="vCar" class="vbtn" aria-pressed="false">Carrier view</button>
         </div>
       </div>
-      <canvas id="sph" width="1040" height="1064" role="img" aria-label="The arithmetic symmetry sphere of F13: meridians, latitudes, the rotating frame, and the wavefunction comb of phase arrows on the frame's great circle"></canvas>
+      <canvas id="sph" width="1040" height="1064" role="img" aria-label="The arithmetic symmetry sphere of F13: meridians, latitudes, the rotating frame, and the register comb of phase arrows on the frame's great circle"></canvas>
       <div class="readout">
         <span>the frame's prime meridian sweeps clockwise, one step of 30&deg; per chronon ·
           now on the ray of <b id="frameOut">1</b> · returns after <b>12</b></span>
         <span>in the Subject's view the frame is static and the residues evolve
           <b>x &#8614; gx</b>: slot a reads a&middot;g<sup>&tau;</sup>,
           unit slot now <b id="slotOut">1</b> · &times;2 per chronon</span>
-        <span style="flex-basis:100%">the wavefunction is the comb: instantaneous, space-like, thirteen cells;
+        <span style="flex-basis:100%">the comb is the active register R<sub>&tau;</sub>: instantaneous, space-like, thirteen cells;
           the arrow direction is the phase i<sup>r</sup>, the tint the rung s, so each cell shows
           its whole value x = i<sup>r</sup>&middot;3<sup>s</sup>; one step: a quarter about the
           fiber, one rung of tint</span>
@@ -89,18 +88,24 @@
     </div>
     <div class="panel">
       <div class="trow">
-        <h2>The phase · the F4 fold</h2>
+        <h2 id="ringsTitle">The phase · the Subject view</h2>
+        <div style="display:flex; gap:8px">
+          <button id="vSub2" class="vbtn on" aria-pressed="true">Subject view</button>
+          <button id="vCar2" class="vbtn" aria-pressed="false">Carrier view</button>
+        </div>
       </div>
-      <canvas id="rings" width="1040" height="1064" role="img" aria-label="The phase panel: the Carrier ring of 232 ticks, the Subject ring of 12 nodes, the shared quarter clock, and the fold-table tags"></canvas>
+      <canvas id="rings" width="1040" height="1064" role="img" aria-label="The phase panel: the Carrier ring of 232 ticks, the L1 time latitude ring of the shell, and the common C4 fold clock"></canvas>
       <div class="readout">
-        <span>fold (00:F4): x = i<sup>r</sup>&middot;3<sup>s</sup> · both shells share the class
-          r = &tau; mod 4, one quarter per chronon · mass is the winding rate:
+        <span>fold: x = i<sup>r</sup>&middot;q<sup>s</sup> · both shells share the class
+          r = &tau; mod 4, one quarter per chronon · mass is the winding rate (D2):
           &kappa; = <b>3</b> vs S = <b>58</b> windings per own period</span>
         <span>Carrier, S even: no product; classes sign-blind (&#295; and h share class 2);
           the octant &zeta;&#8328; = 97 completes · transport gcd(12, 232) = <b>4</b></span>
-        <span style="flex-basis:100%">the inner tags are the fold-table occupancy on the exponent cycle,
-          the time-like reading; the wavefunction itself is the comb on the shell's great circle,
-          and this panel registers its one shared datum: the class r</span>
+        <span style="flex-basis:100%">the middle ring is the shell's L&#8321; time latitude, the drive's
+          own orbit through the unit, green on both panels and view-synced with the sphere;
+          its cells carry the time-domain phase comb, the same arrows as the shell's space-like
+          comb: direction i<sup>r</sup> of the registered value, tint the rung s; the panel
+          registers the one shared datum: the class r</span>
       </div>
     </div>
   </div>
@@ -116,7 +121,7 @@
   </div>
 
   <div class="bridge">
-    the evolution is <b>x &#8614; gx</b> and the drive step folds (00:F4): on the Subject,
+    the evolution is <b>x &#8614; gx</b> and the drive step folds: on the Subject,
     &kappa; odd, exactly <b>2 = i&middot;3</b>: one oriented quarter-turn times one rung per chronon
     &middot; on the Carrier, S even, the step does not factor: the octant &zeta;&#8328; carries it
     &middot; [i&#295;&part;<sub>&tau;</sub>] = [E], one quarter from each ring &middot;
@@ -130,11 +135,11 @@
       the one gauge bit selects c = 74 through k<sub>B</sub>c = h &middot;
       octant &zeta;&#8328; = <b>97</b>, &zeta;&#8328;&sup2; = h<br>
       core Q&#8324; = {1, &#295;, &minus;1, h} = {1, 144, 232, 89}</span>
-    <span><span class="reg">The minimal complete pair</span><br>
+    <span><span class="reg">The minimal non-trivial pair</span><br>
       admissibility in full: S &equiv; 2 (mod 4), S &equiv; 1 (mod 3), &Omega; &equiv; 5 (mod 12),
       p&sup2; = 169 &lt; 233; jointly &Omega; &equiv; 41 (mod 48)<br>
       the scan of (169, 233): 173, 181, 197, 229 fail S even; 193 fails S &equiv; 1 (mod 3)<br>
-      Subject minimal too: &kappa; = 1 gives 5, its own core; &kappa; = 2 gives 9, composite</span>
+      Subject: &kappa; = 1 gives the trivial pair (5, 41), F&#8325; its own fold; &kappa; = 2 gives 9, composite</span>
     <span><span class="reg">Subject (the frame, the origin)</span><br>
       &kappa; = <b>3</b> &nbsp; p = <b>13</b> &nbsp; g = <b>2</b> &nbsp;
       i = <b>5</b> &nbsp; &pi; = <b>6</b> &nbsp; e = <b>6</b><br>
@@ -144,7 +149,7 @@
       &middot; C&#8321;&#8324; = N&sup1; interactions and boosts<br>
       split cycle &cap; N&sup1; = {&plusmn;1}: the continuum's one circle is two finite tori<br>
       transport: gcd(12, 232) = 4 &middot; invariant S &equiv; 2 (mod 4) &middot;
-      joint clock C&#8326;&#8329;&#8326; &cong; C&#8321;&#8322; &times;<sub>C&#8324;</sub>
+      joint recurrence C&#8326;&#8329;&#8326; &cong; C&#8321;&#8322; &times;<sub>C&#8324;</sub>
       C&#8322;&#8323;&#8322;</span>
   </div>
 
@@ -186,25 +191,36 @@
     <p><span class="k">The Hermitian form is algebraic, not positive [2].</span> This episode makes no Born
       claims. Its exact claims are unitarity, phases, and periods. Probability enters the series later,
       through registration counting.</p>
-    <p><span class="k">The animated operator is the drive pullback [2].</span> The exact operator
+    <p><span class="k">One step, two exact readings [2].</span> The exact operator
       content of one step is the basis-label permutation P&#8322;|a&#10217; = |2a&#10217;: unitary,
       P&#8322;<sup>12</sup> = I on the twelve units, the origin fixed. In component form it is the
       pullback (P&#8322;&psi;)(a) = &psi;(2<sup>&minus;1</sup>a), character for character the drive
       D of the zonal theorem: the free evolution is the drive, and it is not a Cayley step of any
-      Hamiltonian with Frobenius-fixed spectrum; the two sectors meet only at &plusmn;1. The scalar
-      reading 2I is not the operator content, and could not be: the register vector is isotropic,
-      &Sigma;a&sup2; &equiv; 0 (mod 13), which is the zonal theorem's own isotropy of the winding
-      lines; unitarity is carried by the permutation, exactly as the theorem's proof reindexes.
-      The interacting sector, the Cayley step U = (I &minus; wH)<sup>&minus;1</sup>(I + wH) with
+      Hamiltonian with Frobenius-fixed spectrum; the two sectors meet only at &plusmn;1. The comb
+      animates the active reading: register labels advance, R<sub>&tau;</sub>(a) =
+      a&middot;g<sup>&tau;</sup>, one comb step composed with the pullback giving the identity, so
+      the animation runs by D<sup>&minus;1</sup> while the coefficient wavefunction,
+      &Psi;<sub>&tau;</sub>(a) = &Psi;&#8320;(g<sup>&minus;&tau;</sup>a) =
+      D<sup>&tau;</sup>&Psi;&#8320;(a), runs by D: on one cell the comb sends 1 to 2 while
+      (D&chi;&#8321;)(1) = 2<sup>&minus;1</sup> = 7. The two are duals through the inverse table,
+      one dynamics read from two frames, and the word wavefunction belongs to the coefficient side
+      alone. The scalar reading 2I is not the operator content, and could not be: the register
+      vector is isotropic, &Sigma;a&sup2; &equiv; 0 (mod 13), the zonal theorem's own isotropy of
+      the winding lines, so norm preservation on this one vector is nondiagnostic; unitarity is
+      carried by the permutation, exactly as the theorem's proof reindexes.
+      The Cayley kinetic sector, the step U = (I &minus; wH)<sup>&minus;1</sup>(I + wH) with
       H = 2I &minus; T &minus; T<sup>&minus;1</sup> on the translation shell, is machine-verified
       off-screen (exact unitarity, order 13) and enters the display with the Object.</p>
-    <p><span class="k">The state is a vector, not a point (00:F4) [1].</span> The wavefunction is an
+    <p><span class="k">The state is a vector, not a point (00:C1) [1].</span> The register section is an
       instantaneous, space-like object: the residue vector of the frame's prime great circle, the
       additive line through the Observer. Thirteen cells: the origin fixed at 0 at the pole and
-      twelve components &psi;<sub>&tau;</sub>(a) = a&middot;g<sup>&tau;</sup>. The comb on the
+      twelve components R<sub>&tau;</sub>(a) = a&middot;g<sup>&tau;</sup>; the full space splits as
+      K&delta;&#8320; &oplus; K<sup>F&#8321;&#8323;&times;</sup>, the step acting as the identity
+      on the origin summand and as D on the units. The comb on the
       shell displays it: each cell carries the 4-state phase vector i<sup>r</sup> of its registered
       residue, r = dlog(x) mod 4 in the fold x = i<sup>r</sup>&middot;3<sup>s</sup>, tinted by its
-      rung s.</p>
+      rung s. The coefficient wavefunction of the fold (00:F4) is this section's passive dual,
+      read through the inverse table.</p>
     <p><span class="k">The phase arrow is orthogonal to the meridian fiber [2].</span> The phase is a
       fiber datum: it displaces nothing along the space-like base, so the arrow carries no
       component along the meridian. The transverse plane at each cell is spanned by the two
@@ -213,7 +229,7 @@
       drive steps, one counterclockwise quarter along the latitudes. The real axis is the one
       direction orthogonal to both zonal and meridional: the radial. So the four states are
       radial out (1), zonal counterclockwise (i), radial in (&minus;1), zonal clockwise
-      (&minus;i), and one drive step, &psi;<sub>&tau;+1</sub> = g&middot;&psi;<sub>&tau;</sub>,
+      (&minus;i), and one drive step, R<sub>&tau;+1</sub> = g&middot;R<sub>&tau;</sub>,
       turns every arrow one quarter about its meridian fiber: the comb corkscrews around the
       space-like circle, the transverse-wave picture of the continuum recovered exactly, with
       Re radial and Im zonal. The tint completes the registration: each arrow is coloured by its
@@ -228,8 +244,10 @@
       and radial states mirrored through the horizontal plane. The origin at the pole has no
       fiber plane: the meridians converge there and the latitude shrinks to a point; its
       fixedness (0&middot;g = 0) and its phaselessness are one fact. The latitude reading of the
-      same step is time-like: the inner tags of the phase panel walk the fold table, one depth
-      per (r, s) cell, one class and one rung per chronon. This vector is residue-valued, the
+      same step is time-like: the phase panel's middle ring is this L&#8321; latitude itself,
+      its cells re-registering one drive step per chronon and carrying the same phase arrows
+      read in the time domain, the ring's radial the real axis and the zonal tangent the
+      imaginary, i one quarter counterclockwise. This vector is residue-valued, the
       registration layer: K-valued amplitudes arrive with the Object.</p>
     <p><span class="k">The Carrier is a timeless torsor [1].</span> It has no generator and no origin:
       nothing in it moves and nothing in it counts. Its determined content is the register, fixed
@@ -249,18 +267,23 @@
       its octant sits in the even classes.</p>
     <p><span class="k">Transport to the Carrier [3].</span> F&#8321;&#8323; is not inside
       F&#8322;&#8323;&#8323; and C&#8321;&#8322; is not a subgroup of C&#8322;&#8323;&#8322;: the
-      two phase charts register through the one common C&#8324; class quotient, gcd(12, 232) = 4,
-      each shell lifting the class in its own core Q&#8324;. The transport invariant is
-      S &equiv; 2 (mod 4). The joint clock is the fibre product
+      two phase charts register through the one common C&#8324; class quotient, gcd(12, 232) = 4.
+      The lifts are shell-specific: the Subject lifts all four classes in its Q&#8324;, while the
+      Carrier core, sign-blind, lifts the even classes only and the octant supplies the odd pair.
+      The transport invariant is S &equiv; 2 (mod 4). The joint registration recurrence (00:F2)
+      is the fibre product
       C&#8326;&#8329;&#8326; &cong; C&#8321;&#8322; &times;<sub>C&#8324;</sub> C&#8322;&#8323;&#8322;:
       the trajectory &tau; &#8614; (&tau; mod 12, &tau; mod 232) visits every class-compatible pair
       exactly once. The chronon &tau; is a cycle position, never an unbounded count: the shell
-      returns every 12, the Carrier every 232, and the counter wraps at 696.</p>
+      returns every 12, the Carrier every 232, and the counter wraps at 696; the recurrence is
+      bookkeeping of the Subject's registration across the shells, internal to neither.</p>
     <span class="badge">exact arithmetic: every label is a residue of F&#8321;&#8323; or
-      F&#8322;&#8323;&#8323; as tagged; externally verified, 60 instance checks (verify-233.js, including the
-      end-to-end check of the deployed labels) and 25 dynamics checks (verify-f13.js), including the
+      F&#8322;&#8323;&#8323; as tagged; externally verified, 64 instance checks (verify-233.js, including the
+      end-to-end check of the sibling page file: repository consistency) and 25 dynamics checks (verify-f13.js), including the
       bit-verified register and the order-13 Cayley example over F&#8321;&#8326;&#8329;; the full
-      scripts live in the numeric validation suite [4]; the display
+      scripts live in the numeric validation suite [4]; claims split by ledger status: the counts
+      are exact arithmetic, the identifications carry their master rows, mass as winding (D2),
+      the fold (00:F4), constants as Carrier residues (00:B7); the display
       never interpolates: exact states only, one
       indivisible step per chronon</span>
 
@@ -373,7 +396,7 @@ function drawSphere(tc){
   }
   // nodes and labels; the frame lights the residues it currently reads.
   // Carrier view: label(m, a) = a * g^m, fixed. Subject view: the slots are
-  // frame-fixed and re-register, label(m, a) = a * g^{m - tau}.
+  // frame-fixed and re-register, label(m, a) = a * g^{m + tau}.
   const mP = isCar ? mod(t, 12) : 0, mQ = isCar ? mod(t+3, 12) : 3;
   for (let m=0; m<12; m++){
     for (let a=1; a<=6; a++){
@@ -393,7 +416,7 @@ function drawSphere(tc){
         sc.fillText(String(val), p.x + 9, p.y - 7);
         sc.globalAlpha = 1;
       }
-      // the wavefunction comb: on the frame's prime great circle every cell
+      // the register comb: on the frame's prime great circle every cell
       // carries the 4-state phase vector i^r of its registered residue,
       // r = dlog(val) mod 4. The arrow is orthogonal to the meridian fiber:
       // the phase is a fiber datum and carries no component along the
@@ -437,7 +460,7 @@ function drawSphere(tc){
     sc.strokeStyle = INK3; sc.lineWidth = 1;
     sc.beginPath(); sc.arc(anti.x, anti.y, 3, 0, 7); sc.stroke();
   }
-  // the Observer origin at the pole: the fixed cell of the wavefunction,
+  // the Observer origin at the pole: the fixed cell of the register section,
   // value 0, no phase; the gold ring marks it as the comb's thirteenth cell
   const pole = proj(0, 0);
   sc.fillStyle = ACC; sc.beginPath(); sc.arc(pole.x, pole.y, 4.5, 0, 7); sc.fill();
@@ -454,7 +477,7 @@ function drawSphere(tc){
     sc.fillText("blue: the frame's prime meridian M\u2080 (static)", 12, 492);
     sc.fillText("red: the frame's quarter meridian M\u03BA (static)", 12, 506);
   }
-  sc.fillText("green: L\u2081 · purple: L\u2084 · comb \u03C8\u03C4: tint = the rung s", 12, 520);
+  sc.fillText("green: L\u2081 · purple: L\u2084 · comb R\u03C4: tint = the rung s", 12, 520);
   sc.textAlign = "right"; sc.fillStyle = INK2;
   if (isCar){
     sc.fillText("the numbers stand; the frame turns clockwise", 508, 492);
@@ -483,11 +506,17 @@ function drawRings(tc){
   rc.textBaseline = "middle"; rc.textAlign = "center";
   const rQ = mod(tc, 4);                       // the shared registrable class r = tau mod 4
   const alpha = mod(tc, 3);                    // the Subject outcome rung (fibre)
+  const isCar = view === "carrier";
+  // the view lock, as on the sphere. Carrier view: the charts stand and the
+  // frame's registration moves. Subject view: the frame is the reference, the
+  // registration stands, and the charts turn under it; on this ring the whole
+  // C232 chart rotates one tick per chronon, the registration fixed at east.
+  const off = isCar ? 0 : mod(tc, 232);
 
   // outer ring: the Carrier's C232, every tick exact; cardinals gold, the four
   // odd-octant ticks purple, and the current crossing class combed brighter
   for (let a=0; a<232; a++){
-    const th = chi232(a);
+    const th = chi232(a - off);
     const card = a % 58 === 0;
     const oct = a % 29 === 0 && !card;
     const inClass = a % 4 === rQ;
@@ -500,70 +529,120 @@ function drawRings(tc){
     rc.lineTo(RCX + Math.cos(th)*r2, RCY - Math.sin(th)*r2);
     rc.stroke();
   }
+  // the chart labels ride the chart: fixed in the Carrier view, turning with
+  // the C232 ring in the Subject view (chart exponents: hbar 174, h 58, 1 at
+  // 0, -1 at 116, the octant at 29)
   rc.font = "11.5px sans-serif"; rc.fillStyle = "#e8c07a";
-  rc.fillText("\u0127 = 144", RCX, RCY-RO-16);
-  rc.fillText("h = 89", RCX, RCY+RO+16);
-  rc.textAlign = "left";  rc.fillText("1", RCX+RO+10, RCY);
-  rc.textAlign = "right"; rc.fillText("\u22121 = 232", RCX-RO-10, RCY);
-  rc.textAlign = "center";
+  for (const [ex, lab] of [[174, "\u0127 = 144"], [58, "h = 89"], [0, "1"], [116, "\u22121 = 232"]]){
+    const th = chi232(ex - off);
+    rc.fillText(lab, RCX + Math.cos(th)*(RO+19), RCY - Math.sin(th)*(RO+19));
+  }
   rc.fillStyle = "#9b7fd4"; rc.font = "10.5px sans-serif";
-  const zth = chi232(29);
-  rc.fillText("\u03B6\u2088 = 97", RCX + Math.cos(zth)*(RO+24), RCY - Math.sin(zth)*(RO+24));
-  // dim drive dot, outer: the point the observation never resolves
-  const thC = chi232(mod(tc,232));
+  const zth = chi232(29 - off);
+  rc.fillText("\u03B6\u2088 = 97", RCX + Math.cos(zth)*(RO+26), RCY - Math.sin(zth)*(RO+26));
+  // dim registration dot, outer: sweeps the chart in the Carrier view, stands
+  // at east in the Subject view; the point the observation never resolves
+  const thC = chi232(mod(tc,232) - off);
   rc.fillStyle = INK3;
   rc.beginPath(); rc.arc(RCX + Math.cos(thC)*(RO-14), RCY - Math.sin(thC)*(RO-14), 2.6, 0, 7); rc.fill();
 
-  // inner ring: the Subject's C12 with its three fibres (cosets of Q4);
-  // the current fibre alpha = tau mod 3 is lit
-  rc.strokeStyle = "#3a3936"; rc.lineWidth = 1.2;
+  // middle ring: the shell's L1 time latitude, exactly as drawn in green on
+  // the sphere: the drive's own orbit through the unit, seen from the pole.
+  // chi12 is that polar view in the sphere's canonical orientation (unit
+  // longitude east, drive clockwise). Carrier view: the values stand, cell m
+  // reads g^m, the frame rays turn. Subject view: the rays stand, the cells
+  // re-register, slot m reads g^{m+tau}. The cell named 1 walks by the
+  // pullback g^{-tau}: ringed gold, the INV naming.
+  rc.strokeStyle = GRN; rc.lineWidth = 1.7; rc.globalAlpha = 0.85;
   rc.beginPath(); rc.arc(RCX, RCY, RI, 0, 7); rc.stroke();
-  for (let j=0; j<12; j++){
-    const th = chi12(j), fib = j % 3, core = fib === 0;
-    const lit = fib === alpha;
+  rc.globalAlpha = 1;
+  const mP = isCar ? mod(tc,12) : 0, mQ = isCar ? mod(tc+3,12) : 3;
+  const mOne = isCar ? 0 : mod(-tc, 12);       // the cell whose value is 1
+  for (let m=0; m<12; m++){
+    const th = chi12(m);
+    const val = isCar ? ORB[m] : ORB[mod(m + tc, 12)];
+    const core = [1,5,12,8].includes(val);   // Q4: fibre 0
+    const onB = m === mP || m === mod(mP+6,12), onG = m === mQ || m === mod(mQ+6,12);
     const x = RCX + Math.cos(th)*RI, y = RCY - Math.sin(th)*RI;
-    rc.fillStyle = FIBC[fib];
-    rc.globalAlpha = lit ? 1 : 0.4;
-    rc.beginPath(); rc.arc(x, y, core?4:3, 0, 7); rc.fill();
-    if (lit){ rc.strokeStyle = FIBC[fib]; rc.lineWidth = 1;
+    // small node dots in the sphere's style: green on the L1 latitude, the
+    // frame's cells in the meridian colours; the arrow carries fibre and phase
+    rc.fillStyle = onB ? ACC : onG ? MER : GRN;
+    rc.beginPath(); rc.arc(x, y, onB || onG ? 3 : 2.2, 0, 7); rc.fill();
+    if (m === mOne){ rc.strokeStyle = TURN; rc.lineWidth = 1.2;
       rc.beginPath(); rc.arc(x, y, 7.5, 0, 7); rc.stroke(); }
-    rc.globalAlpha = 1;
     const lx = RCX + Math.cos(th)*(RI+24), ly = RCY - Math.sin(th)*(RI+24);
-    rc.font = "11.5px sans-serif"; rc.fillStyle = core ? "#e8c07a" : INK2;
-    const lab = j===0 ? "1" : j===3 ? "\u2212i = 8" : j===6 ? "\u22121 = 12"
-              : j===9 ? "i = 5" : String(ORB[j]);
+    rc.font = "11.5px sans-serif";
+    rc.fillStyle = onB ? "#7fb3ef" : onG ? "#e8938c" : core ? "#e8c07a" : INK2;
+    const lab = val===1 ? "1" : val===5 ? "i = 5" : val===12 ? "\u22121 = 12"
+              : val===8 ? "\u2212i = 8" : String(val);
     rc.fillText(lab, lx, ly);
   }
-  // the state vector: twelve depth tags circulating with the drive;
-  // the component of depth a sits at node dlog(a) + tau, on its current value
-  for (let j=0; j<12; j++){
-    const th = chi12(j);
-    const a = ORB[mod(j - tc, 12)];
-    const unit = a === 1;
-    const x = RCX + Math.cos(th)*(RI-19), y = RCY - Math.sin(th)*(RI-19);
-    if (unit){
-      rc.strokeStyle = ACC; rc.lineWidth = 1.2;
-      rc.beginPath(); rc.arc(x, y, 8, 0, 7); rc.stroke();
+  // the frame's meridians on the latitude, prime (blue) and quarter (red), as
+  // on the sphere: each is a great circle, so it crosses the latitude at two
+  // antipodal longitudes, m and m+6; both crossings are drawn. The prime cell
+  // is the unit slot, reading g^tau.
+  for (const [mm, col] of [[mP, ACC], [mQ, MER]]){
+    for (const m2 of [mm, mod(mm + 6, 12)]){
+      const th = chi12(m2);
+      rc.strokeStyle = col; rc.lineWidth = 2; rc.globalAlpha = 0.9;
+      rc.beginPath();
+      rc.moveTo(RCX + Math.cos(th)*72, RCY - Math.sin(th)*72);
+      rc.lineTo(RCX + Math.cos(th)*(RI-8), RCY - Math.sin(th)*(RI-8));
+      rc.stroke(); rc.globalAlpha = 1;
     }
-    rc.fillStyle = unit ? ACC : INK2; rc.font = unit ? "10.5px sans-serif" : "10px sans-serif";
-    rc.fillText(String(a), x, y);
   }
-  // dim drive dot, inner
-  const thS = chi12(mod(tc,12));
+  // the time-domain phase comb: every latitude cell carries the 4-state phase
+  // arrow i^r of its registered value, the same arrows as the sphere's
+  // space-like comb, read here in the time domain. In this polar view the
+  // plane's own directions serve: the radial is the real axis, the zonal
+  // tangent (+theta, visually ccw) the imaginary axis, because i = g^9 acts
+  // on the ring as 9 slots clockwise = one quarter counterclockwise. States:
+  // r = 0 radial out, 1 zonal ccw, 2 radial in, 3 zonal cw; tint the rung s.
+  // Subject view: every arrow turns one quarter ccw per chronon, the global
+  // phase law r(a g^tau) = r(a) + tau on the time latitude.
+  for (let m=0; m<12; m++){
+    const th = chi12(m);
+    const val = isCar ? ORB[m] : ORB[mod(m + tc, 12)];
+    const cls = WCLS[val];
+    const x = RCX + Math.cos(th)*RI, y = RCY - Math.sin(th)*RI;
+    const er = [Math.cos(th), -Math.sin(th)];          // radial out
+    const el = [-Math.sin(th), -Math.cos(th)];         // zonal ccw (+theta)
+    const qr = [1,0,-1,0][cls], qz = [0,1,0,-1][cls];
+    const vx = 21*(qr*er[0] + qz*el[0]), vy = 21*(qr*er[1] + qz*el[1]);
+    const mag = Math.hypot(vx, vy), ux = vx/mag, uy = vy/mag;
+    rc.strokeStyle = FIBC[WRNG[val]]; rc.lineWidth = 1.9; rc.lineCap = "round";
+    const tx = x + 0.73*vx, ty = y + 0.73*vy;
+    rc.beginPath();
+    rc.moveTo(x - 0.27*vx, y - 0.27*vy);
+    rc.lineTo(tx, ty);
+    rc.stroke();
+    const hs = Math.max(3, 0.24*mag);
+    rc.beginPath();
+    rc.moveTo(tx - hs*ux - 0.62*hs*uy, ty - hs*uy + 0.62*hs*ux);
+    rc.lineTo(tx, ty);
+    rc.lineTo(tx - hs*ux + 0.62*hs*uy, ty - hs*uy - 0.62*hs*ux);
+    rc.stroke();
+  }
+  // dim registration dot, inner: sweeps in the Carrier view, stands at the
+  // unit slot in the Subject view
+  const thS = chi12(isCar ? mod(tc,12) : 0);
   rc.fillStyle = INK3;
   rc.beginPath(); rc.arc(RCX + Math.cos(thS)*(RI-11), RCY - Math.sin(thS)*(RI-11), 2.4, 0, 7); rc.fill();
-  // the fold hand: the Subject lifts the class to a core residue, i^tau
-  const thF = chi12(IEXP[rQ]);
+  // the fold hand: the Subject lifts the class to a core residue, i^tau,
+  // pointing at the cell that now holds it (fixed in the Carrier view,
+  // re-registering in the Subject view)
+  const thF = chi12(isCar ? IEXP[rQ] : mod(IEXP[rQ] - tc, 12));
   rc.strokeStyle = INK; rc.lineWidth = 3; rc.lineCap = "round";
-  rc.beginPath(); rc.moveTo(RCX + Math.cos(thF)*69, RCY - Math.sin(thF)*69);
-  rc.lineTo(RCX + Math.cos(thF)*(RI-16), RCY - Math.sin(thF)*(RI-16)); rc.stroke();
+  rc.beginPath(); rc.moveTo(RCX + Math.cos(thF)*63, RCY - Math.sin(thF)*63);
+  rc.lineTo(RCX + Math.cos(thF)*81, RCY - Math.sin(thF)*81); rc.stroke();
 
-  // the shared Q4 clock at the centre: one class, both shells
+  // the common C4 fold clock at the centre: one class; the lifts are shell-specific
   rc.strokeStyle = EDGE; rc.lineWidth = 1.2;
   rc.beginPath(); rc.arc(RCX, RCY, 59, 0, 7); rc.stroke();
   for (let q=0; q<4; q++){
     const th = q*Math.PI/2;
-    rc.strokeStyle = q === rQ ? TURN : "#3a3936"; rc.lineWidth = q===rQ ? 2 : 1;
+    rc.strokeStyle = "#3a3936"; rc.lineWidth = q===rQ ? 2 : 1;   // no gold on the tick:
+    // the hand must not read as continuing past the digit
     rc.beginPath();
     rc.moveTo(RCX + Math.cos(th)*55, RCY - Math.sin(th)*55);
     rc.lineTo(RCX + Math.cos(th)*63, RCY - Math.sin(th)*63);
@@ -574,7 +653,7 @@ function drawRings(tc){
   const thQ = rQ*Math.PI/2;
   rc.strokeStyle = TURN; rc.lineWidth = 2.6; rc.lineCap = "round";
   rc.beginPath(); rc.moveTo(RCX, RCY);
-  rc.lineTo(RCX + Math.cos(thQ)*55, RCY - Math.sin(thQ)*55); rc.stroke();
+  rc.lineTo(RCX + Math.cos(thQ)*38, RCY - Math.sin(thQ)*38); rc.stroke();
 
   // captions at the canvas bottom, mirroring the left panel
   rc.textAlign = "left";
@@ -582,13 +661,17 @@ function drawRings(tc){
   rc.fillText("r = \u03C4 mod 4 = " + rQ + " \u00B7 i^\u03C4 = \u00D7" + [1,5,12,8][rQ] +
               " \u00B7 fibre \u03B1 = " + alpha, 12, 492);
   rc.fillStyle = INK2; rc.font = "10.5px sans-serif";
-  rc.fillText("the tags: the twelve depths on the exponent cycle", 12, 506);
-  rc.fillText("the fold table stays filled: one depth per (r, s) cell", 12, 520);
+  rc.fillText("middle: L\u2081 time latitude \u00b7 arrows: the time-domain comb i^r", 12, 506);
+  if (isCar){
+    rc.fillText("the charts stand; the frame turns: rays and dots clockwise", 12, 520);
+  } else {
+    rc.fillText("the frame stands; the charts turn: \u00D7g inner, one tick outer", 12, 520);
+  }
   rc.textAlign = "right";
   rc.fillStyle = INK2; rc.font = "10.5px sans-serif";
   rc.fillText("drive \u21BB \u00B7 oriented phase \u21BA: i = g\u207B\u1D4F", 508, 492);
-  rc.fillText("inner tags: the depths, moving with the drive", 508, 506);
-  rc.fillText("hand: the unit\u2019s lift i^\u03C4 \u00B7 dim dots: the drive", 508, 520);
+  rc.fillText("gold ring: the cell named 1 = g^\u2212\u03C4, the pullback", 508, 506);
+  rc.fillText("hand: the unit\u2019s lift i^\u03C4 \u00B7 dim dots: the registration", 508, 520);
   rc.textAlign = "center";
 }
 
@@ -597,17 +680,27 @@ const TITLES = {
   carrier: "The shell · the Carrier view",
   subject: "The shell · the Subject view"
 };
+const TITLES2 = {
+  carrier: "The phase · the Carrier view",
+  subject: "The phase · the Subject view"
+};
+// one view state, locked across both panels: either button pair switches both
 function setView(v){
   view = v;
-  const car = document.getElementById("vCar"), sub = document.getElementById("vSub");
-  car.className = "vbtn" + (v==="carrier" ? " on" : "");
-  sub.className = "vbtn" + (v==="subject" ? " on" : "");
-  car.setAttribute("aria-pressed", v==="carrier" ? "true" : "false");
-  sub.setAttribute("aria-pressed", v==="subject" ? "true" : "false");
-  document.getElementById("sphTitle").textContent = TITLES[v];
+  for (const [carId, subId, titleId, titles] of
+       [["vCar", "vSub", "sphTitle", TITLES], ["vCar2", "vSub2", "ringsTitle", TITLES2]]){
+    const car = document.getElementById(carId), sub = document.getElementById(subId);
+    car.className = "vbtn" + (v==="carrier" ? " on" : "");
+    sub.className = "vbtn" + (v==="subject" ? " on" : "");
+    car.setAttribute("aria-pressed", v==="carrier" ? "true" : "false");
+    sub.setAttribute("aria-pressed", v==="subject" ? "true" : "false");
+    document.getElementById(titleId).textContent = titles[v];
+  }
 }
 document.getElementById("vCar").onclick = () => setView("carrier");
 document.getElementById("vSub").onclick = () => setView("subject");
+document.getElementById("vCar2").onclick = () => setView("carrier");
+document.getElementById("vSub2").onclick = () => setView("subject");
 document.getElementById("pause").onclick = e => { paused = !paused; e.target.textContent = paused ? "Run" : "Pause"; };
 document.getElementById("step").onclick = () => { t = mod(t+1,696); frac = 0; onState(); };
 document.getElementById("reset").onclick = () => { t = 0; frac = 0; onState(); };

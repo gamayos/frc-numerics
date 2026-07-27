@@ -1,4 +1,4 @@
-// Exact verification for 5-phase on the minimal complete pair (13, 233).
+// Exact verification for 5-phase on the minimal non-trivial pair (13, 233).
 // Subject F13 (kappa = 3), Carrier F233 (S = 58), fold per 00:F4.
 'use strict';
 let fails = 0;
@@ -254,7 +254,7 @@ ok('fold hand residues: i^tau = 1, 5, 12, 8', [0,1,2,3].every(t =>
      'the drive pullback in the register orientation, all tau, all cells', pull);
 }
 
-// ---- 10. the joint clock: the fibre product ----
+// ---- 10. the joint registration recurrence: the fibre product ----
 {
   const seen = new Set(); let compat = true;
   for (let t = 0; t < 696; t++){
@@ -267,9 +267,11 @@ ok('fold hand residues: i^tau = 1, 5, 12, 8', [0,1,2,3].every(t =>
      12 * 232 / 4 === 696);
 }
 
-// ---- 11. end to end: the deployed labels of index.html ----
+// ---- 11. end to end: the sibling index.html (repository consistency) ----
 // The page and this verifier must not merely agree by duplication: read the
-// deployed file and compare its tables and register labels to recomputation.
+// sibling file and compare its tables and register labels to recomputation.
+// This establishes repository consistency; the live deployment is compared
+// by diff outside this script.
 {
   const fs = require('fs');
   let html = '';
@@ -298,7 +300,58 @@ ok('fold hand residues: i^tau = 1, 5, 12, 8', [0,1,2,3].every(t =>
   ok('deployed fold notation is i^r 3^s and never i^r g^s',
      html.includes('i<sup>r</sup>&middot;3<sup>s</sup>') &&
      !html.includes('i<sup>r</sup>&middot;g<sup>s</sup>'));
-  ok('the page self-labels 5-phase', html.includes('5-phase'));
+  ok('the page carries the stable episode marker (1-phase, rev 5)',
+     html.includes('data-episode="1-phase"') && html.includes('data-rev="5"'));
+}
+
+// ---- 12. review-2 residuals: register vs coefficient, the trivial pair, the octant lift ----
+{
+  // Active register vs coefficient wavefunction. One comb step composed with
+  // the drive pullback is the identity, so the animation runs by D^{-1}; the
+  // coefficient side runs by D. On one cell: the comb sends 1 -> 2, while
+  // (D chi_1)(1) = chi_1(2^{-1}) = 7. Duals through INV, one dynamics.
+  const inv2 = pwm(2, P - 2, P);
+  let dual = true;
+  for (let a = 1; a < P; a++) if ((2 * ((inv2 * a) % P)) % P !== a % P) dual = false;
+  ok('the comb evolves by D^{-1}: one active step then the pullback is the identity; '+
+     'on one cell the comb sends 1 -> 2 while (D chi_1)(1) = 7',
+     dual && (2 * 1) % P === 2 && (inv2 * 1) % P === 7 && inv2 === 7);
+
+  // The trivial pair (5, 41): admissible in full, but F_5^x is its own fold.
+  const q = 5, om = 41;
+  const units5 = new Set(); for (let j = 0, x = 1; j < 4; j++){ units5.add(x); x = (x * 2) % q; }
+  ok('the trivial pair (5, 41) passes every admissibility clause (S = 10: 2 mod 4, 1 mod 3; '+
+     '41 = 5 mod 12, 41 mod 48, 25 < 41; register 32^2 = -1, 12^2 = 2S+1, 11^2 = Omega-2) '+
+     'while F_5 is its own fold, pure Q4, no rung: (13, 233) is the minimal non-trivial pair',
+     10 % 4 === 2 && 10 % 3 === 1 && om % 12 === 5 && om % 48 === 41 && q * q < om &&
+     (32 * 32) % om === om - 1 && (12 * 12) % om === 2 * 10 + 1 && (11 * 11) % om === om - 2 &&
+     units5.size === 4 && [1, 2, 3, 4].every(u => units5.has(u)));
+
+  // The L1-latitude ring law: in the Carrier view the cell at longitude
+  // IEXP[r] holds i^r; in the Subject view slot IEXP[r] - tau re-registers
+  // to i^r. The fold hand always points at the cell holding the lift.
+  {
+    const IEXP = [0, 9, 6, 3], CORE4 = [1, 5, 12, 8];
+    const ORB2 = []; for (let j = 0, x = 1; j < 12; j++){ ORB2.push(x); x = (x * 2) % P; }
+    let handOK = true;
+    for (let tau = 0; tau < 696; tau++){
+      const r = tau % 4;
+      if (ORB2[IEXP[r]] !== CORE4[r]) handOK = false;                       // Carrier view
+      const m = mod(IEXP[r] - tau, 12);
+      if (ORB2[mod(m + tau, 12)] !== CORE4[r]) handOK = false;              // Subject view
+      if (ORB2[mod(mod(-tau, 12) + tau, 12)] !== 1) handOK = false;         // the gold-ringed cell reads 1
+    }
+    ok('the L1 ring law over the full recurrence: the fold hand points at the cell '+
+       'holding i^tau in both views, and the pullback-named cell reads 1', handOK);
+  }
+
+  // The Carrier Q4 lifts even fold classes only; the octant exponent is odd.
+  const dl = {}; for (let k = 0, x = 1; k < 232; k++){ dl[x] = k; x = (x * 78) % OM; }
+  ok('Carrier core chart exponents {0, 174, 116, 58} sit in even classes {0, 2, 0, 2} (mod 4); '+
+     'the octant exponent 29 is odd: the odd classes ride the octant, never the core',
+     dl[1] === 0 && dl[144] === 174 && dl[232] === 116 && dl[89] === 58 &&
+     JSON.stringify([0, 174, 116, 58].map(e => e % 4)) === JSON.stringify([0, 2, 0, 2]) &&
+     dl[97] === 29 && 29 % 2 === 1);
 }
 
 process.exit(fails ? 1 : 0);

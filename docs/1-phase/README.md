@@ -1,13 +1,18 @@
-# Schrödinger dynamics as finite arithmetic symmetry shell rotation
+# 5-phase: Schrödinger dynamics as finite arithmetic symmetry shell rotation
 
 Single-file interactive visualisation: `index.html`. No dependencies.
-External verification: `verify-233.js` (60 instance checks, including an
-end-to-end comparison against the deployed page) and `verify-f13.js`
-(25 dynamics checks), both node, all passing.
+External verification: `verify-233.js` (64 instance checks, including an
+end-to-end comparison against the sibling `index.html` — repository
+consistency; the live deployment is compared by diff outside the script)
+and `verify-f13.js` (25 dynamics checks), both node, all passing. The
+deployed page and the full scripts live in the numeric validation
+suite [4].
 
-The wavefunction is an instantaneous, space-like object: the residue
-vector of the frame's prime great circle, displayed as the comb on the
-shell [1, 2]. The instance is the minimal complete pair (13, 233).
+The state is an instantaneous, space-like object: the residue vector of
+the frame's prime great circle, displayed as the comb on the shell — the
+active register R_tau, whose passive dual through the inverse table is
+the coefficient wavefunction [1, 2]. The instance is the minimal
+non-trivial pair (13, 233).
 
 ## Revisions in 5-phase
 
@@ -38,9 +43,11 @@ evaluation. Every adopted finding was re-verified by exact arithmetic.
   selections read against it.
 - The transport is stated as a quotient [3]. F13 is not inside F233
   and C12 is not a subgroup of C232: the two phase charts register
-  through the one common C4 class quotient (gcd(12, 232) = 4), each
-  shell lifting the class in its own core Q4. The joint clock is the
-  fibre product C696 = C12 x_{C4} C232: the trajectory
+  through the one common C4 class quotient (gcd(12, 232) = 4), with
+  shell-specific lifts: the Subject lifts all four classes in its Q4,
+  the sign-blind Carrier core lifts the even classes only and the
+  octant supplies the odd pair. The joint registration recurrence
+  (00:F2) is the fibre product C696 = C12 x_{C4} C232: the trajectory
   tau -> (tau mod 12, tau mod 232) visits every class-compatible pair
   exactly once, verified.
 - The admissibility predicate is strengthened. The octant completion
@@ -139,26 +146,43 @@ every tau).
 ## The panels
 
 Left, the shell: the F13 arithmetic symmetry sphere of [2], Figure 1,
-with the Subject/Carrier view toggle and the wavefunction comb on the
+with the Subject/Carrier view toggle and the register comb on the
 frame's prime great circle. Subject view (default): the frame stands,
 the residues evolve x -> gx, the comb standing with the frame. Carrier
 view: the residues stand, the frame turns clockwise, one step per
 chronon, the comb riding it. M0 blue, M_kappa red, L1 green, L4
 purple. Exact states only, no interpolation.
 
-Right, the phase on the F4 fold, per 00:F4 [1]: the shared Q4 clock
-(the class r = tau mod 4, one clock for both shells); the fold-table
-tags (one depth per (r, s) cell, the time-like reading of the same
-step); the Subject's product fold 2 = i * 3 with the fold hand walking
-i^tau = 1, 5, 12, 8; the Carrier's sign-blind classes with the octant
+Right, the phase on the F4 fold, per 00:F4 [1]: the common C4 fold
+clock (the class r = tau mod 4, one class for both shells, lifts
+shell-specific); the middle ring, the shell's L1 time latitude exactly
+as drawn in green on the sphere and view-synced with it (Carrier view:
+the charts stand, the frame rays and registration dots turn; Subject
+view: the frame stands, every latitude cell re-registers by g per
+chronon and the C232 chart turns one tick per chronon under the fixed
+registration; the gold-ringed cell holds the pullback name
+1 = g^{-tau}; the cells carry the time-domain phase comb, the same
+i^r arrows and rung tints as the sphere's space-like comb with the
+ring's radial as the real axis and the zonal tangent as the imaginary,
+every arrow turning one quarter counterclockwise per chronon in the
+Subject view); the Subject's product fold 2 = i * 3
+with the fold hand walking i^tau = 1, 5, 12, 8 on whichever cell now
+holds it; the Carrier's sign-blind classes with the octant
 zeta_8 = 97 carrying the odd classes; and mass as the winding rate,
 kappa = 3 vs S = 58 windings per own period.
+
+Both panels carry the same Subject/Carrier button pair and share one
+view state: either toggle switches both, so the frame data (rays,
+registration dots) and the two charts stay in exact correspondence
+across the sphere and the rings.
 
 ## Time
 
 The chronon tau is a cycle position: the shell returns every 12, the
-Carrier every 232, and the joint clock is the fibre product
-C696 = C12 x_{C4} C232, where the counter wraps. The transport
+Carrier every 232, and the joint registration recurrence (00:F2) is
+the fibre product C696 = C12 x_{C4} C232, where the counter wraps;
+it is bookkeeping of the Subject's registration, internal to neither
+shell. The transport
 invariant is S = 2 (mod 4) [3]. The display never interpolates: every
 frame drawn is an exact state, stepped on the wall clock.
 
@@ -171,11 +195,45 @@ rotation, the fold, the comb laws, the fold-table laws, the operator
 statement (P2 = the drive pullback), the unitarity, and the periods.
 Probability enters the series later, through registration counting [3].
 
+## Revisions after review 2 (27 July 2026)
+
+Review 2 (`reviews/98-lab-1-phase-20260726-2.pdf`) raised the episode
+to 7/10, withdrew its earlier Cayley-propagator objection via the
+8-dirac zonal theorem, and concentrated the remainder in one exact
+distinction. All adopted findings executed and re-verified:
+
+- The register/coefficient split is stated exactly. The comb is the
+  active register R_tau(a) = a g^tau, evolving by D^{-1}; the
+  coefficient wavefunction Psi_tau = D^tau Psi_0 is its passive dual
+  through the inverse table, and the word wavefunction now refers to
+  the coefficient side alone. The state paragraph cites 00:C1 for the
+  register section and 00:F4 for the coefficient fold, and states the
+  zero extension (origin summand fixed, D on the units).
+- The verifier regression is closed: the self-label check reads the
+  stable marker `data-episode="1-phase" data-rev="5"`, not the mutable
+  title; the end-to-end section is worded as repository consistency,
+  deployment compared by diff outside the script.
+- Three checks added (60 -> 63): the D^{-1} composition identity with
+  the one-cell witness (comb 1 -> 2 vs (D chi_1)(1) = 7); the trivial
+  pair (5, 41), admissible in full while F_5 is its own fold, naming
+  (13, 233) the minimal non-trivial pair; the Carrier core's even-only
+  chart classes {0, 2, 0, 2} (mod 4) with the odd octant exponent 29.
+- Exact wording: common C4 fold clock with shell-specific lifts
+  (Subject full Q4; Carrier even classes, octant odd); C696 is the
+  joint registration recurrence (00:F2), bookkeeping internal to
+  neither shell; Cayley kinetic sector replaces interacting sector;
+  norm preservation on the single register vector stated as
+  nondiagnostic, unitarity carried by the permutation; the badge
+  carries the ledger-status legend (exact counts vs row-cited
+  identifications D2, 00:F4, 00:B7).
+- One stale comment fixed: the Subject-view label reads m + tau,
+  matching the code.
+
 ## Verification
 
-verify-233.js (60 checks): the joint minimality with the full scan and
-the strengthened predicate (S = 2 (mod 4), the Omega = 257 guard,
-Omega = 41 (mod 48)); the bit-verified register with the gauge bit and
+verify-233.js (64 checks): the minimal non-trivial pair with the full
+scan and the strengthened predicate (S = 2 (mod 4), the Omega = 257
+guard, Omega = 41 (mod 48)); the bit-verified register with the gauge bit and
 the real core-Q4 computation; the Subject's declared chart and its
 orientation; the octant; the transport; the F4 fold (the product on
 F13, division-unique naming on both shells, no product on F233, octant
@@ -183,8 +241,10 @@ completion, sign-blindness); the winding rates; the fold-table laws;
 the comb laws; the tint laws; the operator section (P2 bijection and
 order, register-vector isotropy, the zonal eigenrelation D chi_k =
 g^{-k} chi_k for all windings, and the animated step as D^{-1} on the
-comb); the fibre-product clock; and the end-to-end deployed-label
-comparison against index.html.
+comb); the fibre-product recurrence; the review-2 residuals (the D^{-1}
+composition identity, the trivial pair (5, 41), the octant lift
+classes); and the end-to-end sibling-file comparison against
+index.html (repository consistency).
 verify-f13.js (25 checks, on the current pair 233/58): the frame
 congruences, the sphere node rule, the rotation and re-registration
 laws, the zonal theorem, dispersion and isotropy, nu = g = 2,
@@ -196,11 +256,11 @@ matrix arithmetic over F169 with exact unitarity.
 [1] Akhtman, Y. Relativistic Algebra over Finite Ring Continuum.
     Axioms 2025, 14, 636.
     https://doi.org/10.3390/axioms14080636
-    
 [2] Akhtman, Y. Schrödinger and Dirac Dynamics over Finite Substrate.
     Preprints 2025, 2025101486.
     https://doi.org/10.20944/preprints202510.1486.v3
-    
 [3] Akhtman, Y.; Voether, E. Quantum Observation over Finite
     Relational Substrate. Preprints 2026, 2026061160.
     https://doi.org/10.20944/preprints202606.1160.v2
+[4] Akhtman, Y. FRC Numerics: the numeric validation suite. GitHub.
+    https://github.com/gamayos/frc-numerics/tree/main/docs/1-phase
