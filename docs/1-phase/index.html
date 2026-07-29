@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Finite Ring Cosmology Lab: Schr&ouml;dinger dynamics over (13, 233)</title>
+<link rel="icon" type="image/png" href="../frc-logo-fav.png">
 <style>
   :root{
     --surface:#1a1a19; --panel:#212120; --edge:#33322f;
@@ -69,10 +70,7 @@
 <body data-palette="#3987e5,#c98500" data-episode="1-phase-4" data-rev="1">
 <div class="wrap">
   <h1>FRC Lab: Schr&ouml;dinger dynamics over the minimal non-trivial pair (13, 233): i&#295;&thinsp;&part;&psi;/&part;t = &Hcirc;&psi; ⇌ &psi;<sub>&tau;+1</sub> = g&middot;&psi;<sub>&tau;</sub></h1>
-  <div class="sub">A complete universe from two primes, the smallest in which the law
-    closes. The Subject shell F&#8321;&#8323; (&kappa; = 3) rides the Carrier
-    F&#8322;&#8323;&#8323; (S = 58), Objectless. The drive x &#8614; gx is the
-    Schr&ouml;dinger evolution itself, not a model of it: the chart is exact in the count face term by term: i&#295; the Subject's quarter-turn composed with the Carrier's action quantum, &Hcirc; the winding rate, &part;t the chronon; one step is the permutation P<sub>g</sub>|a&#10217; = g|a&#10217;, unitary exactly, spinor-covered exactly [2, 3]. Energy is the registered winding, E = hf an identity; the mass phase lives on the boost torus C&#8321;&#8324; alone, the fiber of observation, and the frame's precession through the Carrier count is time dilation: the mass. Every statement is integer arithmetic, machine-verified; the continuum enters only as labelled charts.</div>
+  <div class="sub">A complete universe-in-a-lab from two primes, the smallest non-trivial configuration. The Subject shell F&#8321;&#8323; (&kappa; = 3) rides the Carrier F&#8322;&#8323;&#8323; (S = 58), Objectless. The drive x &#8614; gx is the Schr&ouml;dinger evolution itself, not a model of it. The chart is exact in the count face term by term: i&#295; the Subject's quarter-turn composed with the Carrier's action quantum, &Hcirc; the winding rate, &part;t the chronon; one step is the permutation P<sub>g</sub>|a&#10217; = |ga&#10217;, unitary exactly, spinor-covered exactly [2, 3]. Energy is the registered winding, E = hf an identity; the mass phase lives on the boost torus C&#8321;&#8324; alone, the fiber of observation, and the frame's precession through the Carrier count is time dilation: the mass. Every statement is integer arithmetic, machine-verified; the continuum enters only as labelled charts.</div>
 
   <div class="controls">
     <span class="seg" role="group" aria-label="view">
@@ -80,17 +78,21 @@
       <button id="vSub" class="vbtn" aria-pressed="false">Subject view</button>
     </span>
     <label>speed <input id="speed" type="range" min="1" max="30" value="6"></label>
-    <button id="interpB" class="vbtn on" aria-pressed="true">Interpolated</button>
+    <span class="seg" role="group" aria-label="stepping">
+      <button id="intS" class="vbtn on" aria-pressed="true">Smooth chart</button>
+      <button id="intT" class="vbtn" aria-pressed="false">Exact ticks</button>
+    </span>
     <button id="pause">Pause</button>
     <button id="step">Step 1 chronon</button>
     <button id="reset">Reset</button>
     <span>chronon pair: shell <b id="tickS">0</b>/12 &middot;
       Carrier <b id="tickC">0</b>/232 &middot;
-      perihelion tick <b id="peri">0</b> &middot; sheet <b id="sheet">+1</b></span>
+      perihelion tick <b id="peri">0</b> &middot; fold sheet <b id="sheet">+1</b> &middot;
+      spin sheet &sigma; <b id="sigOut">+1</b></span>
   </div>
 
   <div class="panels">
-    <div class="panel">
+    <div class="panel" style="order:2">
       <div class="trow">
         <h2 id="sphTitle">Symmetry shell &middot; Carrier view</h2>
       </div>
@@ -106,7 +108,7 @@
         &tau; = S (00:C17, 00:C18).
       </div>
     </div>
-    <div class="panel">
+    <div class="panel" style="order:3">
       <div class="trow">
         <h2 id="ringsTitle">Phase chart &middot; Carrier view</h2>
       </div>
@@ -122,7 +124,7 @@
         flipping &times;h per quarter: q on h at &tau; = S (00:C17, 00:C18).
       </div>
     </div>
-    <div class="panel">
+    <div class="panel" style="order:1">
       <div class="trow">
         <h2 id="skyTitle">The sky &middot; Carrier view</h2>
         <span class="seg" role="group" aria-label="sky representation">
@@ -138,17 +140,18 @@
         g&#8308;, mounted 120&deg;: arrows repeat, tints cycle, values &divide;3
         inward; labels ride the outer fiber. 3&times;48 + 12 = 156 = p(p&minus;1):
         the totality (00:Y3). Carrier view: the pattern flows along its Hopf
-        leaves &mdash; the dilation, the mass phase (00:Y5): the dual's band at
-        the quarter, the parity image at the half, home with the cycle.</span><span id="capHopf" style="display:none">
+        leaves &mdash; the chart realization of the dilation, the mass phase
+        (00:Y5): the dual's band at the quarter, the parity image at the half,
+        home with the cycle.</span><span id="capHopf" style="display:none">
         the same sky, the same nodes: the toggle switches only the fibers. The ball
         charts S&sup3;, its silhouette the horizon (00:Y4); each node rides the exact
         Hopf leaf through it, drawn for the 24 outer nodes &mdash; the section of
         PGL&#8322;/C&#8321;&#8324; (00:C19): a boost moves along the fiber, changes
         the observer, unobservable (00:Y3). The clock fiber (&tau;, 0) is the polar
         axis, its cyan bead the clock. Carrier view: the beads translate along their
-        fibers &mdash; the dilation (00:Y5): the dual's band at the quarter, the
-        parity image at the half, home with the cycle. The chart is a labelled
-        approximation; the combinatorics exact.
+        fibers &mdash; the chart realization of the dilation (00:Y5): the dual's band
+        at the quarter, the parity image at the half, home with the cycle. The chart
+        is a labelled approximation; the combinatorics exact.
       </span></div>
     </div>
   </div>
@@ -451,7 +454,9 @@
       the leak's boost component, which the Subject cannot see (00:Y3): every
       bead translates along its own Hopf leaf at the dial's full rate, one
       tick-angle per chronon &mdash; the frame dilation, the mass phase
-      (00:Y5) &mdash; rendered in the sheet-fair chart, where each point
+      (00:Y5), the boost torus being the Dirac layer's mass channel [2] and
+      the mass sector's interaction face [5] &mdash; rendered in the
+      sheet-fair chart, where each point
       projects from the guard on its own side of S&sup3; so that the antipodal
       map is the ball's exact point reflection. Stations, exact and
       gauge-free: at the Carrier quarter the sharp shell disperses into a
@@ -547,7 +552,9 @@
     <a href="https://doi.org/10.20944/preprints202606.1160.v2">doi:10.20944/preprints202606.1160.v2</a><br>
     [4] Akhtman, Y. <i>Gravitation as Phase Synchronisation over a Finite Relational Substrate.</i> Preprints 2026, 2026061018.
     <a href="https://doi.org/10.20944/preprints202606.1018.v2">doi:10.20944/preprints202606.1018.v2</a><br>
-    [5] Numeric validation suite:
+    [5] Akhtman, Y.; Voether, E. <i>Standard-Model Interactions over Finite Relational Substrate.</i> Preprints 2026, 2026061328.
+    <a href="https://doi.org/10.20944/preprints202606.1328.v2">doi:10.20944/preprints202606.1328.v2</a><br>
+    [6] Numeric validation suite:
     <a href="https://github.com/gamayos/frc-numerics/tree/main/docs/1-phase">github.com/gamayos/frc-numerics/tree/main/docs/1-phase</a>
   </div>
 </div>
@@ -598,7 +605,10 @@ let view = "carrier";          // "carrier" (default): numbers stand, the frame
 // switch on the tick only. Off: exact tick-stepping (F = 0)
 let interp = true;
 // The state is the pair of cycle positions (shell tS mod 12, Carrier tC
-// mod 232), each a residue of its own shell (00:C15). The joint recurrence
+// mod 232) together with the Carrier spin sheet sigC, exposed in the
+// readout: the pair alone returns at 696 while the sky stands
+// antipodal on the flipped sheet; full closure is 2 x 696 = 1392.
+// Each position is a residue of its own shell (00:C15). The joint recurrence
 // is the pair space: every class-compatible pair occurs exactly once
 // between consecutive (home, home) events. The double cover is event
 // structure: the frame ray stands at -1 at the pair event (home, 116) --
@@ -1469,14 +1479,27 @@ function setSkyMode(m2){
   o.setAttribute("aria-pressed", m2 === "hopf" ? "true" : "false");
   document.getElementById("capHelix").style.display = m2 === "helix" ? "" : "none";
   document.getElementById("capHopf").style.display = m2 === "hopf" ? "" : "none";
+  document.getElementById("spc").setAttribute("aria-label", m2 === "helix"
+    ? "The Subject's sky: three nested spheres, each carrying the complete "+
+      "double-helix fiber of twenty-four node images on one smooth closed "+
+      "loop through both poles; the Observer at the center"
+    : "The Subject's sky, Hopf representation: the same nodes with the "+
+      "exact Hopf leaf through each of the 24 outer nodes; in the Carrier "+
+      "view the nodes translate along their fibers; the Observer at the "+
+      "center");
 }
 document.getElementById("mHelix").onclick = () => setSkyMode("helix");
 document.getElementById("mHopf").onclick = () => setSkyMode("hopf");
-document.getElementById("interpB").onclick = e => {
-  interp = !interp;
-  e.target.className = "vbtn" + (interp ? " on" : "");
-  e.target.setAttribute("aria-pressed", interp ? "true" : "false");
-};
+function setInterp(v){
+  interp = v;
+  const s = document.getElementById("intS"), t = document.getElementById("intT");
+  s.className = "vbtn" + (v ? " on" : "");
+  t.className = "vbtn" + (v ? "" : " on");
+  s.setAttribute("aria-pressed", v ? "true" : "false");
+  t.setAttribute("aria-pressed", v ? "false" : "true");
+}
+document.getElementById("intS").onclick = () => setInterp(true);
+document.getElementById("intT").onclick = () => setInterp(false);
 document.getElementById("pause").onclick = e => { paused = !paused; e.target.textContent = paused ? "Run" : "Pause"; };
 document.getElementById("step").onclick = () => { stepChronon(); frac = 0; onState(); };
 document.getElementById("reset").onclick = () => { tS = 0; tC = 0; pT = 0; sigC = 0; frac = 0; onState(); };
@@ -1488,6 +1511,7 @@ function onState(){                        // exact updates, at integer chronons
   const j = mod((tS - tC) / 4, 3);
   document.getElementById("sheet").textContent =
     (j > 1 || (j === 1 && tC >= 116)) ? "\u22121" : "+1";
+  document.getElementById("sigOut").textContent = sigC ? "\u22121" : "+1";
   document.getElementById("slotOut").textContent = ORB[tS];
   document.getElementById("frameOut").textContent = ORB[tS];
   document.getElementById("rOut").textContent = tS % 4;

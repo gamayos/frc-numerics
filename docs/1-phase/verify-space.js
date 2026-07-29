@@ -155,5 +155,30 @@ ok('the frame space of E2: |SL2(F13)| = p(p^2 - 1) = 2184; the three tori '+
        if (mod(a * a - 2 * b * b, P) === 1) n1++;
      return n1 === 14; })());
 
+// ---- 10. the executable Hamiltonian: the winding-rate spectrum ----
+// The drive step is the permutation (P_g psi)(a) = psi(g^{-1} a) on the
+// twelve units. Its eigenmodes are the characters chi_k(a) =
+// zeta_12^{k dlog a}, and one chronon multiplies mode k by
+// zeta_12^{-k} exactly: the Hamiltonian's reading is the winding rate,
+// mode by mode, verified cell by cell in index arithmetic (the
+// i-hbar-d/dt face is the chart face of the same law, per [2])
+{
+  let spec = true;
+  const ginv = ORB[11];                       // g^{-1} = g^11
+  for (let k = 0; k < 12; k++)
+    for (let j = 0; j < 12; j++){
+      const a = ORB[j];
+      // (P_g chi_k)(a) = chi_k(g^{-1} a): exponent k * dlog(g^{-1} a)
+      const lhs = mod(k * DL[(ginv * a) % P], 12);
+      // zeta^{-k} chi_k(a): exponent k * dlog(a) - k
+      const rhs = mod(k * DL[a] - k, 12);
+      if (lhs !== rhs) spec = false;
+    }
+  ok('the executable Hamiltonian: P_g chi_k = zeta_12^{-k} chi_k for '+
+     'all twelve modes, cell by cell in index arithmetic -- the energy '+
+     'of mode k is its winding rate k, E = hf as the count identity',
+     spec);
+}
+
 console.log(fails ? `\n${fails} FAILURES` : '\nall checks pass');
 process.exit(fails ? 1 : 0);

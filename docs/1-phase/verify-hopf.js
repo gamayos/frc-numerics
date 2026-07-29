@@ -105,9 +105,10 @@ for (const [P, NS] of [[13, 2], [5, 2]]){
   const prods = new Set();
   for (const b of Bs) for (const t of Ts) prods.add(key(mul(b, t)));
   ok('the spin contrast: |SL2| = 2184 with |B| = 156 and |T| = 14, but '+
-     'B and T share the sign -I, so |BT| = 1092: the section belongs to '+
-     'the observable PGL2, and SL2 is its spin double cover',
-     SL.size === 2184 && Bs.length === 156 && Ts.length === 14 &&
+     'B and T share the sign -I, so |BT| = 1092 = |PSL2|: the section '+
+     'belongs to the observable PGL2 (B meets T trivially there); SL2 '+
+     'is the spin double cover of PSL2, the index-two rotation half of '+
+     'PGL2', SL.size === 2184 && Bs.length === 156 && Ts.length === 14 &&
      prods.size === 1092);
 }
 

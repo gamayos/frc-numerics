@@ -5,8 +5,11 @@ External verification: `verify-233.js` (82 checks: the pair dynamics,
 the events, the oriented octant bridge, the precession theorem),
 `verify-sky.js` (27 checks: the sky map, the fibered covers, the
 radial ladder with the tau+2 completion as sets), `verify-space.js`
-(23 checks: the register, the cone arithmetic, the PGL2/SL2 frame
-counts), `verify-hopf.js` (9 checks: the finite Hopf fibration -- the free
+(24 checks: the register, the cone arithmetic, the frame counts,
+and the executable Hamiltonian: P_g chi_k = zeta_12^{-k} chi_k for
+all twelve modes, the energy of a mode its winding rate),
+`verify-f13.js` (25 checks: the shell operator core of [2] -- H^7 =
+0, ord(U) = 13, U exactly unitary), `verify-hopf.js` (9 checks: the finite Hopf fibration -- the free
 boost action, the unique factorization, the global section, the
 horizon-circle fiber coordinate, at p = 13 and Omega-blind at p = 5,
 with the SL2 spin contrast), and `verify-render.js` (16 checks: the
@@ -117,7 +120,9 @@ it factors uniquely into a Borel part and a boost part. The Borel
 part is the azimuthal drift the panels already draw. The boost part
 is motion along the Hopf fiber -- unobservable to the Subject
 (00:Y3), so absent from the Subject view and resolved only by the
-harness: the frame dilation, the mass phase of 00:Y5. The rate is
+harness: the frame dilation, the mass phase of 00:Y5 -- the boost
+torus is the Dirac layer's exclusive mass channel [2], and the mass
+sector's standard-model interaction face is [5]. The rate is
 forced by the dial: the flip is x h per Carrier quarter, so the
 flow runs at the dial's full tick-angle per chronon, prograde, phi
 = -(bC + F) pi/116, interpolation-ready and closing exactly at the
@@ -155,7 +160,13 @@ the axis leaf: the Subject's own dilation. The rung-ladder
 exchange stays as the discrete arithmetic face of the same
 inversion; with the exact per-tick boost step (which C14 element,
 via the octant bridge) it is the open derivation that would also
-promote 00:Y5.
+promote 00:Y5. The derivation carries a proven constraint
+(review-1): gcd(232, 14) = 2, so no homomorphism C232 -> C14
+exceeds order two -- the tick-level bridge cannot be homomorphic,
+and the exact identification must route through the pair's spinor
+structure. The C4 station face IS homomorphic (gcd(232, 4) = 4):
+the quarter, parity, and home stations are group-exact; the
+continuous fiber phase between them is the chart realization.
 
 ## Interpolated mode
 
@@ -190,14 +201,21 @@ width.
 
 The octant bridge is oriented by the corpus rule: dlog(3w) = 105 = 1
 (mod 8), whence i = gen^42 = 5 and c(iu) = h c(u) with the half-lift
-carrying one octant step. The totality decomposition completes over
-{tau, tau+2}, checked as disjoint sets with full union; the 48 per
-shell counts the 24 simultaneous images with their two spinor lifts.
-The two covers share exactly the one sign, gcd(24, 26) = 2, fibered
-product 24 x 26 / 2 = 2 x 156. The observable frame group is
+carrying one octant step. Two distinct factors of two, kept apart:
+the totality decomposition completes over {tau, tau+2}, checked as
+disjoint sets with full union -- that two doubles 156 to 312; the
+48 per shell counts the 24 simultaneous images with their two
+spinor lifts eta and -eta = eta_{tau+12} -- that two doubles 24 to
+48. The two covers share exactly the one sign, gcd(24, 26) = 2; the
+fibered product here is the pullback of the two sign maps -- the
+compatible sheet pairs, cyclic of order 24 x 26 / 2 = 312 = 2 x 156
+(the sign-identified central product is the other valid order-312
+reading; the construction used is the pullback). The observable frame group is
 PGL2(F13): its Borel is the affine group AGL(1, 13) of 156 cells,
 its nonsplit C14 acts regularly on the fourteen points of P1, 2184 =
-156 x 14 stabilizer times transversal; SL2 is the spin double cover.
+156 x 14 stabilizer times transversal; SL2 is the spin double cover
+of PSL2 (order 1092, the index-two rotation half of PGL2), where B
+and T share the sign -I and |BT| = 1092.
 The sky's leak drift is a half-angle on the Carrier's spinor
 cover (C464 inside F_233^2, 464 | 54288): the sheet sigC flips at
 the Carrier wrap, the drift steps uniformly through it, and the
@@ -249,4 +267,5 @@ carry their standing constructive descriptions.
 [2] Schroedinger and Dirac Dynamics over Finite Substrate, pp202510.1486.
 [3] Quantum Observation over Finite Relational Substrate, pp202606.1160.
 [4] Gravitation as Phase Synchronisation over a Finite Relational Substrate, pp202606.1018.
-[5] https://github.com/gamayos/frc-numerics/tree/main/docs/1-phase-4
+[5] Standard-Model Interactions over Finite Relational Substrate, pp202606.1328.
+[6] https://github.com/gamayos/frc-numerics/tree/main/docs/1-phase-4
