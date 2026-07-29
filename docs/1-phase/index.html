@@ -77,8 +77,8 @@
 
   <div class="controls">
     <span class="seg" role="group" aria-label="view">
-      <button id="vSub" class="vbtn on" aria-pressed="true">Subject view</button>
-      <button id="vCar" class="vbtn" aria-pressed="false">Carrier view</button>
+      <button id="vCar" class="vbtn on" aria-pressed="true">Carrier view</button>
+      <button id="vSub" class="vbtn" aria-pressed="false">Subject view</button>
     </span>
     <label>speed <input id="speed" type="range" min="1" max="30" value="6"></label>
     <button id="interpB" class="vbtn on" aria-pressed="true">Interpolated</button>
@@ -569,7 +569,7 @@ function stepChronon(){
   if (tC === 0) sigC = 1 - sigC;           // the Carrier sheet flips at the wrap
   if (tS === 0) pT = tC;                   // perihelion: the tick at shell-home
 }
-let view = "subject";          // "carrier": numbers stand, the frame turns with
+let view = "carrier";          // "carrier": numbers stand, the frame turns with
                                // the drive; "subject": numbers re-register, the
                                // drive hidden. In both, the frame leaks: the
                                // chart precesses with the Carrier count
@@ -1399,6 +1399,7 @@ function onState(){                        // exact updates, at integer chronons
 // ---------- the loop: exact states at the ticks; between them the
 // interpolated mode smooths the chart motion by the fraction [approx],
 // every angle stepping by its constant per-chronon increment ----------
+setView("carrier");
 onState();
 let last = null;
 function loop(ts){
