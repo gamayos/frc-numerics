@@ -1,4 +1,4 @@
-# 1-phase-3: Schrodinger dynamics over the minimal non-trivial pair
+# 1-phase-4: Schrodinger dynamics with the frame dilation
 
 Single-file interactive visualisation: `index.html`. No dependencies.
 External verification: `verify-233.js` (82 checks: the pair dynamics,
@@ -9,7 +9,7 @@ radial ladder with the tau+2 completion as sets), `verify-space.js`
 counts), `verify-hopf.js` (9 checks: the finite Hopf fibration -- the free
 boost action, the unique factorization, the global section, the
 horizon-circle fiber coordinate, at p = 13 and Omega-blind at p = 5,
-with the SL2 spin contrast), and `verify-render.js` (15 checks: the
+with the SL2 spin contrast), and `verify-render.js` (16 checks: the
 production rendering itself -- the pair sweep over both sky
 representations, the caption-free canvases, the label laws, the
 double-cover closures in the Carrier view, the drive-hiding of the
@@ -21,7 +21,11 @@ quarter turn in S chronons, the q hand riding to h, the
 one drive sense across the panels: the Carrier-view sky steps
 clockwise with the drive, as the shell and the chart, and the
 interpolated mode: exact endpoints, +1 quarter class per chronon,
-on-tick data);
+on-tick data, and the frame dilation in the sheet-fair chart:
+bead-on-fiber at every phase, the congruent parity image wF = -w
+at the half, the dual's radial band at the quarter, home at the
+cycle, the ensemble breathing without collapse, the Subject view
+unflowed);
 node, all passing, all integer arithmetic in the exact suites. The screen projection is
 a labelled chart approximation; every state shown is exact and
 discrete. The instance is the minimal non-trivial pair (13, 233),
@@ -106,6 +110,53 @@ identical; the combinatorics is carried by verify-hopf.js. The
 guard chart is the labelled approximation; the silhouette radius
 206 clears the outer shell (node radius 200.5) with margin.
 
+## The frame dilation (00:Y5)
+
+The leak per chronon is an element of the frame group, and by C19
+it factors uniquely into a Borel part and a boost part. The Borel
+part is the azimuthal drift the panels already draw. The boost part
+is motion along the Hopf fiber -- unobservable to the Subject
+(00:Y3), so absent from the Subject view and resolved only by the
+harness: the frame dilation, the mass phase of 00:Y5. The rate is
+forced by the dial: the flip is x h per Carrier quarter, so the
+flow runs at the dial's full tick-angle per chronon, prograde, phi
+= -(bC + F) pi/116, interpolation-ready and closing exactly at the
+Carrier wrap with no sheet bit. The realisation is the pure fiber
+flow rendered in the sheet-fair chart: each point projects from
+the guard on its own side of S3 (denominator W0 - |q4|), so the
+antipodal map is the ball's exact point reflection and no chart
+constant enters any station. Every bead rides its own leaf at
+every phase -- bead-on-fiber always -- and the helix guide loops
+flow pointwise into smooth screwed curves, the pole crossings
+passing the center along the observer's axis leaf, as they must.
+Stations, exact and gauge-free: at the Carrier quarter the sharp
+shell disperses into a radial band, the Fourier dual's spread
+(the dual has the units of the inverse: localized to dispersed);
+at the half the pattern reassembles as the congruent parity image,
+wF = -w exactly at full scale; home with the Carrier cycle, the
+pattern with the pair at 696. The chart radius along a leaf is
+bounded below by the flow-invariant |z1|, so the ensemble breathes
+and never collapses. The leaves keep the established closed-ellipse
+rendering at the release density in both views. Each event's drawn
+fiber is the foliation leaf through its CURRENT bead (the ball
+carries the standing chart foliation; re-lifting the flowed
+position selects the leaf): the nodes precess along the fibers at
+machine precision through the whole cycle, and the fiber family
+precesses with them -- at the half the entire fibration stands as
+its congruent parity image. The mid-sphere (the q4 = 0 great
+sphere, chart radius S3H/W0) is the seam where the atlas's two
+projective charts glue, C0 but not C1, so flowed curves bend
+exactly there -- the declared signature of the two-chart atlas,
+kept in preference to a smoothing gauge that would cost the
+conic-exact rendering; the seam is left undrawn.
+The visibility profiles follow the flowed positions, in sync with
+the guide loops' front/back passes. The clock bead rides
+the axis leaf: the Subject's own dilation. The rung-ladder
+exchange stays as the discrete arithmetic face of the same
+inversion; with the exact per-tick boost step (which C14 element,
+via the octant bridge) it is the open derivation that would also
+promote 00:Y5.
+
 ## Interpolated mode
 
 The control card carries an Interpolated switch, on by default. It
@@ -181,15 +232,16 @@ read as the arrow of time.
 
 ## Provenance
 
-1-phase-3 extends the stable episode 1-phase-2 (kept frozen as the
-reference realisation) with the Hopf representation toggle. The
-shell and phase panels derive from the standing episode 1-phase-1
-(review-2 line); the sky panel from the standing episode 1-space
-(rev 18). Both source episodes remain frozen; the doctrine
-sections below the panels carry their standing constructive
-descriptions, prefaced by the Schrodinger framing and amended by
-revision 2 (the projective frame chart, the fibered covers, the
-scoped exactness and measure language).
+1-phase-4 extends the stable episode 1-phase-3 (kept frozen as the
+stable release) with the frame dilation: the Hopf flow of the node
+layer and the helix guides in the Carrier view, the leaf-riding
+beads, and the clock bead. 1-phase-3 in turn extends 1-phase-2
+(frozen) with the Hopf representation toggle, the frame-leak view
+semantics, and the interpolated mode; the shell and phase panels
+derive from the standing episode 1-phase-1 (review-2 line), the
+sky panel from the standing episode 1-space (rev 18). All source
+episodes remain frozen; the doctrine sections below the panels
+carry their standing constructive descriptions.
 
 ## References
 
@@ -197,4 +249,4 @@ scoped exactness and measure language).
 [2] Schroedinger and Dirac Dynamics over Finite Substrate, pp202510.1486.
 [3] Quantum Observation over Finite Relational Substrate, pp202606.1160.
 [4] Gravitation as Phase Synchronisation over a Finite Relational Substrate, pp202606.1018.
-[5] https://github.com/gamayos/frc-numerics/tree/main/docs/1-phase-3
+[5] https://github.com/gamayos/frc-numerics/tree/main/docs/1-phase-4

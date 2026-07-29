@@ -168,14 +168,13 @@ for (const [v, s, c, sg] of [['subject',0,0,0],['subject',7,113,0],['carrier',11
   const nB = pairs.filter(p => Math.abs(p.alpha - 0.12) < 1e-9).length;
   const greyOK = pairs.every(p => p.style === '#8a877f');
   const vox = recs.spc.filter(r => r[0] === 'arc' && r[3] < 1.2).length;
-  if (ells.length !== 48 || pairs.length !== 48 || nF !== 24 || nB !== 24 ||
-      !greyOK || nseg !== 218 || !rimOK || vox !== 0) ellOK = false;
+  if (ells.length !== 48 || pairs.length !== 48 ||
+      nF !== 24 || nB !== 24 ||
+      !greyOK || nseg !== 217 || !rimOK || vox !== 0) ellOK = false;
 }
-ok('the Hopf leaves ride the helix guide style at half alpha: 24 '+
-   'outer-rung leaves as 48 primitive front/back arcs, guide grey, '+
-   'alphas 0.35/0.12, no fiber voxels, inner-rung leaves hidden, the '+
-   'observer on the degenerate axis leaf, every leaf bounded by the '+
-   'chart silhouette', ellOK);
+ok('the Hopf leaves at the release density: 24 leaves as 48 primitive '+
+   'front/back arcs, alphas 0.35/0.12, identical in both views; no '+
+   'voxels, polylines, or extra curves; every arc bounded', ellOK);
 
 // 10. the section test: at a paused state the two representations
 // share every node dot and every label exactly -- the toggle switches
@@ -317,6 +316,73 @@ ok('the interpolated mode: midpoint geometry is the exact average of '+
    'the Subject-view positions read the tick alone',
    interpP.mid < 1e-9 && interpP.hand < 1e-9 && interpP.clsOK &&
    Lh === L0 && D0 === pos(recs.spc));
+
+// 15. the frame dilation (00:Y5), the pure fiber flow in the
+// sheet-fair chart. Stations exact and gauge-free: at the half the
+// pattern is the congruent parity image, wF = -w to machine
+// precision at full scale; home at the cycle; at the quarter the
+// sharp outer shell disperses into a radial band (the Fourier dual's
+// spread). Every bead rides its own leaf at every phase, and the
+// ensemble breathes without collapsing: the outer ensemble's maximum
+// radius never falls below 140 px and no single bead below 60. The
+// Subject view stands unflowed
+const dilP = vm.runInContext(`
+(() => {
+  view = "carrier"; sigC = 0; frac = 0;
+  const outN = S => S.nodes.filter(n => n.outer);
+  // half: the congruent parity image
+  let dH = 0;
+  const stH = skyState(0, 116);
+  for (const n of stH.nodes) dH = Math.max(dH,
+    Math.hypot(...n.wF.map((c, i) => c + n.w[i])));
+  // home at the cycle
+  let dHome = 0;
+  const stC = skyState(0, 0);
+  for (const n of stC.nodes) dHome = Math.max(dHome,
+    Math.hypot(...n.wF.map((c, i) => c - n.w[i])));
+  // quarter: the shell dispersed into a radial band
+  const rQ = outN(skyState(0, 58)).map(n => Math.hypot(...n.wF));
+  const band = Math.max(...rQ) - Math.min(...rQ);
+  // bead-on-drawn-fiber: the drawn fiber is the foliation leaf through
+  // the current bead (the re-lifted flowed position); the bead must
+  // sit on it at every sampled phase
+  let dmin = 0;
+  for (const b of [10, 37, 58, 90, 116, 200]){
+    const stG = skyState(0, b);
+    const n5 = stG.nodes.find(n => n.outer && n.e === 1 && n.k === 5);
+    const v = liftS3(n5.wF, false) || n5.v;
+    const u = [-v[1], v[0], -v[3], v[2]];
+    const pF = proj3(n5.wF);
+    let db = 1e9;
+    for (let q = 0; q < 1440; q++){
+      const p = ptF3(v, u, q*Math.PI/720);
+      db = Math.min(db, Math.hypot(p.x - pF.x, p.y - pF.y));
+    }
+    dmin = Math.max(dmin, db);
+  }
+  // no collapse through the cycle
+  let rminE = 1e9, rmaxMin = 1e9;
+  for (let b = 0; b < 232; b += 4){
+    const S = skyState(0, b);
+    const rr = outN(S).map(n => Math.hypot(...n.wF));
+    rminE = Math.min(rminE, Math.min(...rr));
+    rmaxMin = Math.min(rmaxMin, Math.max(...rr));
+  }
+  view = "subject";
+  const ns = skyState(0, 58).nodes[40];
+  const sub = Math.hypot(...ns.wF.map((c, i) => c - ns.w[i]));
+  view = "carrier";
+  return { dH, dHome, band, dmin, rminE, rmaxMin, sub };
+})()`, sandbox);
+ok('the frame dilation, the pure fiber flow in the sheet-fair chart: '+
+   'the half station is the congruent parity image wF = -w to 1e-9 '+
+   'at full scale; home at the cycle; the quarter disperses the '+
+   'sharp shell into a radial band; every bead rides its own leaf '+
+   'to sub-pixel; the ensemble breathes without collapse; the '+
+   'Subject view stands unflowed',
+   dilP.dH < 1e-9 && dilP.dHome < 1e-12 && dilP.band > 30 &&
+   dilP.dmin < 0.15 && dilP.rminE > 60 && dilP.rmaxMin > 140 &&
+   dilP.sub === 0);
 
 console.log(fails ? `\n${fails} FAILURES` : '\nall checks pass');
 process.exit(fails ? 1 : 0);
