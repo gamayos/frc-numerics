@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Finite Ring Cosmology Lab: Schrödinger dynamics as (13,233) shell rotation</title>
+<title>Finite Ring Cosmology Lab: Schr&ouml;dinger dynamics over (13, 233)</title>
 <style>
   :root{
     --surface:#1a1a19; --panel:#212120; --edge:#33322f;
@@ -15,20 +15,24 @@
        font:14px/1.45 "Avenir Next","Segoe UI",system-ui,sans-serif; padding:22px}
   h1{font-size:19px; font-weight:600; letter-spacing:.2px}
   .sub{color:var(--ink2); margin-top:4px; font-size:13px}
-  .wrap{max-width:1100px; margin:0 auto}
-  .panels{display:flex; gap:14px; margin-top:16px; flex-wrap:wrap; align-items:stretch}
-  .panel{flex:1 1 480px; background:var(--panel); border:1px solid var(--edge);
-         border-radius:10px; padding:12px}
+  .wrap{max-width:1760px; margin:0 auto}
+  .panels{display:flex; gap:12px; margin-top:14px; align-items:stretch}
+  .panel{flex:1 1 0; min-width:0; background:var(--panel); border:1px solid var(--edge);
+         border-radius:10px; padding:10px}
   .panel h2{font-size:13px; font-weight:600; color:var(--ink2);
             text-transform:uppercase; letter-spacing:.8px; margin-bottom:8px}
   .trow{display:flex; align-items:center; justify-content:space-between;
         height:30px; margin-bottom:8px}
   .trow h2{margin-bottom:0}
   canvas{width:100%; height:auto; display:block; border-radius:6px}
-  .readout{display:flex; justify-content:space-between; margin-top:8px;
-           font-size:13px; color:var(--ink2); flex-wrap:wrap; gap:4px}
-  .readout b{color:var(--ink); font-weight:600}
-  .bridge{width:100%; text-align:left; margin-top:10px; padding:9px 14px;
+  .cap{margin-top:8px; font-size:12px; color:var(--ink2); line-height:1.5}
+  .cap b{color:var(--ink); font-weight:600}
+  @media (orientation: portrait){ .panels{flex-direction:column} }
+  @media (orientation: landscape) and (max-width: 1500px){
+    .panels{flex-wrap:wrap}
+    .panel{flex:1 1 calc(50% - 6px)}
+  }
+  .bridge{width:100%; text-align:left; margin-top:12px; padding:9px 14px;
           background:var(--panel); border:1px solid var(--edge); border-radius:10px;
           font-size:13px; color:var(--ink2)}
   .bridge b{color:var(--ink)}
@@ -46,7 +50,13 @@
   input[type=range]{accent-color:var(--acc); vertical-align:middle}
   .vbtn{font-size:12px}
   .vbtn.on{background:var(--acc); border-color:var(--acc); color:#fff}
-  .doctrine{margin-top:16px; color:var(--ink2); font-size:13px; max-width:1100px}
+  .seg{display:inline-flex; border:1px solid var(--edge); border-radius:6px;
+       overflow:hidden; background:var(--surface)}
+  .seg .vbtn{border:0; border-radius:0; margin:0; padding:4px 12px;
+             background:transparent; color:var(--ink)}
+  .seg .vbtn.on{background:var(--acc); color:#fff}
+  .seg .vbtn:focus-visible{outline:2px solid var(--ink); outline-offset:-2px}
+  .doctrine{margin-top:16px; color:var(--ink2); font-size:13px}
   .doctrine p{margin-top:6px}
   .doctrine .k{color:var(--ink); font-weight:600}
   .badge{display:inline-block; margin-top:10px; padding:3px 10px; border:1px solid var(--edge);
@@ -56,80 +66,116 @@
   .refs a{color:#6f9fd8; text-decoration:none}
 </style>
 </head>
-<body data-palette="#3987e5,#c98500" data-episode="1-phase-1" data-rev="5">
+<body data-palette="#3987e5,#c98500" data-episode="1-phase-3" data-rev="1">
 <div class="wrap">
-  <h1>FRC Lab: Schrödinger dynamics as unitary shell rotation</h1>
-  <div class="sub">minimal non-trivial pair <b>(13, 233)</b> · Subject and Carrier · the state is the
-    residue vector of the frame's great circle: twelve components and the fixed origin, folding on
-    x = i<sup>r</sup>&middot;q<sup>s</sup>, q = g&#8308; [1] · the free evolution is the
-    drive [2] · Carrier view: its own period read whole, the quarter flip &times;h and the
-    6/29 precession; the double cover as the events (home, &minus;1) and (home, home)
-    (00:C17, 00:C18)</div>
-
-  <div class="panels">
-    <div class="panel">
-      <div class="trow">
-        <h2 id="sphTitle">The shell · the Subject view</h2>
-        <div style="display:flex; gap:8px">
-          <button id="vSub" class="vbtn on" aria-pressed="true">Subject view</button>
-          <button id="vCar" class="vbtn" aria-pressed="false">Carrier view</button>
-        </div>
-      </div>
-      <canvas id="sph" width="1040" height="1064" role="img" aria-label="The arithmetic symmetry sphere of F13: meridians, latitudes, the rotating frame, and the register comb of phase arrows on the frame's great circle"></canvas>
-      <div class="readout">
-        <span>the frame's prime meridian sweeps clockwise, one step of 30&deg; per chronon ·
-          now on the ray of <b id="frameOut">1</b> · returns after <b>12</b></span>
-        <span>in the Subject's view the frame is static and the residues evolve
-          <b>x &#8614; gx</b>: slot a reads a&middot;g<sup>&tau;</sup>,
-          unit slot now <b id="slotOut">1</b> · &times;2 per chronon</span>
-        <span style="flex-basis:100%">the comb is the active register R<sub>&tau;</sub>: instantaneous, space-like, thirteen cells;
-          the arrow direction is the phase i<sup>r</sup>, the tint the rung s, so each cell shows
-          its whole value x = i<sup>r</sup>&middot;3<sup>s</sup>; one step: a quarter about the
-          fiber, one rung of tint</span>
-      </div>
-    </div>
-    <div class="panel">
-      <div class="trow">
-        <h2 id="ringsTitle">The phase · the Subject view</h2>
-        <div style="display:flex; gap:8px">
-          <button id="vSub2" class="vbtn on" aria-pressed="true">Subject view</button>
-          <button id="vCar2" class="vbtn" aria-pressed="false">Carrier view</button>
-        </div>
-      </div>
-      <canvas id="rings" width="1040" height="1064" role="img" aria-label="The phase panel: the Carrier ring of 232 ticks, the L1 time latitude ring of the shell, and the common C4 fold clock"></canvas>
-      <div class="readout">
-        <span>fold: x = i<sup>r</sup>&middot;q<sup>s</sup> · both shells share the class
-          r = &tau; mod 4, one quarter per chronon · mass is the winding rate (D2):
-          &kappa; = <b>3</b> vs S = <b>58</b> windings per own period</span>
-        <span>Carrier, S even: the octant &zeta;&#8328; = 97 carries the odd classes
-          (&#295; and h share class 2) · transport gcd(12, 232) = <b>4</b></span>
-        <span style="flex-basis:100%">the middle ring is the shell's L&#8321; time latitude, the drive's
-          own orbit through the unit, green on both panels and view-synced with the sphere;
-          its cells carry the time-domain phase comb, the same arrows as the shell's space-like
-          comb: direction i<sup>r</sup> of the registered value, tint the rung s; the panel
-          registers the one shared datum: the class r</span>
-      </div>
-    </div>
-  </div>
-
+  <h1>FRC Lab: Schr&ouml;dinger dynamics over the minimal non-trivial pair (13, 233)</h1>
+  <div class="sub">the drive x &#8614; gx as the exact unitary evolution [2, 3], read through
+    three complementary views of one state: the frame's symmetry (the shell), the phase (the
+    chart), and the observed space (the sky, in two representations: the double-helix
+    fibers and the finite Hopf fibration, 00:C19) &middot; Subject shell
+    F&#8321;&#8323; (&kappa; = 3), Carrier F&#8322;&#8323;&#8323; (S = 58), Objectless</div>
 
   <div class="controls">
-    <label>speed <input id="speed" type="range" min="1" max="30" value="5"></label>
+    <span class="seg" role="group" aria-label="view">
+      <button id="vSub" class="vbtn on" aria-pressed="true">Subject view</button>
+      <button id="vCar" class="vbtn" aria-pressed="false">Carrier view</button>
+    </span>
+    <label>speed <input id="speed" type="range" min="1" max="30" value="6"></label>
+    <button id="interpB" class="vbtn on" aria-pressed="true">Interpolated</button>
     <button id="pause">Pause</button>
     <button id="step">Step 1 chronon</button>
     <button id="reset">Reset</button>
     <span>chronon pair: shell <b id="tickS">0</b>/12 &middot;
       Carrier <b id="tickC">0</b>/232 &middot;
-      perihelion tick <b id="peri">0</b> &middot; sheet <b id="sheet">+1</b>
-      (&minus;1 between the events (home, 116) and (home, home))</span>
+      perihelion tick <b id="peri">0</b> &middot; sheet <b id="sheet">+1</b></span>
+  </div>
+
+  <div class="panels">
+    <div class="panel">
+      <div class="trow">
+        <h2 id="sphTitle">The symmetry shell &middot; the Subject view</h2>
+      </div>
+      <canvas id="sph" width="1040" height="1040" role="img" aria-label="The arithmetic symmetry sphere of F13: meridians, latitudes, the rotating frame, and the register comb of phase arrows on the frame's great circle"></canvas>
+      <div class="cap">
+        the F&#8321;&#8323; symmetry sphere: blue the prime meridian, red the quarter
+        meridian, green L&#8321; the time latitude, purple L&#8324; the Energy latitude;
+        the comb on the frame's great circle shows each cell's whole value, the arrow the
+        phase i<sup>r</sup>, the tint the rung s. Subject view: the register stands and
+        the slots re-register &times;g, the unit slot now <b id="slotOut">1</b>; Carrier
+        view: the residues stand, the frame sweeps 30&deg; per chronon (now on the ray
+        of <b id="frameOut">1</b>), and the register drifts one tick-angle per chronon
+        against the Carrier's standing quarters: the frame leak, no Subject being an
+        ideal of the Carrier, q &#8594; p at &tau; = S (00:C17, 00:C18).
+      </div>
+    </div>
+    <div class="panel">
+      <div class="trow">
+        <h2 id="ringsTitle">The phase chart &middot; the Subject view</h2>
+      </div>
+      <canvas id="rings" width="1040" height="1040" role="img" aria-label="The phase chart: the Carrier ring of 232 ticks, the L1 time latitude ring of the shell, and the common C4 fold clock"></canvas>
+      <div class="cap">
+        the phase chart: outer, the Carrier ring of 232 ticks; middle, the L&#8321; time
+        latitude with the time-domain comb i<sup>r</sup>; inner, the shared fold clock
+        r = &tau; mod 4, its hand the unit's lift i<sup>&tau;</sup>. Drive
+        &#8635;, oriented phase &#8634;: i = g<sup>&minus;&kappa;</sup>. The frame leak
+        (00:C17, 00:C18): in the Subject view the register stands and the Carrier
+        chart {1, &#295;, &minus;1, h} turns &#8634; one tick-angle per chronon; in
+        the Carrier view the quarters stand, &#295; on top, and the register drifts
+        &#8635;. The q/p dial reads the same in both views: q's Carrier address, one
+        tick-angle &#8635; per chronon, the address flipping &times;h per quarter
+        &mdash; q lands on the h cardinal at &tau; = S.
+      </div>
+    </div>
+    <div class="panel">
+      <div class="trow">
+        <h2 id="skyTitle">The sky &middot; the Subject view</h2>
+        <span class="seg" role="group" aria-label="sky representation">
+          <button id="mHelix" class="vbtn on" aria-pressed="true">Double helix</button>
+          <button id="mHopf" class="vbtn" aria-pressed="false">Hopf fibers</button>
+        </span>
+      </div>
+      <canvas id="spc" width="1040" height="1040" role="img" aria-label="The Subject's sky: three nested spheres at the axial latitude radii, each carrying the complete double-helix fiber of twenty-four node images on one smooth closed loop through both poles; consecutive fibers one rung apart, arrows repeating and tints cycling; the Observer at the center"></canvas>
+      <div class="cap"><span id="capHelix">the sky: &kappa; = 3 nested fibers on the radial ladder, radii
+        R&middot;sin(2a&pi;/p), the Observer at the center; each shell carries the
+        complete double-helix fiber &mdash; the twelve cells by two routes on one smooth
+        closed loop through both poles, the sign of &minus;1 distributed over the orbit.
+        Consecutive fibers are one rung apart, &times;3 = g&#8308;, mounted 120&deg;
+        apart about the main axis: the arrows repeat, the tints cycle, values &divide;3
+        per shell inward; labels ride the outer fiber; internal shells semi-visible.
+        3&times;48 + 12 = 156 = p(p&minus;1): the totality of the observable (00:Y3).</span><span id="capHopf" style="display:none">
+        the same sky, the same nodes: the toggle switches only the fibers. The
+        sky ball charts the whole S&sup3;, its silhouette the horizon sphere
+        (00:Y4); each node lifts to S&sup3; and rides the exact Hopf leaf
+        through it, drawn for the 24 outer-rung nodes. The nodes are the
+        section of PGL&#8322;/C&#8321;&#8324; (00:C19): a boost moves along the
+        fiber, changes the observer, and is unobservable &mdash; observation is
+        the Hopf section (00:Y3). The observer's clock fiber (&tau;, 0) is the
+        polar axis, blue: the stabilizer, the pure drive. The guard chart is
+        the labelled approximation; the combinatorics is exact.
+      </span></div>
+    </div>
+  </div>
+
+  <div class="bridge" style="display:flex; gap:22px; flex-wrap:wrap; align-items:center">
+    <span>fibre tints (the rung s):
+      <span style="color:#c98500">&#9679; s = 0</span>&nbsp;
+      <span style="color:#d060c0">&#9679; s = 1</span>&nbsp;
+      <span style="color:#a8a5a0">&#9679; s = 2</span></span>
+    <span>arrows (the quarter r): &#8594; r = 0 &middot; &#8593; r = 1 &middot;
+      &#8592; r = 2 &middot; &#8595; r = 3</span>
+    <span>now: r = &tau; mod 4 = <b id="rOut">0</b> &middot;
+      i<sup>&tau;</sup> = &times;<b id="iOut">1</b> &middot;
+      fibre &alpha; = &tau; mod 3 = <b id="aOut">0</b></span>
   </div>
 
   <div class="bridge">
-    the evolution is <b>x &#8614; gx</b> and the drive step folds: on the Subject,
-    &kappa; odd, exactly <b>2 = i&middot;3</b>: one oriented quarter-turn times one rung per chronon
-    &middot; on the Carrier, S even, the octant &zeta;&#8328; carries the step
-    &middot; [i&#295;&part;<sub>&tau;</sub>] = [E], one quarter from each ring &middot;
-    the mode spectrum enters with the Object, next episode
+    one state, three readings &middot; the state is the pair (shell &tau; mod 12, Carrier
+    tick mod 232), advanced together by the drive; the display never interpolates: exact
+    states only &middot; the shell shows the frame's symmetry, the chart shows the phase
+    and the fold, the sky shows what the Subject observes &middot; the views are one
+    toggle, locked across all three panels &middot; verified end to end in
+    <b>verify-233.js</b>, <b>verify-sky.js</b>, <b>verify-space.js</b>, and the
+    production-render suite <b>verify-render.js</b>
   </div>
 
   <div class="monitor">
@@ -155,10 +201,56 @@
       transport: gcd(12, 232) = 4 &middot; invariant S &equiv; 2 (mod 4) &middot;
       joint recurrence C&#8326;&#8329;&#8326; &cong; C&#8321;&#8322; &times;<sub>C&#8324;</sub>
       C&#8322;&#8323;&#8322;</span>
+    <span><span class="reg">The half-phase clock</span><br>
+      &eta; = &radic;g, ord(&eta;) = <b>24</b>: the double cover of the drive<br>
+      &eta;&sup1;&sup2; = &minus;1 &middot; &radic;i = 3&eta; &middot; chart angles halved on the sky</span>
+    <span><span class="reg">The sky map: two covers</span><br>
+      &theta; = k&middot;180/13&deg; on C&#8322;&#8326; = 2p &middot; &phi; = &alpha; +
+      &beta;: (&tau;+3k) on C&#8322;&#8324; plus the cell's half-angle c&middot;180/13&deg;<br>
+      the sign of &minus;1 distributed: one half-step per cell, half the cover per
+      circuit</span>
+    <span><span class="reg">The radial ladder</span><br>
+      &kappa; shells within the horizon: 4a &lt; p &hArr; a &le; &kappa;, identically<br>
+      axial radii R&middot;sin(2a&pi;/p) [approx, the chart flattening]; the outer
+      shell nearly at the rim, sin(6&pi;/13) = 0.9927; the instance draws
+      &kappa; = 3</span>
+    <span><span class="reg">The three fibers (00:F4)</span><br>
+      C&#8321;&#8322; = C&#8324; &times; C&#8323;: the quarter inside each fiber, the rung
+      as the ladder<br>
+      consecutive fibers &times;3 = g&#8308; on both faces: the rung on the values,
+      120&deg; mounting about the axis; arrows repeat, tints cycle; 3&times;48 + 12 =
+      <b>156</b></span>
+    <span><span class="reg">The closure</span><br>
+      at each pole the branches differ by half the cover: exact pass-throughs<br>
+      injective everywhere; positions close after <b>24</b>, values after <b>12</b>:
+      S(&minus;1) = &minus;I drawn</span>
+    <span><span class="reg">The curl (00:C18)</span><br>
+      half a tick-angle per lookback chronon into the azimuth<br>
+      58 &times; 360 = 90 &times; 232: the chart quarter at lookback S</span>
+    <span><span class="reg">The trace (00:Y3)</span><br>
+      lattice rows swept once per arm per circuit; primary 6 &times; 24 = <b>144</b><br>
+      direct events 12&sup2; + 12 = <b>156</b> = p(p&minus;1); the covers share the one
+      sign: 24&middot;26/2 = 2&times;156, the closed circuit</span>
+    <span><span class="reg">The echo sky &middot; the loop</span><br>
+      two routes per cell: shared half-angle, colatitudes summing 180&deg;, transports
+      an odd multiple of 45&deg; apart<br>
+      the echo = the advanced cone &times;g&#8315;&#185;; the antipodal apex the null
+      self-echo; C7 on values: retarded &times; conjugate = a&sup2;</span>
   </div>
 
-
   <div class="doctrine">
+    <p><span class="k">Schr&ouml;dinger dynamics on the finite substrate [2, 3].</span>
+      The drive x &#8614; gx is the shell's exact unitary evolution: one chronon
+      multiplies every registered value by the generator, turning every phase arrow one
+      quarter and stepping every tint one rung &mdash; the global phase and the diagonal
+      law. The quantum paper identifies this chronon-indexed zonal evolution as the
+      Schr&ouml;dinger evolution of the windings [3], and the Dirac paper carries its
+      exact unitary and spinor structure [2]. No dynamical quantity is approximated
+      &mdash; every state, phase, and count is exact, with the screen projection the one
+      labelled chart approximation: the three
+      panels are three complementary readings of this one evolution &mdash; the frame's
+      symmetry on the shell, the phase and the fold on the chart, the observed space on
+      the sky &mdash; locked to one state pair and one view toggle.</p>
     <p><span class="k">The shell is the arithmetic symmetry sphere [2].</span> The node at longitude m,
       depth a carries the residue a&middot;g<sup>m</sup>. The meridians are the additive rays: the unit's
       ray reads 1&hellip;6 down one side and 12&hellip;7 up the other; the quarter-turn ray reads
@@ -178,7 +270,8 @@
       the flip, the remainder eight full octant fibres. In general the remainder is
       8(S/2 &minus; &kappa;(2&kappa;+1)) cells, whole octant fibres always.</p>
     <p><span class="k">The Carrier's quarter-turn (00:C17), and the precession (00:C18).</span> The
-      Carrier evolves in itself over its complete period: each quarter, 58 ticks, multiplies
+      Carrier itself is the timeless torsor; its chart, in the observer's reading, runs
+      the complete period: each quarter, 58 ticks, multiplies
       the chart by 78<sup>58</sup> = h with h&sup2; = &minus;1, the Fourier flip of the
       plane, space and momentum exchanging roles. The four cardinals of the ring are the
       quarter operators {1, h, &minus;1, &#295;}; h and &#295; share class 2, and the
@@ -191,16 +284,18 @@
       pair event (home, 116), the chart reading dlog(&minus;1): the Carrier's own &minus;1
       carries the spinor sign; and it closes only at (home, home), the pair space exhausted
       between closures (00:F2): the double cover as event structure within the totality,
-      the spinor structure in the time domain. The quarter takes exactly S chronons: in the
-      Carrier view the Subject's chart itself, the twelve marks and their core labels, drifts
-      one tick-angle per chronon against the fixed cardinals, exactly dual to the Carrier
-      chart's one-tick slide in the Subject view; q lands on the h cardinal at &tau; = S,
-      and the chart closes at &Omega; &minus; 1 = 232. The frame ray therefore moves at the
+      the spinor structure in the time domain. The quarter takes exactly S chronons: the
+      register and the Carrier's quarters wind one tick-angle per chronon &mdash; no
+      Subject is an ideal of the Carrier, so the frame leaks, the q/p axes riding the
+      register with their Carrier addresses flipping &times;h at each cardinal. In the
+      Subject view the Carrier chart turns &#8634; under the standing register; in the
+      Carrier view the register drifts &#8635; past the standing quarters; q aligns with
+      the h cardinal at &tau; = S, and the chart closes at &Omega; &minus; 1 = 232. The frame ray therefore moves at the
       composed rate 1/12 + 1/232, the coprime numerator &kappa; + S = 61: its absolute
       direction returns exactly at the pair event (home, home) and stands antipodal at
       (home, 116), the double cover carried by the dynamics itself, with the prograde sign
       of the astronomical advance. The chirality is Subject-selected: C14's odd-member rule
-      gives h = 89, exactly as it gives i = 5 on the shell, the gauge bit
+      gives &#295; = 144 the i-orientation, exactly as it gives i = 5 on the shell, the gauge bit
       k<sub>B</sub>c = h concurs, and the transported flip lands on h; the orientation is
       orbit-relative, on both sides. The standing conjecture (00:Y2): this precession is
       the face of gravitational apsidal advance (00:E4), Mercury to the S2 star.</p>
@@ -306,14 +401,126 @@
       positions, each a residue of its own shell. The joint
       recurrence is the pair space (00:F2): every class-compatible pair occurs exactly once
       between consecutive (home, home) events.</p>
-    <span class="badge">exact arithmetic: every label is a residue of F&#8321;&#8323; or
-      F&#8322;&#8323;&#8323; as tagged; externally verified, 82 instance checks (verify-233.js)
-      and 25 dynamics checks (verify-f13.js), the full scripts in the numeric validation
-      suite [4]; the identifications carry their ledger rows: mass as winding (D2),
-      the fold (00:F4), constants as Carrier residues (00:B7); exact states only, one
-      indivisible step per chronon; the Carrier view reads its own complete period: the
-      quarter flip &times;h, the 6/29-per-orbit precession, the double cover as the events
-      (home, &minus;1) and (home, home) (00:C15&ndash;C18; the physical face 00:Y2)</span>
+        <p><span class="k">The grid is the nodes [3, 4].</span> The
+      Subject's space-time grid is its twelve phase-carrying nodes, the register itself;
+      nothing else is observed. Distance is phase decoherence, counted in relational
+      steps along the meridian: node a sits |a| quanta from the Observer and is
+      registered as it was |a| chronons ago, reading a&middot;g<sup>&tau;&minus;|a|</sup>:
+      the unit cone slope. The 3D chart of the nodes is derived, the polar coordinates
+      read off one coherence budget: a cell is one phase with two readings, temporal
+      along the scale cycle and spatial along the meridian, and the sky is the dyad of
+      that pair.</p>
+    <p><span class="k">The half-phase clock: the extension.</span> The two angles exist
+      only through the quadratic extension K = F&#8321;&#8323;[&eta;] with
+      &eta; = &radic;g, the one further frame datum the observer supplies. The spinor
+      clock &lang;&eta;&rang; has order 24, the double cover of the drive cycle: even
+      steps are the drive orbit, odd steps are K-proper, and &eta;&sup1;&sup2; =
+      &minus;1. Every chart angle lands on the sky halved: the drive step 30&deg;
+      becomes 15&deg;, the chart quarter becomes 45&deg;, the Carrier tick half a tick.
+      A head-turn is a congruence, moving every node rigidly with the fibers fixed; a
+      Fourier flip is a chart quarter, 45&deg; on the azimuths with every fiber turned:
+      the two operations differ in both coordinates, so no rotation of the observer is
+      the Fourier dual.</p>
+    <p><span class="k">The sky map: two covers.</span> The two angles are read off
+      two double covers, both of this universe. The temporal cover is the spinor clock
+      C&#8322;&#8324;, &eta; = &radic;g, doubling the drive cycle; the spatial cover is
+      the walk C&#8322;&#8326; = 2p, doubling the space circle &mdash; the loop itself.
+      Colatitude is the walk position: &theta; = k&middot;180/13&deg;, one
+      C&#8322;&#8326; half-step per route quantum; the terminus k = 13 is the antipodal
+      pole, and the horizon falls strictly between rows 6 and 7 (1080 &lt; 1170 &lt;
+      1260): the direct/echo boundary, with nothing registered on it. Azimuth is the
+      sum of the two cover readings: &alpha; = (&tau;+3k)&middot;15&deg; on the spinor
+      clock &mdash; the transport, 45&deg; per decoherence quantum, direction-blind
+      since decoherence is a count &mdash; plus &beta; = c&middot;180/13&deg;, the
+      cell's own half-angle: the space-circle position halved, a datum of the cell
+      alone, the same from either route &mdash; the sign of &minus;1 distributed, one
+      half-step per cell, half the cover per circuit, since &minus;1 is the half-turn
+      of the space circle and position accumulates it. The fine curl adds half a
+      tick-angle per lookback chronon (00:C18). The rung never enters the position:
+      tint and arrow ride the fiber, the energy reading.</p>
+    <p><span class="k">The closure.</span> The sky map is injective everywhere:
+      twenty-four images, twenty-four points, at every chronon &mdash; no folds. At
+      each pole the two branches' azimuths differ by exactly half the cover: the
+      branch flip of passing through a pole, so both poles are exact pass-throughs
+      &mdash; one smooth closed loop, no seams, no cusps, no twists. The direct ring
+      runs continuous through the horizon: space-neighbors 6 and 7 land one half-step
+      apart on the sky. And the covers close the clock: positions return after 24
+      chronons, values after 12; one drive circuit turns every azimuth half-way
+      around, the spinor sign of [2], S(&minus;1) = &minus;I &mdash; visible in the
+      Carrier view, where the drive turns the sky and the register-anchored
+      pattern drifts &#8635; with the register past the standing quarters, half a
+      tick-angle per chronon: the frame leak on the spinor cover, continuous
+      through the Carrier wrap on the sheet &sigma;. The Subject view holds the
+      register: the drive is hidden by re-registration and the sky stands, the
+      values walking through it; the views are locked across all panels.</p>
+    <p><span class="k">The echo sky: the loop and the trace (00:C7, 00:Y3).</span>
+      Space is a closed circle, so every cell is observed by two routes: the direct way
+      at lookback |a|, and around the world at lookback 13&minus;|a|. One formula covers
+      the whole sphere &mdash; arm &epsilon;, route k = 1..12, cell &epsilon;k, value
+      cell&middot;g<sup>&tau;&minus;k</sup>. The direct images fill the near cap; the
+      echo continues past the horizon, and since values are 12-periodic the wrapped
+      past cone is the advanced cone: the echo shows the future value
+      &times;g&#8315;&#185;, the circumnavigation chronon. The two images of every cell
+      share their half-angle and sit at colatitudes summing exactly 180&deg;, their
+      transports an odd multiple of 45&deg; apart: the cover's parity signature. C7 lives on the values &mdash;
+      retarded &times; conjugate = a&sup2;, the matter&ndash;antimatter gauge as the
+      norm-circle relation &mdash; and the instance's matter content selects the direct
+      branch. The loop's anchors are the two null points of the walk: at k = 0 both
+      arms sit on cell 0, the observer's own null registration, the north pole and the
+      time-axis direction; at k = 13 both arms reach the antipodal pole
+      &mdash; the observer's null self-echo, beyond the faithful window of 12, one
+      drive cycle: the loop passes straight through, the azimuth branch flipping by
+      half the cover, and closes. Per drive circuit the direct events number 12&sup2; + 12 = 156 =
+      p(p&minus;1), one per element of the affine group: the cone chart of 00:Y3
+      realized event by event; the two covers share exactly the one sign,
+      gcd(24, 26) = 2: their fibered product over the common &minus;1 carries
+      24&middot;26/2 = 2 &times; 156 cells, twice the Borel count &mdash; the closed
+      circuit &mdash; while the base cycles are coprime, gcd(13, 24) = 1.</p>
+    <p><span class="k">The radial ladder: three fibers (00:F4).</span> The law is
+      scale-generic: a Subject of capacity &kappa; (p = 4&kappa;+1) resolves exactly
+      &kappa; radial decoherence steps within its horizon &mdash; 4a &lt; p &hArr;
+      a &le; &kappa;, identically &mdash; at the axial radii
+      R&middot;sin(2a&pi;/p) &mdash; the latitude circles' own radii, the view down the
+      main axis, the outer shell nearly at the horizon rim &mdash; the chart flattening;
+      the indices and counts are exact,
+      the instance numerals enter only the instance. The drive cycle factorizes
+      uniquely, C&#8321;&#8322; = C&#8324; &times; C&#8323;: each fiber realizes the
+      quarter factor internally (the arrows, the T = 4 wave), and the rung factor is
+      realized externally as the ladder &mdash; the fold x = i&#691;&middot;3&#738;
+      drawn, r inside each fiber, s as the radius. Consecutive fibers are one rung
+      apart, &times;3 = g&#8308;, and the third-of-a-turn appears on both faces: on the
+      values as the rung shift, and on the mounting as the orientation &mdash; each
+      shell rigidly rotated 120&deg; about the main axis, at full angle, since a
+      congruence is not a phase; the quarter is blind to both, so the arrows repeat
+      identically across the shells while the tints cycle one rung. Each shell carries the
+      complete aligned fiber, 48 = 4&times;12 cover-nodes; with the origin stabilizer
+      &mdash; the pure drive, the Observer's own clock, 12 null events &mdash; the
+      count closes: 3&times;48 + 12 = 156 = p(p&minus;1), the affine group: the
+      totality of the observable (00:Y3), decomposed with nothing left over. Equal
+      weight per shell is the uniform counting measure on the three C&#8323; fibers,
+      resolved through coherent sums; the Born readout of [3] lives at the
+      registration layer, and consumes this measure. The instance is Objectless: in the
+      generic (q, p, &Omega;) case, with p and &Omega; enormous, the ladder densifies
+      into the radial coordinate, and radial probability densities with quantum
+      numbers &mdash; an Object's orbital structure on the &kappa;<sub>O</sub> ladder
+      (00:Y1) &mdash; live inside that chart as Object physics; the toy previews the
+      geometry, and contains no orbitals to scale. Visibility is depth alone.</p>
+    <p><span class="k">The sequel (E2): the frame chart is projective.</span> The
+      observer's chart is the projective line, so the observable frame group is
+      PGL&#8322;(F&#8321;&#8323;), order 12 &times; 13 &times; 14 = 2184: its Borel
+      &mdash; the point stabilizer, the affine group AGL(1, 13), our cone chart of 156
+      cells &mdash; and its nonsplit C&#8321;&#8324;, acting regularly on the fourteen
+      points of P&sup1;, factorize it exactly, 2184 = 156 &times; 14, stabilizer times
+      transversal. SL&#8322;(F&#8321;&#8323;), of the same order, is the spin double
+      cover: the Clifford layer, carrying &eta;, the lifts, and the spinor sign
+      S(&minus;1) = &minus;I. The boosts change the observer; their study is the
+      rank-3 sequel, the declared horizon.</p>
+        <span class="badge">exact arithmetic: every drawn datum is a residue, a count, or a
+      class on a cycle of this universe; externally verified end to end by the three
+      suites (verify-233.js: the pair dynamics, the events, the precession theorem;
+      verify-sky.js: the sky map, the covers, the radial ladder; verify-space.js: the
+      register, the cone arithmetic, the frame-group counts); the screen projection is a
+      labelled chart approximation; exact states only</span>
 
   <div class="refs">
     <span class="reg">References</span><br>
@@ -323,13 +530,14 @@
     <a href="https://doi.org/10.20944/preprints202510.1486.v3">doi:10.20944/preprints202510.1486.v3</a><br>
     [3] Akhtman, Y.; Voether, E. <i>Quantum Observation over Finite Relational Substrate.</i> Preprints 2026, 2026061160.
     <a href="https://doi.org/10.20944/preprints202606.1160.v2">doi:10.20944/preprints202606.1160.v2</a><br>
-    [4] Akhtman, Y. <i>FRC Numerics: the numeric validation suite.</i> GitHub.
-    <a href="https://github.com/gamayos/frc-numerics/tree/main/docs/1-phase">github.com/gamayos/frc-numerics/tree/main/docs/1-phase</a>
-  </div>
+    [4] Akhtman, Y. <i>Gravitation as Phase Synchronisation over a Finite Relational Substrate.</i> Preprints 2026, 2026061018.
+    <a href="https://doi.org/10.20944/preprints202606.1018.v2">doi:10.20944/preprints202606.1018.v2</a><br>
+    [5] Numeric validation suite:
+    <a href="https://github.com/gamayos/frc-numerics/tree/main/docs/1-phase-2">github.com/gamayos/frc-numerics/tree/main/docs/1-phase-2</a>
   </div>
 </div>
-
 <script>
+
 "use strict";
 // ---------- the verified instance (verify-233.js, verify-f13.js) ----------
 const P = 13;
@@ -345,17 +553,32 @@ const mod = (a,n)=>((a%n)+n)%n;
 const INK="#ececea", INK2="#a8a5a0", INK3="#6b6965", EDGE="#33322f",
       ACC="#3987e5", TURN="#c98500", LAT="#7da354",
       MER="#d0453c", GRN="#58a35e", PUR="#9b7fd4";   // Fig 2: momentum red is the
-      // paper's quarter seat; here red marks the frame's prime meridian as asked,
+      // paper's quarter role; here red marks the frame's prime meridian as asked,
       // green the time latitude L1, purple the energy latitude L4 = L_{kappa+1}
 
 // No Object here, so no winding: the evolution is x -> gx, the phase g^tau.
 let tS = 0, tC = 0, pT = 0, frac = 0, paused = false;
+// the Carrier spinor sheet: the half-angle of the Carrier tick lives on
+// the Carrier's own Clifford layer (C464 inside F_233^2: 464 | 233^2 - 1
+// = 54288 exactly), so the sky's leak drift carries one further cover
+// bit, toggling at the Carrier wrap; the drawn sky closes with the
+// pair's spinor recurrence, 2 x 696 chronons, in both views
+let sigC = 0;
 function stepChronon(){
   tS = (tS + 1) % 12; tC = (tC + 1) % 232;
+  if (tC === 0) sigC = 1 - sigC;           // the Carrier sheet flips at the wrap
   if (tS === 0) pT = tC;                   // perihelion: the tick at shell-home
 }
-let view = "subject";          // "carrier": numbers stand, frame turns
-                               // "subject": frame stands, numbers re-register
+let view = "subject";          // "carrier": numbers stand, the frame turns with
+                               // the drive; "subject": numbers re-register, the
+                               // drive hidden. In both, the frame leaks: the
+                               // chart precesses with the Carrier count
+// interpolated mode [approx]: the chart motion is smoothed between
+// chronons by the sub-chronon fraction; every angle advances by a
+// constant per-chronon step, so the interpolation is exact at both
+// endpoints; all data -- values, labels, rank tints, cardinal marks --
+// switch on the tick only. Off: exact tick-stepping (F = 0)
+let interp = true;
 // The state is the pair of cycle positions (shell tS mod 12, Carrier tC
 // mod 232), each a residue of its own shell (00:C15). The joint recurrence
 // is the pair space: every class-compatible pair occurs exactly once
@@ -364,13 +587,17 @@ let view = "subject";          // "carrier": numbers stand, frame turns
 // the chart reading dlog(-1), the Carrier's own -1 carrying the sign --
 // and returns at (home, home).
 
-// the precessing q/p dial (00:C17, 00:C18), shared by both panels in the
-// Carrier view: position q blue, momentum p red, one tick-angle per chronon,
-// the Fourier flip x h at each quarter crossing (the cardinals).
+// the q/p dial (00:C17, 00:C18), one instrument, identical in both
+// views: it reports the Subject frame's Carrier address -- the angle of
+// q against the Carrier's quarters -- which is a relational datum of
+// the pair, the same in every view. The dial turns clockwise one
+// tick-angle per chronon, prograde: q sweeps from the Carrier's 1 to
+// its h cardinal, landing at tau = S = 58, the address flipping x h at
+// each quarter crossing.
 function qpDial(ctx, X, Y, bC, peri){
   const AR = 30;
-  const thA = -bC*Math.PI/116;
-  for (const [dth, col, lab] of [[0, ACC, "q"], [-Math.PI/2, MER, "p"]]){
+  const thA = -(bC + (interp ? frac : 0))*Math.PI/116;
+  for (const [dth, col, lab] of [[0, ACC, "q"], [Math.PI/2, MER, "p"]]){
     const c = Math.cos(thA + dth), s = Math.sin(thA + dth);
     ctx.strokeStyle = col; ctx.lineWidth = 1.8; ctx.lineCap = "round";
     ctx.beginPath();
@@ -388,7 +615,7 @@ function qpDial(ctx, X, Y, bC, peri){
 // ---------- left: the sphere (Carrier view) ----------
 const SC = document.getElementById("sph"), sc = SC.getContext("2d");
 sc.scale(2, 2);   // 2x supersampling: crisp text at panel scale
-const CX = 260, CY = 246, R = 205, EL = 0.34;
+const CX = 260, CY = 260, R = 202, EL = 0.34;
 const cosE = Math.cos(EL), sinE = Math.sin(EL);
 // The meridian is the additive line through 0: thirteen points, node a at
 // circle angle beta = a * 2pi/13 from the pole. Depths 1..6 fill one ray,
@@ -418,16 +645,20 @@ function path(pts, style, w, aBack, aFront){
   }
 }
 function drawSphere(aS, bC){
-  sc.clearRect(0,0,520,532);
-  sc.fillStyle = "#161615"; sc.fillRect(0,0,520,532);
+  sc.clearRect(0,0,520,520);
+  sc.fillStyle = "#161615"; sc.fillRect(0,0,520,520);
   sc.textBaseline = "middle"; sc.textAlign = "center";
-  const rot = aS*Math.PI/6;                              // 30 deg per chronon
+  const F = interp ? frac : 0;                           // the sub-chronon fraction
+  const rot = (aS + F)*Math.PI/6;                        // 30 deg per chronon
   const isCar = view === "carrier";
-  // the Subject chart drift (Carrier view): the shell's own marks rotate one
-  // Carrier tick-angle per chronon against the fixed cardinals, dual to the
-  // Carrier chart's one-tick slide in the Subject view (00:C17). Declared
-  // here, above every use in the grid and node loops.
-  const drift = isCar ? -bC*Math.PI/116 : 0;
+  // the frame leak (00:C17, 00:C18): no Subject is an ideal of the Carrier
+  // (a field has none), so the register and the Carrier's quarters wind one
+  // tick-angle per chronon. The register is the Subject view's screen: there
+  // it stands, and the Carrier's structures turn counterclockwise (read on
+  // the phase chart and the sky). The Carrier view holds the quarters: the
+  // register drifts clockwise against them. Declared here, above every use
+  // in the grid and node loops.
+  const drift = isCar ? -(bC + F)*Math.PI/116 : 0;
 
   // The Carrier view: the residues stand, the frame turns.
   // latitudes: colat beta(a), a = 1..6, each the drive orbit in drive order.
@@ -437,8 +668,8 @@ function drawSphere(aS, bC){
     const pts = [];
     for (let s=0; s<=120; s++) pts.push(proj(beta(a), s*2*Math.PI/120));
     const hot = a===1 || a===4;
-    path(pts, a===1 ? GRN : a===4 ? PUR : "rgba(120,118,112,0.9)",
-         hot ? 1.7 : 1, hot ? 0.22 : 0.10, hot ? 0.9 : 0.30);
+    path(pts, a===1 ? GRN : a===4 ? PUR : "rgba(150,148,142,0.95)",
+         hot ? 1.7 : 1, hot ? 0.30 : 0.15, hot ? 1.0 : 0.45);
   }
   // Canonical Fig-1 orientation: the unit ray on the outer great circle
   // (the rim, azimuth +90), the quarter-turn ray facing the viewer.
@@ -447,11 +678,11 @@ function drawSphere(aS, bC){
     const psi = Math.PI/2 - m*Math.PI/6 + drift;
     const pts = [];
     for (let s=0; s<=140; s++) pts.push(proj(s*2*Math.PI/140, psi));
-    path(pts, "rgba(120,118,112,0.9)", 1, 0.08, 0.25);
+    path(pts, "rgba(150,148,142,0.95)", 1, 0.12, 0.38);
   }
-  // Carrier view: the frame rotates clockwise, prime meridian on the ray of
-  // g^tau. Subject view: the frame is static in its canonical position and
-  // the residues re-register instead.
+  // Carrier view: the frame ray rotates clockwise with the drive, prime
+  // meridian on the ray of g^tau, riding the drifting register it points
+  // into. Subject view: the register stands and the residues re-register.
   const fprime = isCar ? Math.PI/2 - rot + drift : Math.PI/2;
   const fquart = isCar ? -rot + drift : 0;
   for (const [psi, col] of [[fprime, ACC], [fquart, MER]]){
@@ -470,14 +701,17 @@ function drawSphere(aS, bC){
       const onB = m===mP || m===mod(mP+6,12), onG = m===mQ || m===mod(mQ+6,12);
       if (p.d < -0.36 && !onB) continue;                 // the comb never hides
       sc.fillStyle = onB ? ACC : onG ? MER : (p.d>0.05 ? INK2 : INK3);
-      sc.globalAlpha = p.d > 0.05 ? 1 : (p.d > -0.36 ? 0.55 : 0.35);
+      sc.globalAlpha = p.d > 0.05 ? 1 : (p.d > -0.36 ? 0.65 : 0.42);
       sc.beginPath(); sc.arc(p.x, p.y, onB||onG ? 3 : 2.2, 0, 7); sc.fill();
       sc.globalAlpha = 1;
       const val = isCar ? (a*ORB[m])%P : (a*ORB[mod(m + aS, 12)])%P;
       if (p.d > -0.2 || onB){
         sc.font = "11px sans-serif";
         sc.globalAlpha = p.d > -0.2 ? 1 : 0.5;
-        sc.fillStyle = onB ? "#7fb3ef" : onG ? "#e8938c" : (p.d>0.05 ? INK2 : INK3);
+        // one coding only: the label carries the value's rank tint (the
+        // three fibres, gold / magenta / white), depth-dimmed on the far
+        // side; the cardinals are carried by the dots and the meridians
+        sc.fillStyle = shade(FIBC[WRNG[val]], p.d > 0.05 ? 1 : 0.64);
         sc.fillText(String(val), p.x + 9, p.y - 7);
         sc.globalAlpha = 1;
       }
@@ -502,12 +736,16 @@ function drawSphere(aS, bC){
       const bA = beta(a), sA = Math.sin(psiC + AZ), cA = Math.cos(psiC + AZ);
       const er = [Math.sin(bA)*sA, -Math.sin(bA)*cA, Math.cos(bA)];  // radial
       const el = [cA, sA, 0];                                        // zonal ccw
-      const qr = [1,0,-1,0][cls], qz = [0,1,0,-1][cls];
+      // the arrow rotates one quarter per chronon exactly (dlog + 1),
+      // so the interpolated angle lands on the next quarter at the tick;
+      // the tint switches on the tick
+      const qa = (cls + F)*Math.PI/2;
+      const qr = Math.cos(qa), qz = Math.sin(qa);
       const Ax = qr*er[0] + qz*el[0], Ay = qr*er[1] + qz*el[1],
             Az = qr*er[2] + qz*el[2];
       const vx = 27*Ax, vy = 27*(-Az*cosE - Ay*sinE);
       const mag = Math.hypot(vx, vy), ux = vx/mag, uy = vy/mag;
-      sc.globalAlpha = p.d > 0.05 ? 1 : (p.d > -0.36 ? 0.7 : 0.45);
+      sc.globalAlpha = p.d > 0.05 ? 1 : (p.d > -0.36 ? 0.8 : 0.5);
       sc.strokeStyle = FIBC[WRNG[val]]; sc.lineWidth = 1.9; sc.lineCap = "round";
       const tx = p.x + 0.73*vx, ty = p.y + 0.73*vy;
       sc.beginPath();
@@ -523,22 +761,19 @@ function drawSphere(aS, bC){
       sc.globalAlpha = 1;
     }
   }
-  // the precession applied to the shell (Carrier view): the same q/p dial,
-  // and the q/p reference basis drawn in the comb's transverse plane at the
-  // unit cell. The reference advances one tick-angle per chronon and flips
-  // at the cardinals; the phase arrow stays registered, jumping its quarter
-  // at the boundary: the relative drift is the precession, 6/29 quarter per
-  // orbit (00:C17, 00:C18).
+  // the q/p reference basis (Carrier view), anchored at the unit cell
+  // and glued to the register: q rides the radial, p the zonal, A = 0
+  // in the comb's local basis. As the register drifts, the basis
+  // advances one tick-angle per chronon past the standing quarters and
+  // flips its Carrier address x h at each cardinal: the relative drift
+  // is the precession, 6/29 quarter per orbit (00:C17, 00:C18).
   if (isCar){
-    qpDial(sc, 64, 66, bC, pT);
     const pu = proj(beta(1), fprime);
     const bA = beta(1), sA = Math.sin(fprime + AZ), cA = Math.cos(fprime + AZ);
     const er = [Math.sin(bA)*sA, -Math.sin(bA)*cA, Math.cos(bA)];
     const el = [cA, sA, 0];
-    const A = 0;   // the q/p axes are chart-fixed: the drift is carried by
-                   // the shell itself; q rides the radial, p the zonal
     for (const [dth, col] of [[0, ACC], [-Math.PI/2, MER]]){
-      const qr = Math.cos(A + dth), qz = Math.sin(A + dth);
+      const qr = Math.cos(dth), qz = Math.sin(dth);
       const Ax = qr*er[0] + qz*el[0], Ay = qr*er[1] + qz*el[1],
             Az = qr*er[2] + qz*el[2];
       const vx = 16*Ax, vy = 16*(-Az*cosE - Ay*sinE);
@@ -563,64 +798,62 @@ function drawSphere(aS, bC){
   sc.beginPath(); sc.arc(pole.x, pole.y, 8, 0, 7); sc.stroke();
   sc.fillStyle = INK; sc.font = "12px sans-serif";
   sc.fillText("0 · Observer", pole.x, pole.y - 16);
-  // captions
-  sc.font = "10.5px sans-serif"; sc.textAlign = "left"; sc.fillStyle = INK2;
-  if (isCar){
-    sc.fillText("blue: the frame's prime meridian M\u2080, now on the ray of " + ORB[aS], 12, 492);
-    sc.fillText("red: the frame's quarter meridian M\u03BA", 12, 506);
-  } else {
-    sc.fillText("blue: the frame's prime meridian M\u2080 (static)", 12, 492);
-    sc.fillText("red: the frame's quarter meridian M\u03BA (static)", 12, 506);
-  }
-  sc.fillText("green: L\u2081 · purple: L\u2084 · comb R\u03C4: tint = the rung s", 12, 520);
-  sc.textAlign = "right"; sc.fillStyle = INK2;
-  if (isCar){
-    sc.fillText("the shell drifts one tick per chronon: q → p at τ = S", 508, 492);
-    sc.fillText("the frame walks; the ray: −1 at (home, 116), home at (home, home)", 508, 506);
-  } else {
-    sc.fillText("the frame stands; the residues evolve x ↦ gx", 508, 492);
-    sc.fillText("every slot ×g = ×2 per chronon, the origin fixed", 508, 506);
-  }
-  if (isCar){
-    sc.fillText("comb: quarter per chronon · q/p basis: 6/29 quarter per orbit", 508, 520);
-  } else {
-    sc.fillText("the comb: one quarter per chronon about the meridian fiber", 508, 520);
-  }
-  sc.textAlign = "center";
+
 }
 
 // ---------- right: the nested rings ----------
 const RC = document.getElementById("rings"), rc = RC.getContext("2d");
 rc.scale(2, 2);   // 2x supersampling
-const RCX = 260, RCY = 246, RO = 205, RI = 126;
+const RCX = 260, RCY = 260, RO = 202, RI = 124;
 const chi12 = j => -j*Math.PI/6;                          // exponent clockwise; i = 2^9 on top
 const chi232 = a => -a*2*Math.PI/232;                     // the Subject's declared chart on the
-                                                          // torsor (78 = 3^{-1}), hbar at top;
-                                                          // the Carrier itself has no generator
-const FIBC = ["#c98500","#d060c0","#a8a5a0"];              // the three fibres (cosets of Q4)
+                                                          // torsor (78 = 3^{-1}), phase-consistent
+                                                          // with chi12: counterclockwise is the
+                                                          // phase direction on both rings, hbar =
+                                                          // 144 (the i-oriented quarter) on top
+                                                          // matching i on top of C12; the Carrier
+                                                          // itself has no generator
+const FIBC = ["#ffa900","#ff76eb","#fffaf3"];              // the three fibres (cosets
+                                                           // of Q4), at full value V = 1
+// the value ladder: scale a hex colour's V (HSV) by f, hue and saturation kept
+const shade = (hex, f) => {
+  const n = parseInt(hex.slice(1), 16);
+  const ch = v => Math.round(((n >> v) & 255) * f);
+  return "rgb(" + ch(16) + "," + ch(8) + "," + ch(0) + ")";
+};
+// the four sky visibility profiles: outer-front V = 1, mid-front, inner-front,
+// and the whole dark side; graded by brightness at full opacity
+const PROFV = [1.00, 0.74, 0.52, 0.32];
+const SKYT = PROFV.map(f => FIBC.map(c => shade(c, f)));   // tints per profile
+const SKYN = PROFV.map(f => shade("#a8a5a0", f));          // node grey per profile
 const IEXP = [0, 9, 6, 3];                                 // exponent of i^r on C12
 function drawRings(aS, bC){
-  rc.clearRect(0,0,520,532);
-  rc.fillStyle = "#161615"; rc.fillRect(0,0,520,532);
+  rc.clearRect(0,0,520,520);
+  rc.fillStyle = "#161615"; rc.fillRect(0,0,520,520);
   rc.textBaseline = "middle"; rc.textAlign = "center";
   const rQ = (aS % 4);                       // the shared registrable class r = tau mod 4
   const alpha = (aS % 3);                    // the Subject outcome rung (fibre)
   const isCar = view === "carrier";
-  // the view lock, as on the sphere. Carrier view: the charts stand and the
-  // frame's registration moves. Subject view: the frame is the reference, the
-  // registration stands, and the charts turn under it; on this ring the whole
-  // C232 chart rotates one tick per chronon, the registration fixed at east.
+  // the view lock, as on the sphere: the frame leak (00:C17, 00:C18) is
+  // the one relative winding, one Carrier tick-angle per chronon, and
+  // each view holds its own structure. Subject view: the register
+  // {1, i, -1, -i} stands and the Carrier's chart {1, hbar, -1, h} turns
+  // counterclockwise under it, the q/p frame glued to the Carrier's
+  // quarters and turning with them -- the Carrier's h reaches the
+  // register's 1, and the register's i reaches q, at tau = S = 58: the
+  // Fourier x hbar exchange. Carrier view: the quarters and q/p stand,
+  // the register drifts clockwise. The chart closes at Omega - 1 = 232;
+  // in the Carrier view the frame ray adds the drive, moving at the
+  // composed rate with numerator kappa+S = 61: antipodal at the (home,
+  // dlog(-1)) event, home again at (home, home). The registration sweeps
+  // the standing chart in the Carrier view and stands at east in the
+  // Subject view, riding its own turning chart.
+  const F = interp ? frac : 0;
+  // the C232 chart turn is tick-quantized: the ring is 232-fold
+  // self-similar, so a one-tick turn maps the marks onto themselves and
+  // interpolating it would only wobble; the chart steps on the tick
   const off = isCar ? 0 : bC;
-  const drift = isCar ? -bC*Math.PI/116 : 0;   // the Subject ring's
-                                                        // drift, dual to `off`
-
-  // The drift is carried by the Subject's ring itself (see `drift` above):
-  // its twelve marks, core labels, rays, hand and comb all rotate one
-  // Carrier tick-angle per chronon against the fixed cardinals, dual to the
-  // Carrier chart's one-tick slide in the Subject view (00:C17). q lands on
-  // the h cardinal at tau = S = 58; the chart closes at Omega - 1 = 232;
-  // the frame ray moves at the composed rate with numerator kappa+S = 61:
-  // antipodal at the (home, dlog(-1)) event, home again at (home, home).
+  const drift = isCar ? -(bC + F)*Math.PI/116 : 0;
 
   // outer ring: the Carrier's C232, every tick exact; cardinals gold (the four
   // quarter operators {1, h, -1, hbar}), the odd-octant ticks purple, and the
@@ -631,7 +864,7 @@ function drawRings(aS, bC){
     const oct = a % 29 === 0 && !card;
     const inClass = a % 4 === rQ;
     rc.strokeStyle = card ? TURN : oct ? "#9b7fd4" :
-      inClass ? "rgba(236,236,234,0.5)" : "rgba(120,118,112,0.26)";
+      inClass ? "rgba(236,236,234,0.72)" : "rgba(150,148,142,0.38)";
     rc.lineWidth = card ? 2 : oct ? 1.6 : 1;
     const r1 = (card||oct) ? RO-6 : RO-4, r2 = (card||oct) ? RO+6 : RO+4;
     rc.beginPath();
@@ -639,9 +872,9 @@ function drawRings(aS, bC){
     rc.lineTo(RCX + Math.cos(th)*r2, RCY - Math.sin(th)*r2);
     rc.stroke();
   }
-  // the chart labels ride the chart: fixed in the Carrier view, turning with
-  // the C232 ring in the Subject view (chart exponents: hbar 174, h 58, 1 at
-  // 0, -1 at 116, the octant at 29)
+  // the chart labels ride the chart: fixed in the Carrier view, turning
+  // counterclockwise with the C232 in the Subject view (chart exponents:
+  // hbar 174 on top, h 58 at bottom, 1 at 0, -1 at 116, the octant at 29)
   rc.font = "11.5px sans-serif"; rc.fillStyle = "#e8c07a";
   for (const [ex, lab] of [[174, "\u0127 = 144"], [58, "h = 89"], [0, "1"], [116, "\u22121 = 232"]]){
     const th = chi232(ex - off);
@@ -650,39 +883,31 @@ function drawRings(aS, bC){
   rc.fillStyle = "#9b7fd4"; rc.font = "10.5px sans-serif";
   const zth = chi232(29 - off);
   rc.fillText("\u03B6\u2088 = 97", RCX + Math.cos(zth)*(RO+26), RCY - Math.sin(zth)*(RO+26));
-  // dim registration dot, outer: sweeps the chart in the Carrier view, stands
-  // at east in the Subject view; the point the observation never resolves
-  const thC = chi232(bC - off);
-  rc.fillStyle = INK3;
-  rc.beginPath(); rc.arc(RCX + Math.cos(thC)*(RO-14), RCY - Math.sin(thC)*(RO-14), 2.6, 0, 7); rc.fill();
-
   // middle ring: the shell's L1 time latitude, exactly as drawn in green on
   // the sphere: the drive's own orbit through the unit, seen from the pole.
   // chi12 is that polar view in the sphere's canonical orientation (unit
   // longitude east, drive clockwise). Carrier view: the values stand, cell m
   // reads g^m, the frame rays turn. Subject view: the rays stand, the cells
-  // re-register, slot m reads g^{m+tau}. The cell named 1 walks by the
-  // pullback g^{-tau}: ringed gold, the INV naming.
+  // re-register, slot m reads g^{m+tau}.
   rc.strokeStyle = GRN; rc.lineWidth = 1.7; rc.globalAlpha = 0.85;
   rc.beginPath(); rc.arc(RCX, RCY, RI, 0, 7); rc.stroke();
   rc.globalAlpha = 1;
   const mP = isCar ? aS : 0, mQ = isCar ? mod(aS+3, 12) : 3;
-  const mOne = isCar ? 0 : mod(-aS, 12);       // the cell whose value is 1
   for (let m=0; m<12; m++){
     const th = chi12(m) + drift;
     const val = isCar ? ORB[m] : ORB[mod(m + aS, 12)];
-    const core = [1,5,12,8].includes(val);   // Q4: fibre 0
-    const onB = m === mP || m === mod(mP+6,12), onG = m === mQ || m === mod(mQ+6,12);
     const x = RCX + Math.cos(th)*RI, y = RCY - Math.sin(th)*RI;
-    // small node dots in the sphere's style: green on the L1 latitude, the
-    // frame's cells in the meridian colours; the arrow carries fibre and phase
-    rc.fillStyle = onB ? ACC : onG ? MER : GRN;
-    rc.beginPath(); rc.arc(x, y, onB || onG ? 3 : 2.2, 0, 7); rc.fill();
-    if (m === mOne){ rc.strokeStyle = TURN; rc.lineWidth = 1.2;
-      rc.beginPath(); rc.arc(x, y, 7.5, 0, 7); rc.stroke(); }
+    // uniform node dots: green on the L1 latitude, one size; the frame's
+    // cardinal directions are carried by the meridian rays, the value by
+    // the arrow and the label
+    rc.fillStyle = GRN;
+    rc.beginPath(); rc.arc(x, y, 2.2, 0, 7); rc.fill();
     const lx = RCX + Math.cos(th)*(RI+24), ly = RCY - Math.sin(th)*(RI+24);
     rc.font = "11.5px sans-serif";
-    rc.fillStyle = onB ? "#7fb3ef" : onG ? "#e8938c" : core ? "#e8c07a" : INK2;
+    // one coding only: the label carries the value's rank tint (the
+    // three fibres, gold / magenta / white); the frame's cardinal
+    // directions are already carried by the dots and the meridian rays
+    rc.fillStyle = FIBC[WRNG[val]];
     const lab = val===1 ? "1" : val===5 ? "i = 5" : val===12 ? "\u22121 = 12"
               : val===8 ? "\u2212i = 8" : String(val);
     rc.fillText(lab, lx, ly);
@@ -690,10 +915,11 @@ function drawRings(aS, bC){
   // the frame's meridians on the latitude, prime (blue) and quarter (red), as
   // on the sphere: each is a great circle, so it crosses the latitude at two
   // antipodal longitudes, m and m+6; both crossings are drawn. The prime cell
-  // is the unit slot, reading g^tau.
+  // is the unit slot, reading g^tau; the rays slide with the frame in the
+  // Carrier view
   for (const [mm, col] of [[mP, ACC], [mQ, MER]]){
     for (const m2 of [mm, mod(mm + 6, 12)]){
-      const th = chi12(m2) + drift;
+      const th = chi12(m2 + (isCar ? F : 0)) + drift;
       rc.strokeStyle = col; rc.lineWidth = 2; rc.globalAlpha = 0.9;
       rc.beginPath();
       rc.moveTo(RCX + Math.cos(th)*72, RCY - Math.sin(th)*72);
@@ -717,7 +943,11 @@ function drawRings(aS, bC){
     const x = RCX + Math.cos(th)*RI, y = RCY - Math.sin(th)*RI;
     const er = [Math.cos(th), -Math.sin(th)];          // radial out
     const el = [-Math.sin(th), -Math.cos(th)];         // zonal ccw (+theta)
-    const qr = [1,0,-1,0][cls], qz = [0,1,0,-1][cls];
+    // Subject view: the slot re-registers x g, the arrow turns one
+    // quarter per chronon; Carrier view: the residues stand, so the
+    // arrow stands -- only the precession moves it
+    const qa = (cls + (isCar ? 0 : F))*Math.PI/2;
+    const qr = Math.cos(qa), qz = Math.sin(qa);
     const vx = 21*(qr*er[0] + qz*el[0]), vy = 21*(qr*er[1] + qz*el[1]);
     const mag = Math.hypot(vx, vy), ux = vx/mag, uy = vy/mag;
     rc.strokeStyle = FIBC[WRNG[val]]; rc.lineWidth = 1.9; rc.lineCap = "round";
@@ -733,15 +963,12 @@ function drawRings(aS, bC){
     rc.lineTo(tx - hs*ux + 0.62*hs*uy, ty - hs*uy - 0.62*hs*ux);
     rc.stroke();
   }
-  // dim registration dot, inner: sweeps in the Carrier view, stands at the
-  // unit slot in the Subject view
-  const thS = chi12(isCar ? aS : 0) + drift;
-  rc.fillStyle = INK3;
-  rc.beginPath(); rc.arc(RCX + Math.cos(thS)*(RI-11), RCY - Math.sin(thS)*(RI-11), 2.4, 0, 7); rc.fill();
   // the fold hand: the Subject lifts the class to a core residue, i^tau,
-  // pointing at the cell that now holds it (fixed in the Carrier view,
-  // re-registering in the Subject view)
-  const thF = chi12(isCar ? IEXP[rQ] : mod(IEXP[rQ] - aS, 12)) + drift;
+  // pointing at the cell that now holds it; per chronon the exponent
+  // steps -3 (x i) in the Carrier view and -4 (x i g^{-1}) in the
+  // Subject view, interpolated to land exactly on the next cell
+  const thF = chi12((isCar ? IEXP[rQ] : mod(IEXP[rQ] - aS, 12))
+                    - (isCar ? 3 : 4)*F) + drift;
   rc.strokeStyle = INK; rc.lineWidth = 3; rc.lineCap = "round";
   rc.beginPath(); rc.moveTo(RCX + Math.cos(thF)*63, RCY - Math.sin(thF)*63);
   rc.lineTo(RCX + Math.cos(thF)*81, RCY - Math.sin(thF)*81); rc.stroke();
@@ -760,87 +987,419 @@ function drawRings(aS, bC){
     rc.fillStyle = q === rQ ? INK : INK3; rc.font = "10px sans-serif";
     rc.fillText(String(q), RCX + Math.cos(th)*46, RCY - Math.sin(th)*46);
   }
-  const thQ = rQ*Math.PI/2;
+  const thQ = (rQ + F)*Math.PI/2;
   rc.strokeStyle = TURN; rc.lineWidth = 2.6; rc.lineCap = "round";
   rc.beginPath(); rc.moveTo(RCX, RCY);
   rc.lineTo(RCX + Math.cos(thQ)*38, RCY - Math.sin(thQ)*38); rc.stroke();
 
-  // the precessing q/p frame (Carrier view): the shared dial, one tick-angle
-  // per chronon, 6/29 quarter per Subject orbit (00:C17, 00:C18)
-  if (isCar) qpDial(rc, 64, 66, bC, pT);
+  // the q/p frame: the shared dial in both views, glued to the Carrier's
+  // quarters -- standing in the Carrier view, turning counterclockwise
+  // with the chart in the Subject view; 6/29 quarter per Subject orbit
+  // (00:C17, 00:C18)
+  qpDial(rc, 64, 66, bC, pT);
 
-  // captions at the canvas bottom, mirroring the left panel
-  rc.textAlign = "left";
-  rc.fillStyle = INK; rc.font = "11.5px sans-serif";
-  rc.fillText("r = \u03C4 mod 4 = " + rQ + " \u00B7 i^\u03C4 = \u00D7" + [1,5,12,8][rQ] +
-              " \u00B7 fibre \u03B1 = " + alpha, 12, 492);
-  rc.fillStyle = INK2; rc.font = "10.5px sans-serif";
-  rc.fillText("middle: L\u2081 time latitude \u00b7 arrows: the time-domain comb i^r", 12, 506);
-  if (isCar){
-    rc.fillText("Carrier chart stands \u00B7 the Subject ring drifts: q \u2192 p at \u03C4 = S", 12, 520);
-  } else {
-    rc.fillText("the frame stands; the charts turn: \u00D7g inner, one tick outer", 12, 520);
+
+}
+const SP = document.getElementById("spc"), sp = SP.getContext("2d");
+sp.scale(2, 2);
+const R3 = 158, H3 = 56, L3 = 30;
+const CX3 = 260, CY3 = 260, AZ3 = -0.42, EL3 = 0.40;
+const cosA3 = Math.cos(AZ3), sinA3 = Math.sin(AZ3), cosE3 = Math.cos(EL3), sinE3 = Math.sin(EL3);
+function proj3(w){
+  const x1 = w[0]*cosA3 - w[1]*sinA3, y1 = w[0]*sinA3 + w[1]*cosA3;
+  return { x: CX3 + x1, y: CY3 - w[2]*cosE3 - y1*sinE3, d: (-y1*cosE3 + w[2]*sinE3)/170 };
+}
+const al3 = d => d > 0.05 ? 1 : d > -0.36 ? 0.6 : 0.4;
+function seg3(a, b, style, w, alpha){
+  sp.strokeStyle = style; sp.lineWidth = w; sp.globalAlpha = alpha;
+  sp.beginPath(); sp.moveTo(a.x, a.y); sp.lineTo(b.x, b.y); sp.stroke();
+  sp.globalAlpha = 1;
+}
+function ring3(zc, style, w, aB, aF){
+  for (const pass of [0,1]){
+    sp.strokeStyle = style; sp.lineWidth = w;
+    sp.globalAlpha = pass ? aF : aB;
+    sp.beginPath(); let pen = false;
+    for (let k = 0; k <= 120; k++){
+      const a = k*2*Math.PI/120;
+      const p = proj3([R3*Math.cos(a), R3*Math.sin(a), zc]);
+      if ((pass===1) === (p.d > 0)){ pen ? sp.lineTo(p.x,p.y) : sp.moveTo(p.x,p.y); pen = true; }
+      else pen = false;
+    }
+    sp.stroke(); sp.globalAlpha = 1;
   }
-  rc.textAlign = "right";
-  rc.fillStyle = INK2; rc.font = "10.5px sans-serif";
-  rc.fillText("drive \u21BB \u00B7 oriented phase \u21BA: i = g\u207B\u1D4F", 508, 492);
-  rc.fillText("gold ring: the cell named 1 = g^\u2212\u03C4, the pullback", 508, 506);
-  rc.fillText("hand: the unit\u2019s lift i^\u03C4 \u00B7 dim dots: the registration", 508, 520);
-  rc.textAlign = "center";
+}
+let skyMode = "helix";               // the sky representation toggle
+function drawSpace(aS, bC){
+  if (skyMode === "hopf") return drawHopf(aS, bC);
+  return drawHelix(aS, bC);
+}
+// the shared sky state: one node computation for both representations,
+// so the toggle switches the fibers and only the fibers
+function skyState(aS, bC){
+  const isCar = view === "carrier";
+  // the sky chronon: positions close after 24; tau mod 24 is pair-native,
+  // the CRT of (tS mod 12, tC mod 8), no new counter
+  const t24 = aS + 12*((mod(bC - aS, 8))/4);
+  // the sky pattern is register-anchored: both azimuth components --
+  // the transport and the cell's half-angle -- are register data, so
+  // the pattern stands with the register in the Subject view and
+  // drifts clockwise with it in the Carrier view, at the half rate:
+  // the half lives on the Carrier's spinor cover C464 (inside the
+  // Carrier's Clifford layer), carried by the sheet sigC that flips at
+  // the Carrier wrap, continuous through it, closing with the pair's
+  // spinor recurrence, 2 x 696. The drive's turn of the sky is frame
+  // rotation: hidden in the Subject view by re-registration, shown in
+  // the Carrier view
+  const F = interp ? frac : 0;
+  const drift3 = isCar ? (bC + F + 232*sigC)*Math.PI/232 : 0;
+  const TICK2 = Math.PI/232;                     // the halved tick-angle
+  // the radial chart: a Subject of capacity kappa resolves exactly kappa
+  // radial decoherence steps within its horizon (4a < p iff a <= kappa,
+  // identically for p = 4 kappa + 1), at the axial radii r_a =
+  // R_H sin(2 a pi / p) -- the latitude circles' own radii, the view
+  // down the main axis [approx: the chart flattening; the indices and
+  // counts are exact]. The instance draws kappa = 3 shells, the outer
+  // nearly at the horizon rim (sin(6 pi/13) = 0.9927). Each shell
+  // carries the complete double-helix fiber; consecutive fibers are one
+  // rung apart, x3 = g^4, and the third-of-a-turn appears on both
+  // faces: on the values as the rung shift (labels divide by 3 inward,
+  // tints cycle) and on the mounting as the orientation -- each shell
+  // rigidly rotated 120 deg about the main axis, 8 C24-steps, at full
+  // angle since a congruence is not a phase. The quarter is blind to
+  // both (4 = 8 = 0 mod 4): the arrows repeat identically across the
+  // shells -- the fold x = i^r 3^s drawn: r inside each fiber, s as
+  // the radial ladder (00:F4)
+  const RH = 202;
+  const RSH = [Math.sin(2*Math.PI/13), Math.sin(4*Math.PI/13),
+               Math.sin(6*Math.PI/13)].map(t => RH*t);
+  const M3 = [3, 9, 1];                          // x 3^{a-3} mod 13 per shell
+  const TH3 = k => k*Math.PI/13;
+  const PH3 = (e, k, s) => ((isCar ? t24 + F : 0) + 3*k + 8*(s - 2))*Math.PI/12
+                           + (e > 0 ? k : 13 - k)*Math.PI/13
+                           + k*TICK2 + drift3;
+  // the azimuth-to-screen convention: +ph renders clockwise, the drive
+  // sense shared with the shell and the phase chart
+  const sph = (th, ph, dz, R) =>
+    [-R*Math.sin(th)*Math.sin(ph), -R*Math.sin(th)*Math.cos(ph),
+     R*Math.cos(th) + (dz || 0)];
+  const nodes = [];
+  for (let s = 0; s < 3; s++){
+    const R = RSH[s], outer = s === 2, scl = R / RSH[2];
+    for (const e of [1, -1]) for (let k = 1; k <= 12; k++){
+      const c = mod(e*k, P);
+      const x = (c * ORB[mod(aS - k, 12)] * M3[s]) % P;
+      const cls = WCLS[x];
+      // the position is a chart datum alone: no value datum enters it --
+      // the whole fold (r, s) rides the arrow and the tint
+      const w = sph(TH3(k), PH3(e, k, s), 0, R);
+      const pn = proj3(w);
+      nodes.push({ s, e, k, c, x, cls, w, pn, ph: PH3(e, k, s), outer, scl,
+                   prof: pn.d > 0.02 ? (2 - s) : 3 });
+    }
+  }
+  return { RH, RSH, TH3, PH3, sph, nodes };
+}
+function drawSkyGuides(RH, RSH){
+  // guides: the polar axis, the horizon sphere, the three shells
+  seg3(proj3([0,0,-RH-8]), proj3([0,0,RH+8]), INK3, 1, 0.4);
+  const po0 = proj3([0,0,0]);
+  sp.strokeStyle = INK3; sp.lineWidth = 1; sp.globalAlpha = 0.16;
+  sp.beginPath(); sp.arc(po0.x, po0.y, RH, 0, 7); sp.stroke();
+  for (const r of RSH){
+    sp.globalAlpha = 0.26;
+    sp.beginPath(); sp.arc(po0.x, po0.y, r, 0, 7); sp.stroke();
+  }
+  sp.globalAlpha = 1;
+}
+function drawSkyMarks(nodes){
+  // the node marks: the quarter arrow i^r, the dot, the outer labels --
+  // identical in both representations; the four visibility profiles:
+  // front side graded by shell (outer brightest, V = 1), the whole dark
+  // side one dim profile; brightness carries the grade at full opacity,
+  // the tints keeping hue and saturation at every level
+  const F = interp ? frac : 0;
+  for (const n of nodes){
+    const { w, pn, ph, x, cls, outer, scl, prof } = n;
+    const er = [-Math.sin(ph), -Math.cos(ph), 0], ez = [0, 0, 1];
+    const AL = 15*scl;
+    const qa = (cls + F)*Math.PI/2;                // one quarter per chronon
+    const qr = Math.cos(qa), qz = Math.sin(qa);
+    const v = [AL*(qr*er[0] + qz*ez[0]), AL*(qr*er[1] + qz*ez[1]),
+               AL*(qr*er[2] + qz*ez[2])];
+    const p0 = proj3([w[0]-0.27*v[0], w[1]-0.27*v[1], w[2]-0.27*v[2]]);
+    const p1 = proj3([w[0]+0.73*v[0], w[1]+0.73*v[1], w[2]+0.73*v[2]]);
+    sp.globalAlpha = 1;
+    sp.strokeStyle = SKYT[prof][WRNG[x]]; sp.lineWidth = outer ? 1.7 : 1.4;
+    sp.lineCap = "round";
+    sp.beginPath(); sp.moveTo(p0.x, p0.y); sp.lineTo(p1.x, p1.y); sp.stroke();
+    const dx = p1.x-p0.x, dy = p1.y-p0.y, mg = Math.hypot(dx,dy)||1,
+          ux = dx/mg, uy = dy/mg, hs = Math.max(2.2, 0.2*mg);
+    sp.beginPath();
+    sp.moveTo(p1.x - hs*ux - 0.62*hs*uy, p1.y - hs*uy + 0.62*hs*ux);
+    sp.lineTo(p1.x, p1.y);
+    sp.lineTo(p1.x - hs*ux + 0.62*hs*uy, p1.y - hs*uy - 0.62*hs*ux);
+    sp.stroke();
+    sp.fillStyle = SKYN[prof];
+    sp.beginPath(); sp.arc(pn.x, pn.y, 2.2*Math.max(scl, 0.6), 0, 7);
+    sp.fill();
+    if (outer){
+      const lf = prof === 3 ? 0.45 : 1;
+      sp.font = "10.5px sans-serif";
+      sp.fillStyle = shade([1,5,12,8].includes(x) ? "#e8c07a" : "#ececea", lf);
+      sp.fillText(String(x), pn.x + 9, pn.y - 9);
+    }
+    sp.globalAlpha = 1;
+  }
+}
+function drawSkyObserver(){
+  // the Observer at the center: here and now; the origin stabilizer,
+  // the pure drive, is the observer's own clock
+  const po = proj3([0,0,0]);
+  sp.fillStyle = ACC; sp.beginPath(); sp.arc(po.x, po.y, 4.5, 0, 7); sp.fill();
+  sp.fillStyle = INK; sp.font = "12px sans-serif";
+  sp.fillText("0", po.x, po.y - 13);
+  sp.globalAlpha = 0.5; sp.fillStyle = INK2; sp.font = "10.5px sans-serif";
+  sp.fillText("Observer", po.x, po.y + 15);
+  sp.globalAlpha = 1;
+}
+function drawHelix(aS, bC){
+  sp.clearRect(0,0,520,520);
+  sp.fillStyle = "#161615"; sp.fillRect(0,0,520,520);
+  sp.textBaseline = "middle"; sp.textAlign = "center";
+  const S = skyState(aS, bC);
+  drawSkyGuides(S.RH, S.RSH);
+  // the drive fibers: the guide loop of each shell, innermost to
+  // outermost, one stroke per depth pass -- continuous runs with a
+  // single stroke each, so the joints carry no segment overlaps; a
+  // crossing segment belongs to its end point's depth class, the
+  // original rule
+  for (let s = 0; s < 3; s++){
+    const R = S.RSH[s], outer = s === 2;
+    const pts = [];
+    for (let q = 0; q <= 91; q++) pts.push([ 1, q*13/91]);
+    for (let q = 0; q <= 91; q++) pts.push([-1, 13 - q*13/91]);
+    const P3 = pts.map(([e, k]) => proj3(S.sph(S.TH3(k), S.PH3(e, k, s), 0, R)));
+    for (const front of [false, true]){
+      sp.strokeStyle = "#8a877f"; sp.lineWidth = outer ? 1.4 : 1.1;
+      sp.lineJoin = "round"; sp.lineCap = "round";
+      sp.globalAlpha = front ? (outer ? 0.70 : 0.48) : 0.24;
+      sp.beginPath();
+      let pen = false, prev = null;
+      for (const p of P3){
+        if ((p.d > 0) === front){
+          if (!pen){ sp.moveTo((prev || p).x, (prev || p).y);
+                     if (prev) sp.lineTo(p.x, p.y); }
+          else sp.lineTo(p.x, p.y);
+          pen = true;
+        } else pen = false;
+        prev = p;
+      }
+      sp.stroke();
+    }
+    sp.globalAlpha = 1;
+  }
+  drawSkyMarks(S.nodes);
+  drawSkyObserver();
 }
 
-// ---------- controls ----------
+// ---------- the sky, Hopf representation (00:C19, 00:Y4) ----------
+// The same sky, the same nodes: the toggle switches only the fibers.
+// The Hopf fibration is a global structure, and the chart shows it as
+// one: the guard projection (center at w0 = 1.1 outside S3) maps the
+// whole S3 onto the ball whose silhouette is the horizon sphere --
+// the sky ball is the chart of the whole S3 (00:Y4). The chart is
+// two-sheeted: the ray through a sky point meets S3 twice, and the
+// node's spinor sheet selects the preimage. Each node lifts to its
+// preimage and carries the exact Hopf circle through it -- the leaf
+// of the global foliation, e^{it}(z1, z2) -- projected back as one
+// bounded exact ellipse through the node. The fibers fill the ball,
+// mutually linked, the three shells riding three depths of the
+// foliation. The observer lifts to the pole (0, +-i): the degenerate
+// leaf, the polar axis segment -- the stabilizer, the pure drive.
+// Motion along a fiber is a boost: it changes the observer, and is
+// unobservable; the nodes are the section (00:Y3, 00:C19). The 13
+// marks on the outer fibers are the C14 boost points, the node the
+// fourteenth [approx: the guard chart; the combinatorics is exact]
+function drawHopf(aS, bC){
+  sp.clearRect(0,0,520,520);
+  sp.fillStyle = "#161615"; sp.fillRect(0,0,520,520);
+  sp.textBaseline = "middle"; sp.textAlign = "center";
+  const S = skyState(aS, bC);
+  drawSkyGuides(S.RH, S.RSH);
+  const W0 = 1.1, RSIL = 206, S3H = RSIL*Math.sqrt(W0*W0 - 1);
+  // the lift: the sheet-selected preimage on S3 of a sky point
+  const lift = (w, sheet) => {
+    const x = [w[0]/S3H, w[1]/S3H, w[2]/S3H];
+    const x2 = x[0]*x[0] + x[1]*x[1] + x[2]*x[2];
+    const disc = 1 - x2*(W0*W0 - 1);
+    if (disc < 0) return null;
+    const q4 = (x2*W0 + (sheet ? 1 : -1)*Math.sqrt(disc))/(x2 + 1);
+    const lam = W0 - q4;
+    return [x[0]*lam, x[1]*lam, x[2]*lam, q4];
+  };
+  // a point of the leaf through v: q(t) = cos t v + sin t u, u = iv
+  const ptF = (v, u, t) => {
+    const c = Math.cos(t), s = Math.sin(t);
+    const d = W0 - (c*v[3] + s*u[3]);
+    return proj3([S3H*(c*v[0] + s*u[0])/d, S3H*(c*v[1] + s*u[1])/d,
+                  S3H*(c*v[2] + s*u[2])/d]);
+  };
+  // the exact screen ellipse of a leaf, in closed form: homogeneous
+  // screen coordinates are M (cos t, sin t, 1), so the image conic is
+  // C = M^-T diag(1,1,-1) M^-1
+  const numF = (v, u, c, s, one) => {
+    const X = S3H*(c*v[0] + s*u[0]), Y = S3H*(c*v[1] + s*u[1]),
+          Z = S3H*(c*v[2] + s*u[2]), d = W0*one - (c*v[3] + s*u[3]);
+    const x1 = X*cosA3 - Y*sinA3, y1 = X*sinA3 + Y*cosA3;
+    return [CX3*d + x1, CY3*d - Z*cosE3 - y1*sinE3, d];
+  };
+  const fibEll = (v, u) => {
+    const c1 = numF(v,u,1,0,0), c2 = numF(v,u,0,1,0), c3 = numF(v,u,0,0,1);
+    const [a,bb,c] = [c1[0],c2[0],c3[0]], [d,e,f] = [c1[1],c2[1],c3[1]],
+          [g,h,i] = [c1[2],c2[2],c3[2]];
+    const A2 = e*i-f*h, B2 = c*h-bb*i, C2 = bb*f-c*e,
+          D2 = f*g-d*i, E2 = a*i-c*g,  F2 = c*d-a*f,
+          G2 = d*h-e*g, H2 = bb*g-a*h, I2 = a*e-bb*d;
+    const dt = a*A2 + bb*D2 + c*G2;
+    if (Math.abs(dt) < 1e-12) return null;
+    const N = [[A2/dt,B2/dt,C2/dt],[D2/dt,E2/dt,F2/dt],[G2/dt,H2/dt,I2/dt]];
+    const K = [[0,0,0],[0,0,0],[0,0,0]], DG = [1,1,-1];
+    for (let r2 = 0; r2 < 3; r2++) for (let cc = 0; cc < 3; cc++)
+      for (let k = 0; k < 3; k++) K[r2][cc] += N[k][r2]*DG[k]*N[k][cc];
+    const A = K[0][0], B = 2*K[0][1], C = K[1][1],
+          D = 2*K[0][2], E = 2*K[1][2], F = K[2][2];
+    const det = 4*A*C - B*B; if (det <= 0) return null;
+    const cx = (B*E - 2*C*D)/det, cy = (B*D - 2*A*E)/det;
+    const Fp = A*cx*cx + B*cx*cy + C*cy*cy + D*cx + E*cy + F;
+    const tr = A + C, dd = Math.sqrt((A-C)*(A-C) + B*B);
+    const l1 = (tr + dd)/2, l2 = (tr - dd)/2;
+    if (!(l1*Fp < 0 && l2*Fp < 0)) return null;
+    return { cx, cy, r1: Math.sqrt(-Fp/l1), r2: Math.sqrt(-Fp/l2),
+             rot: Math.abs(B) < 1e-12 ? (A <= C ? 0 : Math.PI/2)
+                                      : Math.atan2(l1 - A, B/2) };
+  };
+  // a leaf in the helix guide style: uniform guide grey, the front
+  // half at the helix front alpha, the back half dim. The screen depth
+  // along a leaf has a homogeneous linear numerator N(t) = nc cos t +
+  // ns sin t, so the leaf splits at two antipodal roots into one front
+  // and one back elliptical arc -- both primitive strokes
+  const dep = q => -(q[0]*sinA3 + q[1]*cosA3)*cosE3 + q[2]*sinE3;
+  const drawFiber = (v, u, col, wdt, aF, aB) => {
+    const el = fibEll(v, u);
+    if (!el){
+      sp.strokeStyle = col; sp.lineWidth = wdt; sp.globalAlpha = aF;
+      sp.beginPath();
+      for (let q = 0; q <= 144; q++){
+        const p = ptF(v, u, q*Math.PI/72);
+        q ? sp.lineTo(p.x, p.y) : sp.moveTo(p.x, p.y);
+      }
+      sp.stroke(); sp.globalAlpha = 1; return;
+    }
+    const nc = dep(v), ns = dep(u);
+    const t0 = Math.atan2(-nc, ns);
+    const co = Math.cos(el.rot), si = Math.sin(el.rot);
+    const psi = t => { const p = ptF(v, u, t);
+      const dx = p.x - el.cx, dy = p.y - el.cy;
+      return Math.atan2((-dx*si + dy*co)/el.r2, (dx*co + dy*si)/el.r1); };
+    const m2 = a => ((a % (2*Math.PI)) + 2*Math.PI) % (2*Math.PI);
+    const arc = (ta, tb, alpha) => {
+      const a0 = psi(ta), a1 = psi(tb), am = psi((ta + tb)/2);
+      const ccw = m2(am - a0) > m2(a1 - a0);
+      sp.strokeStyle = col; sp.lineWidth = wdt; sp.globalAlpha = alpha;
+      sp.beginPath();
+      sp.ellipse(el.cx, el.cy, el.r1, el.r2, el.rot, a0, a1, ccw);
+      sp.stroke(); sp.globalAlpha = 1;
+    };
+    const frontFirst = -nc*Math.sin(t0) + ns*Math.cos(t0) > 0;
+    arc(t0, t0 + Math.PI, frontFirst ? aF : aB);
+    arc(t0 + Math.PI, t0 + 2*Math.PI, frontFirst ? aB : aF);
+  };
+  // the outer-rung leaves as guides, the same style as the helix
+  // loops; identity stays on the node layer. The lift rides the far
+  // sheet, one fixed convention, so the leaves rotate rigidly with
+  // the nodes; the inner-rung leaves are hidden for now
+  const SHOW_INNER = false;
+  for (const n of S.nodes){
+    if (!n.outer && !SHOW_INNER) continue;
+    const v = lift(n.w, false);
+    if (!v) continue;
+    const u = [-v[1], v[0], -v[3], v[2]];
+    drawFiber(v, u, "#8a877f", n.outer ? 1.4 : 1.1,
+              n.outer ? 0.35 : 0.24, 0.12);
+  }
+  // the observer's clock fiber (tau, 0): the degenerate leaf through
+  // the pole, the polar axis segment
+  {
+    const v = [0,0,0,1], u = [0,0,-1,0];
+    const tst = Math.acos((W0 - Math.sqrt(W0*W0 + 8))/4);
+    seg3(ptF(v, u, tst), ptF(v, u, -tst), ACC, 1.4, 0.5);
+  }
+  drawSkyMarks(S.nodes);
+  drawSkyObserver();
+}
+
+
+// ---------- controls: one view, locked across the three panels ----------
 const TITLES = {
-  carrier: "The shell · the Carrier view",
-  subject: "The shell · the Subject view"
+  sphTitle:   { carrier: "The symmetry shell \u00b7 the Carrier view",
+                subject: "The symmetry shell \u00b7 the Subject view" },
+  ringsTitle: { carrier: "The phase chart \u00b7 the Carrier view",
+                subject: "The phase chart \u00b7 the Subject view" },
+  skyTitle:   { carrier: "The sky \u00b7 the Carrier view",
+                subject: "The sky \u00b7 the Subject view" }
 };
-const TITLES2 = {
-  carrier: "The phase · the Carrier view",
-  subject: "The phase · the Subject view"
-};
-// one view state, locked across both panels: either button pair switches both
 function setView(v){
   view = v;
-  for (const [carId, subId, titleId, titles] of
-       [["vCar", "vSub", "sphTitle", TITLES], ["vCar2", "vSub2", "ringsTitle", TITLES2]]){
-    const car = document.getElementById(carId), sub = document.getElementById(subId);
-    car.className = "vbtn" + (v==="carrier" ? " on" : "");
-    sub.className = "vbtn" + (v==="subject" ? " on" : "");
-    car.setAttribute("aria-pressed", v==="carrier" ? "true" : "false");
-    sub.setAttribute("aria-pressed", v==="subject" ? "true" : "false");
-    document.getElementById(titleId).textContent = titles[v];
-  }
+  const car = document.getElementById("vCar"), sub = document.getElementById("vSub");
+  car.className = "vbtn" + (v==="carrier" ? " on" : "");
+  sub.className = "vbtn" + (v==="subject" ? " on" : "");
+  car.setAttribute("aria-pressed", v==="carrier" ? "true" : "false");
+  sub.setAttribute("aria-pressed", v==="subject" ? "true" : "false");
+  for (const id of ["sphTitle", "ringsTitle", "skyTitle"])
+    document.getElementById(id).textContent = TITLES[id][v];
 }
 document.getElementById("vCar").onclick = () => setView("carrier");
 document.getElementById("vSub").onclick = () => setView("subject");
-document.getElementById("vCar2").onclick = () => setView("carrier");
-document.getElementById("vSub2").onclick = () => setView("subject");
+function setSkyMode(m2){
+  skyMode = m2;
+  const h = document.getElementById("mHelix"), o = document.getElementById("mHopf");
+  h.className = "vbtn" + (m2 === "helix" ? " on" : "");
+  o.className = "vbtn" + (m2 === "hopf" ? " on" : "");
+  h.setAttribute("aria-pressed", m2 === "helix" ? "true" : "false");
+  o.setAttribute("aria-pressed", m2 === "hopf" ? "true" : "false");
+  document.getElementById("capHelix").style.display = m2 === "helix" ? "" : "none";
+  document.getElementById("capHopf").style.display = m2 === "hopf" ? "" : "none";
+}
+document.getElementById("mHelix").onclick = () => setSkyMode("helix");
+document.getElementById("mHopf").onclick = () => setSkyMode("hopf");
+document.getElementById("interpB").onclick = e => {
+  interp = !interp;
+  e.target.className = "vbtn" + (interp ? " on" : "");
+  e.target.setAttribute("aria-pressed", interp ? "true" : "false");
+};
 document.getElementById("pause").onclick = e => { paused = !paused; e.target.textContent = paused ? "Run" : "Pause"; };
 document.getElementById("step").onclick = () => { stepChronon(); frac = 0; onState(); };
-document.getElementById("reset").onclick = () => { tS = 0; tC = 0; pT = 0; frac = 0; onState(); };
+document.getElementById("reset").onclick = () => { tS = 0; tC = 0; pT = 0; sigC = 0; frac = 0; onState(); };
 
 function onState(){                        // exact updates, at integer chronons only
   document.getElementById("tickS").textContent = tS;
   document.getElementById("tickC").textContent = tC;
   document.getElementById("peri").textContent = pT;
-  // the sheet, pair-derived: CRT residue
-  // j = ((tS - tC)/4) mod 3 counts Carrier revolutions; the second sheet
-  // runs from the event (home, 116) to (home, home)
   const j = mod((tS - tC) / 4, 3);
   document.getElementById("sheet").textContent =
-    (j > 1 || (j === 1 && tC >= 116)) ? "−1" : "+1";
+    (j > 1 || (j === 1 && tC >= 116)) ? "\u22121" : "+1";
   document.getElementById("slotOut").textContent = ORB[tS];
   document.getElementById("frameOut").textContent = ORB[tS];
+  document.getElementById("rOut").textContent = tS % 4;
+  document.getElementById("iOut").textContent = [1, 5, 12, 8][tS % 4];
+  document.getElementById("aOut").textContent = tS % 3;
 }
 
-// ---------- the loop: exact states only; nothing moves between chronons ----------
-// A finite shell has no intermediate configurations. The display never
-// interpolates: it shows the state at the integer chronon and nothing else.
-// The speed slider sets the tick rate, not a motion rate.
+// ---------- the loop: exact states at the ticks; between them the
+// interpolated mode smooths the chart motion by the fraction [approx],
+// every angle stepping by its constant per-chronon increment ----------
 onState();
-// Wall-clock stepping: the tick rate is speed/5 exact steps per second on
-// every display, independent of the refresh rate; throttled tabs advance at
-// most one step per resume. The states remain discrete.
 let last = null;
 function loop(ts){
   if (paused || last === null || ts === undefined){
@@ -850,7 +1409,7 @@ function loop(ts){
     last = ts;
     if (frac >= 1){ frac -= 1; if (frac > 1) frac = 1; stepChronon(); onState(); }
   }
-  drawSphere(tS, tC); drawRings(tS, tC);
+  drawSphere(tS, tC); drawRings(tS, tC); drawSpace(tS, tC);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);

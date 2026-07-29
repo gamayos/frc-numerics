@@ -1,96 +1,200 @@
-# 1-phase-1: Schrödinger dynamics as shell rotation, with the Carrier's quarter-turn
+# 1-phase-3: Schrodinger dynamics over the minimal non-trivial pair
 
 Single-file interactive visualisation: `index.html`. No dependencies.
-External verification: `verify-233.js` (82 instance checks) and
-`verify-f13.js` (25 dynamics checks), both node, all passing. The
-instance is the minimal non-trivial pair (13, 233): Subject F13
-(kappa = 3), Carrier F233 (S = 58), fold per 00:F4.
+External verification: `verify-233.js` (82 checks: the pair dynamics,
+the events, the oriented octant bridge, the precession theorem),
+`verify-sky.js` (27 checks: the sky map, the fibered covers, the
+radial ladder with the tau+2 completion as sets), `verify-space.js`
+(23 checks: the register, the cone arithmetic, the PGL2/SL2 frame
+counts), `verify-hopf.js` (9 checks: the finite Hopf fibration -- the free
+boost action, the unique factorization, the global section, the
+horizon-circle fiber coordinate, at p = 13 and Omega-blind at p = 5,
+with the SL2 spin contrast), and `verify-render.js` (15 checks: the
+production rendering itself -- the pair sweep over both sky
+representations, the caption-free canvases, the label laws, the
+double-cover closures in the Carrier view, the drive-hiding of the
+Subject view, the wrap continuity in both views, the Hopf lighting
+laws, the primitive-arc fiber rendering, the section test: nodes
+and labels identical across the toggle, the single-stroke helix
+guide loops, the frame leak: standing Carrier chart, the
+quarter turn in S chronons, the q hand riding to h, the
+one drive sense across the panels: the Carrier-view sky steps
+clockwise with the drive, as the shell and the chart, and the
+interpolated mode: exact endpoints, +1 quarter class per chronon,
+on-tick data);
+node, all passing, all integer arithmetic in the exact suites. The screen projection is
+a labelled chart approximation; every state shown is exact and
+discrete. The instance is the minimal non-trivial pair (13, 233),
+kappa = 3, Objectless.
 
 ## What it shows
 
-Left, the shell: the F13 arithmetic symmetry sphere with the
-Subject/Carrier view toggle and the register comb on the frame's
-prime great circle. Subject view: the frame stands and the residues
-evolve x -> gx, one quarter of phase and one rung of tint per
-chronon. Carrier view: the residues stand at their chart cells, the
-frame walks, and the whole shell drifts one Carrier tick-angle per
-chronon.
+The drive x -> gx as the shell's exact unitary evolution -- the
+Schrodinger evolution of the windings [3], with its unitary and
+spinor structure from [2] -- read through three complementary
+square panels of one state, at one scale, under one Subject/Carrier
+toggle:
 
-Right, the phase: the C232 chart of the Carrier with its cardinals
-{1, h, -1, hbar}, the shell's L1 time latitude as the middle ring
-carrying the time-domain phase comb, and the common C4 fold clock.
-The views lock across both panels.
+The symmetry shell: the F13 arithmetic symmetry sphere -- meridians,
+latitudes, the rotating frame, and the register comb on the frame's
+great circle, each cell showing its whole value through the phase
+arrow i^r and the rung tint s.
 
-## The mechanism (00:C15, 00:C17, 00:C18; the physical face 00:Y2)
+The phase chart: the Carrier ring of 232 ticks, the standing
+backdrop of both views; the L1 time latitude with the time-domain
+comb, and the shared fold clock r = tau mod 4 with the unit's
+lift as its hand; the Subject ring precessing with the Carrier
+count under the q/p dial -- the frame leak (00:C17, 00:C18).
 
-The two cycles share the C4 class quotient, and the registered state
-is the pair of cycle positions, each a residue of its own shell. The
-bridge between the shells is the quadratic extension: the coefficient
-plane K = F169 of the zonal theorem [2], counted by the Carrier. The
-octant is the homomorphic bridge between the plane's units and the
-Carrier's, gcd(168, 232) = 8: an octant-equivariant counting
-transports the flip exactly, the image and the remaining 64 cells
-each closed under the flip, the remainder eight full octant fibres --
-in general 8(S/2 - kappa(2 kappa + 1)) cells, whole fibres always.
+The sky: kappa = 3 nested fibers on the radial ladder at the axial
+radii R sin(2a pi/p), the Observer at the center; each shell the
+complete double-helix fiber -- twelve cells by two routes on one
+smooth closed loop through both poles, the sign of -1 distributed
+over the orbit; consecutive fibers one rung apart, x3 = g^4, mounted
+120 degrees apart about the main axis; 3 x 48 + 12 = 156 = p(p-1),
+the totality of the observable (00:Y3).
 
-The Carrier evolves in itself over its complete period. Each quarter
-(58 ticks) multiplies the chart by 78^58 = h with h^2 = -1: the
-Fourier flip of the plane, position and momentum exchanging roles.
-The four cardinals of the C232 ring are the quarter operators
-{1, h, -1, hbar}; the flip's chirality is the C14 bit,
-Subject-selected: the odd-member rule gives h = 89 as it gives i = 5
-on the shell, and the gauge bit k_B c = h concurs. The orientation is
-orbit-relative, on both sides.
+## The Hopf representation (00:C19, 00:Y3, 00:Y4)
 
-Against this the Subject's orbit precesses: 12 ticks per orbit
-against the 58-tick quarter, 6/29 of a quarter per revolution -- the
-apsidal fraction is the winding ratio kappa/S, the mass-ratio reading
-of D2 (00:C18). The frame returns to minus itself at the pair event
-(home, 116), the chart reading dlog(-1), the Carrier's own -1
-carrying the spinor sign, and closes at (home, home), the pair space
-exhausted between closures (00:F2): the double cover as event
-structure within the totality. The standing conjecture (00:Y2): this
-precession is the face of gravitational apsidal advance (00:E4),
-Mercury to the S2 star; at kappa = 3 the rate is the Schwarzschild
-leading form for an orbit of semi-latus rectum S gravitational radii.
+The sky panel carries a representation toggle: Double helix / Hopf
+fibers. The two representations share one sky: the same node
+computation, the same marks, the same labels -- the toggle switches
+the fibers and only the fibers. The helix mode draws the drive
+orbits (the time factor); the Hopf mode draws the fiber orbits (the
+boost factor) as a global structure. The chart: the guard
+projection (center at w0 = 1.1 outside S3) maps the whole S3 onto
+the ball whose silhouette is the horizon sphere, so the sky ball is
+a chart of the whole S3 (00:Y4). The chart is two-sheeted -- the
+ray through a sky point meets S3 twice -- and the node's spinor
+sheet selects the preimage. Each node lifts to its S3 preimage and
+carries the exact Hopf circle through it, the leaf of the global
+foliation e^{it}(z1, z2), projected back as one closed curve
+through the node, node-on-fiber exact. The lift rides the far sheet
+-- one fixed chart convention, so the foliation's axial symmetry
+makes the leaves rotate rigidly with the nodes (coherence residual
+1e-15). The rung ladder is the foliation depth: the three copies of
+one event lift to three nested leaves, the inner rung riding the
+horizon-circle level (|z2| = 0.14 at the equator), the mid rung at
+0.69, the outer rung deep at 0.86 -- the radial ladder of the sky
+read as the depth of the S3 foliation, the holographic statement of
+00:Y4 made visible. The fiber layer is kept bare and rides the
+helix guide style at half strength (the leaves are denser than the
+loops): guide grey #8a877f, each leaf split at the two antipodal
+roots of its homogeneous depth numerator into one front arc (alpha
+0.35) and one back arc (0.12), both primitive elliptical arcs; the
+node is the leaf's only marked point (the section point),
+identity stays on the node layer. Shown are the 24 outer-rung
+leaves, the inner-rung leaves hidden behind the SHOW_INNER flag.
+A per-fiber color coding, if ever wanted, keys on the address: the
+two routes of one cell share a hue -- the echo pair (00:C7) -- as
+a selective-highlight mode, not a full palette. The nodes are the section of the finite fibration PGL2/C14
+(00:C19); motion along a fiber is a boost, it changes the observer,
+and is unobservable -- observation is the Hopf section (00:Y3). The
+13 marks on the outer fibers are the C14 boost points, the node the
+fourteenth: the fiber coordinate t -> t(infinity), the cells plus
+infinity. The observer lifts to the pole (0, +-i), the degenerate
+leaf: the clock fiber (tau, 0) is the polar axis segment, the
+stabilizer, the pure drive. The screen map per leaf is projective
+in the circle parameter, so every leaf is an exact ellipse, in
+closed form from the conic C = M^-T diag(1,1,-1) M^-1 and drawn as
+primitive elliptical arcs: 48 strokes per frame (front and back per
+leaf), no fiber polylines, node-on-ellipse to 1e-6 px over the full
+state sweep. The
+section test in verify-render.js renders a paused state in both
+representations and checks every node dot and every label
+identical; the combinatorics is carried by verify-hopf.js. The
+guard chart is the labelled approximation; the silhouette radius
+206 clears the outer shell (node radius 200.5) with margin.
 
-## The display
+## Interpolated mode
 
-Both views step whole chronons: exact states only. In the Carrier
-view both panels carry the precessing q/p axes dial (one tick-angle
-per chronon, quarter and perihelion counters), and the shell draws
-the q/p reference basis in the comb's transverse plane at the unit
-cell: the phase arrow jumps its registered quarter while the
-reference precesses. The Subject ring and sphere drift one
-tick-angle per chronon against the fixed cardinals, dual to the
-Carrier chart's one-tick slide in the Subject view; the quarter takes
-exactly S chronons, q standing where p stood at tau = 58, the chart
-closing at Omega - 1 = 232. The frame ray moves at the composed rate
-1/12 + 1/232 with coprime numerator kappa + S = 61, home exactly at
-(home, home) and antipodal at (home, 116), prograde like the
-astronomical advance. The controls carry the pair (shell a/12,
-Carrier b/232), the perihelion tick, and the pair-derived sheet sign.
+The control card carries an Interpolated switch, on by default. It
+smooths all chart motion between chronons by the sub-chronon
+fraction: the drive sweep, the leak drifts, the chart turn, the
+hand, the fold clock, the pullback ring, the dial, the sky's drive
+and drift, and every phase arrow, which rotates exactly one quarter
+per chronon (dlog + 1) and so lands on the next quarter at the
+tick. Every angle advances by a constant per-chronon step, so the
+interpolation is exact at both endpoints; the smoothing is a chart
+convention [approx]. All data stays on the tick: values, labels,
+rank tints, and cardinal marks switch only at integer chronons,
+riding the interpolated guides. Two exclusions follow from the
+data/geometry split: the phase comb's arrows stand in the Carrier
+view (the residues stand, so there is nothing to interpolate), and
+the Subject view's C232 chart turn steps on the tick (the ring is
+232-fold self-similar, so the one-tick turn maps its marks onto
+themselves and interpolating it would only wobble). Off restores
+exact tick-stepping.
 
-## Verification
+## Layout
 
-verify-233.js: the admissibility predicate and the full (169, 233)
-scan; the bit-verified register with the gauge bit; the declared
-chart and its orientation; the octant; the transport and the
-pair-space walk; the F4 fold on both shells; the comb, tint and
-operator laws; the sibling-page end-to-end comparison; the
-quarter-turn mechanism and the precession events; the perihelion
-trace and the cardinal drift; the composed frame-ray rate; the
-octant bridge with the explicit plane construction and the remainder
-fibres; the chirality selection; the pair-native state (CRT rebuild,
-pair-derived sheet, the winding-ratio theorem with the trivial-pair
-concurrence). verify-f13.js: the frame congruences, the sphere node
-rule, the rotation and re-registration laws, the zonal theorem,
-dispersion and isotropy, and the order-13 Cayley example as full
-matrix arithmetic over F169 with exact unitarity.
+The three panels are exactly square, at the same principal-circle
+scale (R = 202 of 520), and hold visuals only: all captions sit
+under the panels. The control card -- with the unified view toggle
+-- sits above the panels so it stays reachable in the portrait mode,
+where the panels stack vertically; in landscape they span the full
+width.
+
+## Revision 2 (review-1)
+
+The octant bridge is oriented by the corpus rule: dlog(3w) = 105 = 1
+(mod 8), whence i = gen^42 = 5 and c(iu) = h c(u) with the half-lift
+carrying one octant step. The totality decomposition completes over
+{tau, tau+2}, checked as disjoint sets with full union; the 48 per
+shell counts the 24 simultaneous images with their two spinor lifts.
+The two covers share exactly the one sign, gcd(24, 26) = 2, fibered
+product 24 x 26 / 2 = 2 x 156. The observable frame group is
+PGL2(F13): its Borel is the affine group AGL(1, 13) of 156 cells,
+its nonsplit C14 acts regularly on the fourteen points of P1, 2184 =
+156 x 14 stabilizer times transversal; SL2 is the spin double cover.
+The sky's leak drift is a half-angle on the Carrier's spinor
+cover (C464 inside F_233^2, 464 | 54288): the sheet sigC flips at
+the Carrier wrap, the drift steps uniformly through it, and the
+sky closes with the pair's spinor recurrence, 2 x 696.
+
+## The frame leak (00:C17, 00:C18)
+
+No Subject is an ideal of the Carrier: a field has no proper
+ideals, so the Subject's register never closes inside F_233 and
+the Carrier's count passes through it -- every observer inherits
+the Carrier clock, every frame is mortal. The panels draw the
+consequence. One relative winding, one tick-angle per chronon, and
+each view holds its own frame. Subject view: the register and the
+sky stand (the sky is register-anchored: both azimuth components
+are register data; the drive is hidden by re-registration; the
+whole geometry is static and only the values walk), while the
+Carrier's chart {1, hbar, -1, h} turns counterclockwise under them
+(hbar = 144 the i-oriented quarter and h = 89 the (-i)-oriented,
+per the standing audit). Carrier view: the quarters stand (hbar on
+top), the drive turns the frame ray and the sky, and the register
+drifts clockwise past them, prograde -- the sky at the half rate on
+the spinor cover (the sheet sigC carrying continuity through the
+Carrier wrap, closure at the spinor recurrence 2 x 696). The q/p
+dial is one instrument, identical in both views: it reports q's
+Carrier address -- a relational datum of the pair -- turning
+clockwise one tick-angle per chronon, the address flipping x h per
+quarter: q lands on the h cardinal at tau = S = 58. The
+frame returns at 232 but the pair phase does not: closure only at
+696, spinor 2 x 696; at cosmological S the recurrence is beyond
+every Subject year and the dephasing is monotone -- C18's winding
+read as the arrow of time.
+
+## Provenance
+
+1-phase-3 extends the stable episode 1-phase-2 (kept frozen as the
+reference realisation) with the Hopf representation toggle. The
+shell and phase panels derive from the standing episode 1-phase-1
+(review-2 line); the sky panel from the standing episode 1-space
+(rev 18). Both source episodes remain frozen; the doctrine
+sections below the panels carry their standing constructive
+descriptions, prefaced by the Schrodinger framing and amended by
+revision 2 (the projective frame chart, the fibered covers, the
+scoped exactness and measure language).
 
 ## References
 
-[1] Relativistic Algebra over Finite Ring Continuum, Axioms 2025, 14, 636.
+[1] Akhtman, Y. Relativistic Algebra over Finite Ring Continuum. Axioms 2025, 14, 636.
 [2] Schroedinger and Dirac Dynamics over Finite Substrate, pp202510.1486.
 [3] Quantum Observation over Finite Relational Substrate, pp202606.1160.
-[4] https://github.com/gamayos/frc-numerics/tree/main/docs/1-phase-1
+[4] Gravitation as Phase Synchronisation over a Finite Relational Substrate, pp202606.1018.
+[5] https://github.com/gamayos/frc-numerics/tree/main/docs/1-phase-3

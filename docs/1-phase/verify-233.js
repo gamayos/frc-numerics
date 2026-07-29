@@ -1,4 +1,4 @@
-// Exact verification for 1-phase-1 on the minimal non-trivial pair (13, 233).
+// Exact verification for 1-phase-3 on the minimal non-trivial pair (13, 233).
 // 1-phase-1 = the 1-phase episode plus the Carrier quarter-turn mechanism
 // (00:C15, 00:C17, 00:C18; face 00:Y2): the flip x h, the 6/29 precession, the
 // double cover, and the perihelion trace. Supersedes the 3-phase folder.
@@ -310,8 +310,8 @@ ok('fold hand residues: i^tau = 1, 5, 12, 8', [0,1,2,3].every(t =>
   ok('deployed fold notation is i^r 3^s and never i^r g^s',
      html.includes('i<sup>r</sup>&middot;3<sup>s</sup>') &&
      !html.includes('i<sup>r</sup>&middot;g<sup>s</sup>'));
-  ok('the page carries the stable episode marker (1-phase-1, rev 5)',
-     html.includes('data-episode="1-phase-1"') && html.includes('data-rev="5"'));
+  ok('the page carries the episode marker (1-phase-3)',
+     html.includes('data-episode="1-phase-3"'));
 }
 
 // ---- 12. the register and coefficient readings, the trivial pair, the octant lift ----
@@ -437,13 +437,21 @@ ok('fold hand residues: i^tau = 1, 5, 12, 8', [0,1,2,3].every(t =>
   const kmul = (x, y) => [(x[0]*y[0] + 2*x[1]*y[1]) % P, (x[0]*y[1] + x[1]*y[0]) % P];
   const kord = (x) => { let o = 1, y = x;
     while (!(y[0] === 1 && y[1] === 0) && o <= 168){ y = kmul(y, x); o++; } return o; };
+  // the bridge is oriented by the corpus rule (C7, C14): the half-lift
+  // 3w (with (3w)^2 = i = 5, the odd member) sits at one octant step,
+  // dlog(3w) = 1 (mod 8); the generator is selected accordingly, so
+  // i = gen^42 exactly, and the orientation is pinned, not accidental
   let gen = null;
   for (let a = 0; a < P && !gen; a++) for (let b = 0; b < P && !gen; b++){
     if (a === 0 && b === 0) continue;
-    if (kord([a, b]) === 168) gen = [a, b];
+    if (kord([a, b]) !== 168) continue;
+    let e = 0, y = [1, 0];
+    while (!(y[0] === 0 && y[1] === 3) && e < 168){ y = kmul(y, [a, b]); e++; }
+    if (e === 105) gen = [a, b];             // dlog(3w) = 105 = 1 (mod 8)
   }
   ok('the coefficient plane built explicitly: K = F13[w]/(w^2-2), |K*| = 168, '+
-     'a generator found', gen !== null);
+     'a generator found and oriented: dlog(3w) = 105 = 1 (mod 8), whence '+
+     'gen^42 = i = 5, the C14 odd member', gen !== null);
   ok('the octant is the whole homomorphic bridge between the plane and the '+
      'Carrier: gcd(168, 232) = 8', gcd(168, 232) === 8);
   const dlK = new Map(); { let x = [1, 0];
@@ -452,14 +460,18 @@ ok('fold hand residues: i^tau = 1, 5, 12, 8', [0,1,2,3].every(t =>
   const cnt = (u) => { const e = dlK.get(u[0] + ',' + u[1]);
     return (pwm(z8C, e % 8, OM) * pwm(coC, e % 21, OM)) % OM; };
   let iK = [1, 0]; for (let k = 0; k < 42; k++) iK = kmul(iK, gen);
-  const img = new Set([0]); let equi = true;
+  const chi8 = (u) => pwm(z8C, dlK.get(u[0] + ',' + u[1]) % 8, OM);
+  const img = new Set([0]); let equi = true, half = true;
   for (const key of dlK.keys()){ const u = key.split(',').map(Number);
     img.add(cnt(u));
     if (cnt(kmul(iK, u)) !== (hh * cnt(u)) % OM) equi = false;
+    if (chi8(kmul([0, 3], u)) !== (z8C * chi8(u)) % OM) half = false;
   }
-  ok('an octant-equivariant counting exists: 169 cells hit exactly, and the '+
-     'flip transports exactly, c(i_K u) = h c(u) on all 168 units',
-     img.size === 169 && equi);
+  ok('an octant-equivariant counting exists: 169 cells hit exactly, and '+
+     'the oriented flip transports exactly: i_K = gen^42 = i = 5, with '+
+     'c(i u) = h c(u) on all 168 units, and the half-lift carries one '+
+     'octant step, chi8((3w) u) = zeta8 chi8(u)',
+     iK[0] === 5 && iK[1] === 0 && img.size === 169 && equi && half);
   const leak = []; for (let c = 0; c < OM; c++) if (!img.has(c)) leak.push(c);
   const leakSet = new Set(leak);
   const dlC = new Map(); { let y = 1;
