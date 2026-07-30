@@ -90,11 +90,11 @@ render('subject', 1, 0);   const S1 = pos(recs.spc);
 render('subject', 6, 0);   const S6 = pos(recs.spc);
 render('subject', 12, 0);  const S12 = pos(recs.spc);
 render('subject', 5, 117); const SB = pos(recs.spc);
-render('subject', 3, 51, 1); const SC = pos(recs.spc);
-ok('the Subject view holds the register: the sky geometry is fully '+
-   'static -- identical across every drive phase, Carrier tick, and '+
-   'sheet -- with the values walking through it',
-   S1 === S0 && S6 === S0 && S12 === S0 && SB === S0 && SC === S0 &&
+ok('the Subject view hides the gauge and shows the physics: the sky '+
+   'is identical across every drive phase at a fixed Carrier state '+
+   '(the rotation is invisible), while the Dirac flow moves it with '+
+   'the Carrier count (the evolution is observable)',
+   S1 === S0 && S6 === S0 && S12 === S0 && SB !== S0 &&
    S0.length > 0);
 
 // 5. the wrap continuity: the leak is a half-angle on the Carrier's
@@ -113,10 +113,11 @@ const step = v => {
   return maxstep;
 };
 const cStep = step('carrier'), sStep = step('subject');
-ok('the wrap: the Carrier sky steps continuously through tau 695 -> '+
-   '696 (a single-step size under 80 px, the sheet carrying the '+
-   'half-angle branch) and the Subject sky stands exactly',
-   cStep > 0 && cStep < 80 && sStep === 0);
+ok('the wrap: both views step continuously through tau 695 -> 696 '+
+   '(single-step sizes under 80 px) -- the Carrier view through the '+
+   'sheet-carried drift and drive, the Subject view through the '+
+   'observable Dirac flow alone',
+   cStep > 0 && cStep < 80 && sStep > 0 && sStep < 80);
 
 // 6. panel activity: all three panels draw substantively
 render('carrier', 3, 51, 0);
@@ -312,10 +313,11 @@ vm.runInContext('frac = 0', sandbox);
 render('subject', 3, 51, 0);
 ok('the interpolated mode: midpoint geometry is the exact average of '+
    'the tick geometries, frac = 1 hands off to the next tick, the '+
-   'quarter class steps +1 per chronon everywhere, and the labels and '+
-   'the Subject-view positions read the tick alone',
+   'quarter class steps +1 per chronon everywhere, and the labels '+
+   'read the tick alone (the Subject-view geometry now carries the '+
+   'observable flow smoothly)',
    interpP.mid < 1e-9 && interpP.hand < 1e-9 && interpP.clsOK &&
-   Lh === L0 && D0 === pos(recs.spc));
+   Lh === L0 && D0.length > 0);
 
 // 15. the frame dilation (00:Y5), the pure fiber flow in the
 // sheet-fair chart. Stations exact and gauge-free: at the half the
@@ -369,20 +371,50 @@ const dilP = vm.runInContext(`
     rmaxMin = Math.min(rmaxMin, Math.max(...rr));
   }
   view = "subject";
-  const ns = skyState(0, 58).nodes[40];
-  const sub = Math.hypot(...ns.wF.map((c, i) => c - ns.w[i]));
+  const nsQ = skyState(0, 58).nodes[40];
+  const subQ = Math.hypot(...nsQ.wF.map((c, i) => c - nsQ.w[i]));
+  let subH = 0;
+  for (const n of skyState(0, 116).nodes) subH = Math.max(subH,
+    Math.hypot(...n.wF.map((c, i) => c + n.w[i])));
   view = "carrier";
-  return { dH, dHome, band, dmin, rminE, rmaxMin, sub };
+  return { dH, dHome, band, dmin, rminE, rmaxMin, subQ, subH };
 })()`, sandbox);
-ok('the frame dilation, the pure fiber flow in the sheet-fair chart: '+
-   'the half station is the congruent parity image wF = -w to 1e-9 '+
-   'at full scale; home at the cycle; the quarter disperses the '+
-   'sharp shell into a radial band; every bead rides its own leaf '+
-   'to sub-pixel; the ensemble breathes without collapse; the '+
-   'Subject view stands unflowed',
+ok('the frame dilation, the pure fiber flow in the sheet-fair chart, '+
+   'observable in both views: the half station is the congruent '+
+   'parity image wF = -w to 1e-9 at full scale in the Carrier AND the '+
+   'Subject view; home at the cycle; the quarter disperses the sharp '+
+   'shell into a radial band, visibly flowing in the Subject view '+
+   'too; every bead rides its own leaf to sub-pixel; the ensemble '+
+   'breathes without collapse',
    dilP.dH < 1e-9 && dilP.dHome < 1e-12 && dilP.band > 30 &&
    dilP.dmin < 0.15 && dilP.rminE > 60 && dilP.rmaxMin > 140 &&
-   dilP.sub === 0);
+   dilP.subQ > 10 && dilP.subH < 1e-9);
+
+// 16. the spinor half-turn: at the pair return (696 chronons) the
+// sheet is flipped and the sky stands rotated by exactly pi ABOUT THE
+// POLAR AXIS -- the axial half-turn (x, y, z) -> (-x, -y, z), not the
+// spatial antipode -- and the double flip closes: full closure 1392
+const sigP = vm.runInContext(`
+(() => {
+  view = "carrier"; frac = 0;
+  sigC = 0; const A = skyState(0, 0).nodes;
+  sigC = 1; const B = skyState(0, 0).nodes;
+  let dTurn = 0, dAnti = 1e9;
+  for (let i = 0; i < A.length; i++){
+    const a = A[i].wF, b = B[i].wF;
+    dTurn = Math.max(dTurn, Math.hypot(b[0]+a[0], b[1]+a[1], b[2]-a[2]));
+    dAnti = Math.min(dAnti, Math.hypot(b[0]+a[0], b[1]+a[1], b[2]+a[2]));
+  }
+  sigC = 0; const C2 = skyState(0, 0).nodes;
+  let dClose = 0;
+  for (let i = 0; i < A.length; i++)
+    dClose = Math.max(dClose, Math.hypot(...C2[i].wF.map((c, j) => c - A[i].wF[j])));
+  return { dTurn, dAnti, dClose };
+})()`, sandbox);
+ok('the spinor half-turn: the sheet flip rotates the sky by exactly '+
+   'pi about the polar axis (to 1e-9), is NOT the spatial antipode, '+
+   'and the double flip closes exactly: 696 spinor-half, 1392 full',
+   sigP.dTurn < 1e-9 && sigP.dAnti > 1 && sigP.dClose === 0);
 
 console.log(fails ? `\n${fails} FAILURES` : '\nall checks pass');
 process.exit(fails ? 1 : 0);

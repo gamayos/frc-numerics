@@ -1,4 +1,4 @@
-# 1-phase-4: Schrodinger dynamics with the frame dilation
+# 1-phase-5: Schrodinger dynamics with the observable Dirac flow
 
 Single-file interactive visualisation: `index.html`. No dependencies.
 External verification: `verify-233.js` (82 checks: the pair dynamics,
@@ -9,10 +9,12 @@ radial ladder with the tau+2 completion as sets), `verify-space.js`
 and the executable Hamiltonian: P_g chi_k = zeta_12^{-k} chi_k for
 all twelve modes, the energy of a mode its winding rate),
 `verify-f13.js` (25 checks: the shell operator core of [2] -- H^7 =
-0, ord(U) = 13, U exactly unitary), `verify-hopf.js` (9 checks: the finite Hopf fibration -- the free
+0, ord(U) = 13, U exactly unitary; the winding-spectrum check now
+states the spectral generator: H chi_k = k chi_k and P_g =
+zeta_12^{-H}), `verify-hopf.js` (9 checks: the finite Hopf fibration -- the free
 boost action, the unique factorization, the global section, the
 horizon-circle fiber coordinate, at p = 13 and Omega-blind at p = 5,
-with the SL2 spin contrast), and `verify-render.js` (16 checks: the
+with the SL2 spin contrast), and `verify-render.js` (17 checks: the
 production rendering itself -- the pair sweep over both sky
 representations, the caption-free canvases, the label laws, the
 double-cover closures in the Carrier view, the drive-hiding of the
@@ -28,7 +30,8 @@ on-tick data, and the frame dilation in the sheet-fair chart:
 bead-on-fiber at every phase, the congruent parity image wF = -w
 at the half, the dual's radial band at the quarter, home at the
 cycle, the ensemble breathing without collapse, the Subject view
-unflowed);
+unflowed, and the spinor half-turn: the sheet flip is the exact
+axial pi-rotation, not the spatial antipode, closing at 1392);
 node, all passing, all integer arithmetic in the exact suites. The screen projection is
 a labelled chart approximation; every state shown is exact and
 discrete. The instance is the minimal non-trivial pair (13, 233),
@@ -118,11 +121,21 @@ guard chart is the labelled approximation; the silhouette radius
 The leak per chronon is an element of the frame group, and by C19
 it factors uniquely into a Borel part and a boost part. The Borel
 part is the azimuthal drift the panels already draw. The boost part
-is motion along the Hopf fiber -- unobservable to the Subject
-(00:Y3), so absent from the Subject view and resolved only by the
-harness: the frame dilation, the mass phase of 00:Y5 -- the boost
-torus is the Dirac layer's exclusive mass channel [2], and the mass
-sector's standard-model interaction face is [5]. The rate is
+is motion along the Hopf fiber: the frame dilation, the mass phase
+of 00:Y5 -- the boost torus is the Dirac layer's exclusive mass
+channel [2], and the mass sector's standard-model interaction face
+is [5]. As of 1-phase-5 the flow is drawn in BOTH views, for it is
+Subject-observable: gauge motions are rigid frame motions (the
+drive's global phase, the Borel drift of the register), and those
+stay hidden; the fiber flow deforms the registered configuration
+non-rigidly -- dispersal, parity, reassembly -- and a non-rigid
+change of the registered images is an observation by definition
+(00:Y3: the sky is the section). The physical anchors concur: the
+apsidal advance is the observed quantity of 00:Y2 (Mercury against
+the star field), time dilation is measured relationally, and Y5's
+rest energy is the dilation's REGISTERED shadow. The observed
+dilation cycle is the gravitational face: gravitation as phase
+synchronisation [4]. The rate is
 forced by the dial: the flip is x h per Carrier quarter, so the
 flow runs at the dial's full tick-angle per chronon, prograde, phi
 = -(bC + F) pi/116, interpolation-ready and closing exactly at the
@@ -206,11 +219,13 @@ the totality decomposition completes over {tau, tau+2}, checked as
 disjoint sets with full union -- that two doubles 156 to 312; the
 48 per shell counts the 24 simultaneous images with their two
 spinor lifts eta and -eta = eta_{tau+12} -- that two doubles 24 to
-48. The two covers share exactly the one sign, gcd(24, 26) = 2; the
-fibered product here is the pullback of the two sign maps -- the
-compatible sheet pairs, cyclic of order 24 x 26 / 2 = 312 = 2 x 156
-(the sign-identified central product is the other valid order-312
-reading; the construction used is the pullback). The observable frame group is
+48. The two covers share exactly the one sign, gcd(24, 26) = 2: the
+joint cover is the central product (C24 x C26)/<(12, 13)>, the
+quotient identifying the two signs, cyclic of order 24 x 26 / 2 =
+312 = 2 x 156. (Review-2 correction: the parity pullback is a
+different order-312 subgroup that does not identify the signs --
+the C24 sign is parity-even, in the kernel of its sign map -- so
+the central product is the construction that states the sharing.) The observable frame group is
 PGL2(F13): its Borel is the affine group AGL(1, 13) of 156 cells,
 its nonsplit C14 acts regularly on the fourteen points of P1, 2184 =
 156 x 14 stabilizer times transversal; SL2 is the spin double cover
@@ -250,11 +265,13 @@ read as the arrow of time.
 
 ## Provenance
 
-1-phase-4 extends the stable episode 1-phase-3 (kept frozen as the
-stable release) with the frame dilation: the Hopf flow of the node
-layer and the helix guides in the Carrier view, the leaf-riding
-beads, and the clock bead. 1-phase-3 in turn extends 1-phase-2
-(frozen) with the Hopf representation toggle, the frame-leak view
+1-phase-5 extends the stable episode 1-phase-4 (kept frozen as the
+stable release, two review rounds absorbed) with one change of
+physics: the Dirac flow is drawn in both views, Subject-observable
+-- the gravitational face. 1-phase-4 extended 1-phase-3 (frozen)
+with the frame dilation in the sheet-fair chart, the leaf-riding
+beads, and the clock bead; 1-phase-3 extended 1-phase-2 (frozen)
+with the Hopf representation toggle, the frame-leak view
 semantics, and the interpolated mode; the shell and phase panels
 derive from the standing episode 1-phase-1 (review-2 line), the
 sky panel from the standing episode 1-space (rev 18). All source

@@ -119,7 +119,8 @@ ok('the drive enters the Carrier as a PGL2 element: 2 is a non-residue '+
      'p(p - 1) cells, closing at lcm(12, 13) = 156 -- the Borel (point '+
      'stabilizer) of PGL2(F13); the nonsplit C14 acts regularly on the '+
      '14 points of P1, so |PGL2| = 156 x 14 = 2184, stabilizer times '+
-     'transversal; SL2, of the same order, is its spin double cover',
+     'transversal; SL2 (also order 2184) is the spin double cover of '+
+     'PSL2, the index-two rotation half of PGL2',
      13 * 12 === P * (P - 1) && P * (P - 1) === 156 &&
      12 * 13 === 156 && 156 * 14 === P * (P * P - 1));
 }
@@ -155,16 +156,19 @@ ok('the frame space of E2: |SL2(F13)| = p(p^2 - 1) = 2184; the three tori '+
        if (mod(a * a - 2 * b * b, P) === 1) n1++;
      return n1 === 14; })());
 
-// ---- 10. the executable Hamiltonian: the winding-rate spectrum ----
-// The drive step is the permutation (P_g psi)(a) = psi(g^{-1} a) on the
-// twelve units. Its eigenmodes are the characters chi_k(a) =
-// zeta_12^{k dlog a}, and one chronon multiplies mode k by
-// zeta_12^{-k} exactly: the Hamiltonian's reading is the winding rate,
-// mode by mode, verified cell by cell in index arithmetic (the
-// i-hbar-d/dt face is the chart face of the same law, per [2])
+// ---- 10. the permutation spectrum and the spectral generator ----
+// Two faces, kept separate: the active register advances as R_{tau+1}
+// = g R_tau, while coefficient functions advance as Psi_{tau+1} = P_g
+// Psi with (P_g Psi)(a) = Psi(g^{-1} a). The eigenmodes of P_g are the
+// characters chi_k(a) = zeta_12^{k dlog a}. Define the spectral
+// generator H by H chi_k = k chi_k; then the drive step is exactly
+// P_g = zeta_12^{-H}, verified cell by cell in index arithmetic --
+// the energy of mode k is its winding rate k (the i-hbar-d/dt face is
+// the chart face of the same law, per [2])
 {
-  let spec = true;
+  let spec = true, gen = true;
   const ginv = ORB[11];                       // g^{-1} = g^11
+  const H = k => k;                           // the spectral generator
   for (let k = 0; k < 12; k++)
     for (let j = 0; j < 12; j++){
       const a = ORB[j];
@@ -173,11 +177,14 @@ ok('the frame space of E2: |SL2(F13)| = p(p^2 - 1) = 2184; the three tori '+
       // zeta^{-k} chi_k(a): exponent k * dlog(a) - k
       const rhs = mod(k * DL[a] - k, 12);
       if (lhs !== rhs) spec = false;
+      // the generator identity: P_g = zeta^{-H} on mode k
+      if (lhs !== mod(k * DL[a] - H(k), 12)) gen = false;
     }
-  ok('the executable Hamiltonian: P_g chi_k = zeta_12^{-k} chi_k for '+
-     'all twelve modes, cell by cell in index arithmetic -- the energy '+
-     'of mode k is its winding rate k, E = hf as the count identity',
-     spec);
+  ok('the permutation spectrum: P_g chi_k = zeta_12^{-k} chi_k for all '+
+     'twelve modes, cell by cell in index arithmetic; with the spectral '+
+     'generator H chi_k = k chi_k this is the operator identity P_g = '+
+     'zeta_12^{-H} -- the energy of mode k is its winding rate k',
+     spec && gen);
 }
 
 console.log(fails ? `\n${fails} FAILURES` : '\nall checks pass');

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HNE3RMJ5L1"></script>
+<script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-HNE3RMJ5L1'); </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -26,7 +29,8 @@
   .sub{color:var(--ink2); margin-top:4px; font-size:13px}
   .wrap{max-width:1760px; margin:0 auto}
   .panels{display:flex; gap:12px; margin-top:14px; align-items:stretch}
-  .panel{flex:1 1 0; min-width:0; background:var(--panel); border:1px solid var(--edge);
+  .panel{flex:1 1 0; min-width:0; max-width:860px; margin-left:auto;
+         margin-right:auto; background:var(--panel); border:1px solid var(--edge);
          border-radius:10px; padding:10px}
   .panel h2{font-size:13px; font-weight:600; color:var(--ink2);
             text-transform:uppercase; letter-spacing:.8px; margin-bottom:8px}
@@ -73,12 +77,13 @@
   .refs{margin-top:14px; color:var(--ink3); font-size:12px; line-height:1.7}
   .refs .reg{text-transform:uppercase; letter-spacing:.8px; font-size:11px}
   .refs a{color:#6f9fd8; text-decoration:none}
+  .twochar{display: inline-block; min-width: 2ch; text-align: right;}
 </style>
 </head>
-<body data-palette="#3987e5,#c98500" data-episode="1-phase-4" data-rev="1">
+<body data-palette="#3987e5,#c98500" data-episode="1-phase-5" data-rev="1">
 <div class="wrap">
   <h1>FRC Lab: Schr&ouml;dinger dynamics over the minimal non-trivial pair (13, 233): i&#295;&thinsp;&part;&psi;/&part;t = &Hcirc;&psi; ⇌ &psi;<sub>&tau;+1</sub> = g&middot;&psi;<sub>&tau;</sub></h1>
-  <div class="sub">A complete universe-in-a-lab from two primes, the smallest non-trivial configuration. The Subject shell F&#8321;&#8323; (&kappa; = 3) rides the Carrier F&#8322;&#8323;&#8323; (S = 58), Objectless. The drive x &#8614; gx is the Schr&ouml;dinger evolution itself, not a model of it. The chart is exact in the count face term by term: i&#295; the Subject's quarter-turn composed with the Carrier's action quantum, &Hcirc; the winding rate, &part;t the chronon; one step is the permutation P<sub>g</sub>|a&#10217; = |ga&#10217;, unitary exactly, spinor-covered exactly [2, 3]. Energy is the registered winding, E = hf an identity; the mass phase lives on the boost torus C&#8321;&#8324; alone, the fiber of observation, and the frame's precession through the Carrier count is time dilation: the mass. Every statement is integer arithmetic, machine-verified; the continuum enters only as labelled charts.</div>
+  <div class="sub">A complete universe-in-a-lab from two primes, the smallest non-trivial configuration. The Subject shell F&#8321;&#8323; (&kappa; = 3) rides the Carrier F&#8322;&#8323;&#8323; (S = 58), Objectless. The drive x &#8614; gx is the Schr&ouml;dinger evolution itself, not a model of it. Two faces are one law, exact term by term &mdash; i&#295; the Subject's quarter-turn composed with the Carrier's action quantum [3], &Hcirc; the winding rate with spectrum &Hcirc;&chi;<sub>k</sub> = k&chi;<sub>k</sub>, &part;t the chronon, the step the permutation P<sub>g</sub>|a&#10217; = |ga&#10217;, unitary exactly, spinor-covered exactly [2]. Energy is the registered winding, E = hf an identity; the mass phase lives on the boost torus C&#8321;&#8324; alone, the fiber of observation [2, 5]; the frame's precession through the Carrier count is time dilation &mdash; the mass. Every exact claim is integer arithmetic and machine-verified; the continuum enters only as labelled charts.</div>
 
   <div class="controls">
     <span class="seg" role="group" aria-label="view">
@@ -93,23 +98,52 @@
     <button id="pause">Pause</button>
     <button id="step">Step 1 chronon</button>
     <button id="reset">Reset</button>
-    <span>chronon pair: shell <b id="tickS">0</b>/12 &middot;
-      Carrier <b id="tickC">0</b>/232 &middot;
-      perihelion tick <b id="peri">0</b> &middot; fold sheet <b id="sheet">+1</b> &middot;
-      spin sheet &sigma; <b id="sigOut">+1</b></span>
+    <span>chronon pair: shell <b id="tickS" class="twochar">0</b>/12,
+      Carrier <b id="tickC" class="twochar">0</b>/232,
+      perihelion tick <b id="peri" class="twochar">0</b>, fold sheet <b id="sheet" class="twochar">+1</b>,
+      spin sheet &sigma; <b id="sigOut" class="twochar">+1</b></span>
   </div>
 
   <div class="panels">
-    <div class="panel" style="order:2">
+    <div class="panel">
       <div class="trow">
-        <h2 id="sphTitle">Symmetry shell &middot; Carrier view</h2>
+        <h2 id="skyTitle">The sky &middot; Carrier view</h2>
+        <span class="seg" role="group" aria-label="sky representation">
+          <button id="mHelix" class="vbtn on" aria-pressed="true">Double helix</button>
+          <button id="mHopf" class="vbtn" aria-pressed="false">Hopf fibers</button>
+        </span>
+      </div>
+      <canvas id="spc" width="1040" height="1040" role="img" aria-label="The Subject's sky: three nested spheres at the axial latitude radii, each carrying the complete double-helix fiber of twenty-four node images on one smooth closed loop through both poles; consecutive fibers one rung apart, arrows repeating and tints cycling; the Observer at the center"></canvas>
+      <div class="cap"><span id="capHelix">the sky: &kappa; = 3 nested fibers at radii
+        R&middot;sin(2a&pi;/p), the Observer central; each shell one smooth double-helix
+        loop through both poles &mdash; twelve cells by two routes, the sign of
+        &minus;1 distributed. Fibers one rung apart, &times;3 =
+        g&#8308;, mounted 120&deg;: arrows repeat, tints cycle, values &divide;3
+        inward; labels ride the outer fiber. 3&times;48 + 12 = 156 = p(p&minus;1):
+        the totality (00:Y3). In both views the pattern flows along its Hopf
+        leaves &mdash; the observable Dirac evolution, the gravitational face
+        (00:Y5, [4]): dual's band at the quarter, parity image at the half,
+        home with the cycle.</span><span id="capHopf" style="display:none"> the same sky, the same nodes: the toggle switches only the fibers. The ball
+        charts S&sup3;, its silhouette the horizon (00:Y4); each node rides the exact
+        Hopf leaf through it, on the 24 outer nodes &mdash; the section of
+        PGL&#8322;/C&#8321;&#8324; (00:C19): a boost slides along the fiber,
+        unobservable (00:Y3). The clock fiber (&tau;, 0) is the polar axis,
+        its cyan bead the clock. In both views the beads translate along their fibers
+        &mdash; the observable Dirac evolution, the gravitational face (00:Y5, [4]):
+        dual's band at the quarter, parity image at the half, home with the cycle.
+        Chart [approx]; combinatorics exact.
+      </span></div>
+    </div>
+    <div class="panel">
+      <div class="trow">
+        <h2 id="sphTitle">Holographic shell &middot; Carrier view</h2>
       </div>
       <canvas id="sph" width="1040" height="1040" role="img" aria-label="The arithmetic symmetry sphere of F13: meridians, latitudes, the rotating frame, and the register comb of phase arrows on the frame's great circle"></canvas>
       <div class="cap">
-        the F&#8321;&#8323; symmetry sphere: blue space meridian, red momentum meridian, green L&#8321; time latitude, purple L&#8324; Energy latitude; the comb carries each value &mdash; arrow the phase i<sup>r</sup>, tint the rung s. Subject view: the slots re-register &times;g, the unit slot now <b id="slotOut">1</b>. Carrier view: the residues stand, the frame sweeps 30&deg;/chronon (ray of <b id="frameOut">1</b>), the register drifts one tick-angle per chronon: the frame leak &mdash; no Subject is an ideal of the Carrier &mdash; q &#8594; p at &tau; = S (00:C17, 00:C18).
+        the F&#8321;&#8323; symmetry sphere: blue M&#8320; space meridian, red M&#8323; momentum meridian, green L&#8321; time latitude, purple L&#8324; Energy latitude; the comb carries each value &mdash; arrow the phase i<sup>r</sup>, tint the rung s. Subject view: the slots re-register &times;g, the unit slot now <b id="slotOut" class="twochar">1</b>. Carrier view: the residues stand, the frame sweeps 30&deg;/chronon (ray of <b class="twochar" id="frameOut">1</b>), the register drifts one tick-angle per chronon: the frame leak &mdash; no Subject is an ideal of the Carrier &mdash; q &#8594; p at &tau; = S (00:C17, 00:C18).
       </div>
     </div>
-    <div class="panel" style="order:3">
+    <div class="panel">
       <div class="trow">
         <h2 id="ringsTitle">Phase chart &middot; Carrier view</h2>
       </div>
@@ -125,58 +159,30 @@
         flipping &times;h per quarter: q on h at &tau; = S (00:C17, 00:C18).
       </div>
     </div>
-    <div class="panel" style="order:1">
-      <div class="trow">
-        <h2 id="skyTitle">The sky &middot; Carrier view</h2>
-        <span class="seg" role="group" aria-label="sky representation">
-          <button id="mHelix" class="vbtn on" aria-pressed="true">Double helix</button>
-          <button id="mHopf" class="vbtn" aria-pressed="false">Hopf fibers</button>
-        </span>
-      </div>
-      <canvas id="spc" width="1040" height="1040" role="img" aria-label="The Subject's sky: three nested spheres at the axial latitude radii, each carrying the complete double-helix fiber of twenty-four node images on one smooth closed loop through both poles; consecutive fibers one rung apart, arrows repeating and tints cycling; the Observer at the center"></canvas>
-      <div class="cap"><span id="capHelix">the sky: &kappa; = 3 nested fibers at radii
-        R&middot;sin(2a&pi;/p), the Observer central; each shell one smooth double-helix
-        loop through both poles &mdash; twelve cells by two routes, the sign of
-        &minus;1 distributed over the orbit. Fibers one rung apart, &times;3 =
-        g&#8308;, mounted 120&deg;: arrows repeat, tints cycle, values &divide;3
-        inward; labels ride the outer fiber. 3&times;48 + 12 = 156 = p(p&minus;1):
-        the totality (00:Y3). Carrier view: the pattern flows along its Hopf
-        leaves &mdash; the chart realization of the dilation, the mass phase
-        (00:Y5): the dual's band at the quarter, the parity image at the half,
-        home with the cycle.</span><span id="capHopf" style="display:none">
-        the same sky, the same nodes: the toggle switches only the fibers. The ball
-        charts S&sup3;, its silhouette the horizon (00:Y4); each node rides the exact
-        Hopf leaf through it, drawn for the 24 outer nodes &mdash; the section of
-        PGL&#8322;/C&#8321;&#8324; (00:C19): a boost moves along the fiber, changes
-        the observer, unobservable (00:Y3). The clock fiber (&tau;, 0) is the polar
-        axis, its cyan bead the clock. Carrier view: the beads translate along their
-        fibers &mdash; the chart realization of the dilation (00:Y5): the dual's band
-        at the quarter, the parity image at the half, home with the cycle. The chart
-        is a labelled approximation; the combinatorics exact.
-      </span></div>
-    </div>
   </div>
 
   <div class="bridge" style="display:flex; gap:22px; flex-wrap:wrap; align-items:center">
-    <span>fibre tints (the rung s):
-      <span style="color:#c98500">&#9679; s = 0</span>&nbsp;
-      <span style="color:#d060c0">&#9679; s = 1</span>&nbsp;
-      <span style="color:#a8a5a0">&#9679; s = 2</span></span>
-    <span>arrows (the quarter r): &#8594; r = 0 &middot; &#8593; r = 1 &middot;
-      &#8592; r = 2 &middot; &#8595; r = 3</span>
-    <span>now: r = &tau; mod 4 = <b id="rOut">0</b> &middot;
-      i<sup>&tau;</sup> = &times;<b id="iOut">1</b> &middot;
+    <span>fibre tints, the rung s=
+      <span style="color:#c98500">&#9679;: 0</span>&nbsp;
+      <span style="color:#d060c0">&#9679;: 1</span>&nbsp;
+      <span style="color:#a8a5a0">&#9679;: 2</span></span>
+    <span>arrows, the quarter r= &#8594;: 0 &#8593;: 1 &#8592;: 2 &#8595;: 3</span>
+    <span>now: r = &tau; mod 4 = <b id="rOut">0</b>,
+      i<sup>&tau;</sup> = &times;<b class="twochar" id="iOut">1</b>,
       fibre &alpha; = &tau; mod 3 = <b id="aOut">0</b></span>
   </div>
 
   <div class="bridge">
-    one state, three readings &middot; the state is the pair (shell &tau; mod 12, Carrier
-    tick mod 232), advanced together by the drive; the display never interpolates: exact
-    states only &middot; the shell shows the frame's symmetry, the chart shows the phase
-    and the fold, the sky shows what the Subject observes &middot; the views are one
-    toggle, locked across all three panels &middot; verified end to end in
-    <b>verify-233.js</b>, <b>verify-sky.js</b>, <b>verify-space.js</b>, and the
-    production-render suite <b>verify-render.js</b>
+    one state, three readings &middot; the exact register state is the triple
+    (shell &tau; mod 12, Carrier tick mod 232, spin sheet &sigma;); labels and
+    counts change only at exact chronons &middot; Smooth chart interpolates the
+    display geometry between endpoints, Exact ticks holds the registered
+    geometry &middot; the shell shows the frame's symmetry, the chart shows the
+    phase and the fold, the sky shows what the Subject observes &middot; the
+    views are one toggle, locked across all three panels &middot; verified end
+    to end in <b>verify-233.js</b>, <b>verify-sky.js</b>, <b>verify-space.js</b>,
+    <b>verify-f13.js</b>, <b>verify-hopf.js</b>, and the production-render suite
+    <b>verify-render.js</b>
   </div>
 
   <div class="monitor">
@@ -451,13 +457,19 @@
       Carrier view, where the drive turns the sky and the register-anchored
       pattern drifts &#8635; with the register past the standing quarters, half a
       tick-angle per chronon: the frame leak on the spinor cover, continuous
-      through the Carrier wrap on the sheet &sigma;. The harness also resolves
-      the leak's boost component, which the Subject cannot see (00:Y3): every
-      bead translates along its own Hopf leaf at the dial's full rate, one
-      tick-angle per chronon &mdash; the frame dilation, the mass phase
-      (00:Y5), the boost torus being the Dirac layer's mass channel [2] and
-      the mass sector's interaction face [5] &mdash; rendered in the
-      sheet-fair chart, where each point
+      through the Carrier wrap on the sheet &sigma;. The leak's boost
+      component is drawn in both views, for it is Subject-observable: the
+      gauge motions (the drive's global phase, the register's rigid drift)
+      act rigidly and hide from the Subject, but the fiber flow deforms the
+      registered configuration non-rigidly &mdash; and a non-rigid change of
+      the registered images is an observation (00:Y3: the sky is the
+      section). Every bead translates along its own Hopf leaf at the dial's
+      full rate, one tick-angle per chronon &mdash; the frame dilation, the
+      mass phase (00:Y5), the boost torus being the Dirac layer's mass
+      channel [2] and the mass sector's interaction face [5]; the observed
+      dilation cycle is the gravitational face, gravitation as phase
+      synchronisation [4], the apsidal reading of 00:Y2 &mdash; rendered in
+      the sheet-fair chart, where each point
       projects from the guard on its own side of S&sup3; so that the antipodal
       map is the ball's exact point reflection. Stations, exact and
       gauge-free: at the Carrier quarter the sharp shell disperses into a
@@ -494,9 +506,10 @@
       half the cover, and closes. Per drive circuit the direct events number 12&sup2; + 12 = 156 =
       p(p&minus;1), one per element of the affine group: the cone chart of 00:Y3
       realized event by event; the two covers share exactly the one sign,
-      gcd(24, 26) = 2: their fibered product over the common &minus;1 carries
-      24&middot;26/2 = 2 &times; 156 cells, twice the Borel count &mdash; the closed
-      circuit &mdash; while the base cycles are coprime, gcd(13, 24) = 1.</p>
+      gcd(24, 26) = 2: their central product, glued over the common &minus;1,
+      carries 24&middot;26/2 = 2 &times; 156 cells, twice the Borel count &mdash;
+      the closed circuit &mdash; while the base cycles are coprime,
+      gcd(13, 24) = 1.</p>
     <p><span class="k">The radial ladder: three fibers (00:F4).</span> The law is
       scale-generic: a Subject of capacity &kappa; (p = 4&kappa;+1) resolves exactly
       &kappa; radial decoherence steps within its horizon &mdash; 4a &lt; p &hArr;
@@ -607,9 +620,10 @@ let view = "carrier";          // "carrier" (default): numbers stand, the frame
 let interp = true;
 // The state is the pair of cycle positions (shell tS mod 12, Carrier tC
 // mod 232) together with the Carrier spin sheet sigC, exposed in the
-// readout: the pair alone returns at 696 while the sky stands
-// antipodal on the flipped sheet; full closure is 2 x 696 = 1392.
-// Each position is a residue of its own shell (00:C15). The joint recurrence
+// readout: the pair alone returns at 696 while the flipped sheet holds
+// the sky through the spinor half-turn -- the axial rotation (x, y, z)
+// -> (-x, -y, z), not the spatial antipode; full closure is 2 x 696 =
+// 1392. Each position is a residue of its own shell (00:C15). The joint recurrence
 // is the pair space: every class-compatible pair occurs exactly once
 // between consecutive (home, home) events. The double cover is event
 // structure: the frame ray stands at -1 at the pair event (home, 116) --
@@ -1133,21 +1147,26 @@ function skyState(aS, bC){
   // the Carrier view
   const F = interp ? frac : 0;
   const drift3 = isCar ? (bC + F + 232*sigC)*Math.PI/232 : 0;
-  // the dilation (00:Y5): the leak's boost component, unobservable to
-  // the Subject (00:Y3), shown in the harness view at the dial's own
-  // rate -- one full tick-angle per chronon, prograde, the address
-  // flipping x h per Carrier quarter. The flow is the pure fiber flow
-  // rendered in the sheet-fair chart: every bead rides its own leaf at
-  // every phase. Stations, exact and gauge-free: at the half the
-  // pattern is the congruent parity image, wF = -w exactly (the
-  // sheet-fair chart makes the S3 antipodal map the ball's point
-  // reflection); at the quarter the sharp shell disperses into a
-  // radial band -- the Fourier dual's spread, localized to dispersed;
-  // home with the Carrier cycle, the pattern with the pair at 696.
-  // The rung ladder exchange is the discrete arithmetic face of the
-  // same inversion; with the exact per-tick boost step it remains the
-  // open derivation
-  const PHI = isCar ? -(bC + F)*Math.PI/116 : 0;
+  // the dilation (00:Y5): the leak's boost component, drawn in BOTH
+  // views -- the Dirac evolution is Subject-observable. The gauge
+  // components are rigid frame motions (the drive's global phase, the
+  // Borel drift of the register against the Carrier) and stay hidden
+  // from the Subject; the fiber flow deforms the registered
+  // configuration non-rigidly -- dispersal, parity, reassembly -- and
+  // a non-rigid change of the registered images is an observation by
+  // definition (00:Y3: the sky is the section). The observed dilation
+  // cycle is the gravitational face: gravitation as phase
+  // synchronisation [4], the apsidal reading of 00:Y2, time dilation
+  // as the mass at work (00:Y5). Rate: the dial's own, one full
+  // tick-angle per chronon, prograde, the address flipping x h per
+  // Carrier quarter. The flow is the pure fiber flow in the
+  // sheet-fair chart: every bead rides its own leaf; stations exact
+  // and gauge-free -- the congruent parity image wF = -w at the half,
+  // the dual's radial band at the quarter, home with the cycle, the
+  // pattern with the pair at 696. The rung-ladder exchange is the
+  // discrete arithmetic face; with the exact per-tick boost step it
+  // remains the open derivation
+  const PHI = -(bC + F)*Math.PI/116;
   const TICK2 = Math.PI/232;                     // the halved tick-angle
   // the radial chart: a Subject of capacity kappa resolves exactly kappa
   // radial decoherence steps within its horizon (4a < p iff a <= kappa,
@@ -1523,6 +1542,12 @@ function onState(){                        // exact updates, at integer chronons
 // ---------- the loop: exact states at the ticks; between them the
 // interpolated mode smooths the chart motion by the fraction [approx],
 // every angle stepping by its constant per-chronon increment ----------
+// reduced motion: start paused when the user prefers it
+if (typeof matchMedia !== "undefined" &&
+    matchMedia("(prefers-reduced-motion: reduce)").matches){
+  paused = true;
+  document.getElementById("pause").textContent = "Run";
+}
 onState();
 let last = null;
 function loop(ts){

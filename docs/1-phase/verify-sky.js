@@ -65,9 +65,9 @@ const eqPH = (u, v) => u[0] === v[0] && u[1] === v[1];
   ok('the two covers are of this universe: C24 = 2 x 12 doubles the '+
      'drive cycle and C26 = 2p doubles the space circle, both below '+
      'the totality; they share exactly the one sign, gcd(24, 26) = 2: '+
-     'the fibered product over the common -1 has cardinality 24 x 26 / '+
-     '2 = 312 = 2 x 156, twice the Borel count; the base cycles are '+
-     'coprime, gcd(13, 24) = 1',
+     'the central product glued over the common -1 has cardinality '+
+     '24 x 26 / 2 = 312 = 2 x 156, twice the Borel count; the base '+
+     'cycles are coprime, gcd(13, 24) = 1',
      24 === 2 * 12 && 26 === 2 * P && 24 < 233 && 26 < 233 &&
      (() => { const g = (x, y) => y ? g(y, x % y) : x;
        return g(24, 26) === 2 && g(13, 24) === 1 &&
