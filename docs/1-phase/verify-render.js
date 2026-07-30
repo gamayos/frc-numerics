@@ -90,12 +90,25 @@ render('subject', 1, 0);   const S1 = pos(recs.spc);
 render('subject', 6, 0);   const S6 = pos(recs.spc);
 render('subject', 12, 0);  const S12 = pos(recs.spc);
 render('subject', 5, 117); const SB = pos(recs.spc);
-ok('the Subject view hides the gauge and shows the physics: the sky '+
-   'is identical across every drive phase at a fixed Carrier state '+
-   '(the rotation is invisible), while the Dirac flow moves it with '+
-   'the Carrier count (the evolution is observable)',
-   S1 === S0 && S6 === S0 && S12 === S0 && SB !== S0 &&
-   S0.length > 0);
+const curlP = vm.runInContext(`
+(() => {
+  view = "subject"; sigC = 0; frac = 0;
+  const S = skyState(0, 0);
+  let dmin = 1e9, dmax = 0;
+  for (const n of S.nodes.filter(n => n.outer)){
+    const d = Math.hypot(...n.wF.map((c, i) => c - n.w[i]));
+    dmin = Math.min(dmin, d); dmax = Math.max(dmax, d);
+  }
+  view = "carrier";
+  return { dmin, dmax };
+})()`, sandbox);
+ok('the Subject view holds the section and shows the relational '+
+   'observable: the sky is identical across every drive phase and '+
+   'Carrier tick (the rotation and the common flow are gauge), while '+
+   'the retarded boost-curl displaces every image along its leaf by '+
+   'its lookback (00:C18) -- static, integer-exact, visible',
+   S1 === S0 && S6 === S0 && S12 === S0 && SB === S0 &&
+   S0.length > 0 && curlP.dmin > 1 && curlP.dmax > 20);
 
 // 5. the wrap continuity: the leak is a half-angle on the Carrier's
 // spinor cover, carried by the sheet sigC; across the wrap (tau 695
@@ -113,11 +126,11 @@ const step = v => {
   return maxstep;
 };
 const cStep = step('carrier'), sStep = step('subject');
-ok('the wrap: both views step continuously through tau 695 -> 696 '+
-   '(single-step sizes under 80 px) -- the Carrier view through the '+
-   'sheet-carried drift and drive, the Subject view through the '+
-   'observable Dirac flow alone',
-   cStep > 0 && cStep < 80 && sStep > 0 && sStep < 80);
+ok('the wrap: the Carrier sky steps continuously through tau 695 -> '+
+   '696 (a single-step size under 80 px, the sheet carrying the '+
+   'half-angle branch) and the Subject sky stands exactly (the curl '+
+   'is lookback-anchored, not clock-driven)',
+   cStep > 0 && cStep < 80 && sStep === 0);
 
 // 6. panel activity: all three panels draw substantively
 render('carrier', 3, 51, 0);
@@ -165,17 +178,22 @@ for (const [v, s, c, sg] of [['subject',0,0,0],['subject',7,113,0],['carrier',11
   for (let i = 0; i < recs.spc.length - 1; i++)
     if (recs.spc[i][0] === 'ell' && recs.spc[i+1][0] === 'stroke')
       pairs.push({ style: recs.spc[i+1][1], alpha: recs.spc[i+1][2] });
-  const nF = pairs.filter(p => Math.abs(p.alpha - 0.35) < 1e-9).length;
-  const nB = pairs.filter(p => Math.abs(p.alpha - 0.12) < 1e-9).length;
-  const greyOK = pairs.every(p => p.style === '#8a877f');
+  const grey = pairs.filter(p => p.style === '#8a877f');
+  const cyan = pairs.filter(p => p.style !== '#8a877f');
+  const nF = grey.filter(p => Math.abs(p.alpha - 0.35) < 1e-9).length;
+  const nB = grey.filter(p => Math.abs(p.alpha - 0.12) < 1e-9).length;
+  const nT = cyan.filter(p => Math.abs(p.alpha - 0.10) < 1e-9).length;
+  const wantT = v === 'carrier' ? 0 : 24;
   const vox = recs.spc.filter(r => r[0] === 'arc' && r[3] < 1.2).length;
-  if (ells.length !== 48 || pairs.length !== 48 ||
-      nF !== 24 || nB !== 24 ||
-      !greyOK || nseg !== 217 || !rimOK || vox !== 0) ellOK = false;
+  if (ells.length !== 48 + wantT || grey.length !== 48 ||
+      nF !== 24 || nB !== 24 || cyan.length !== wantT || nT !== wantT ||
+      nseg !== 217 || !rimOK || vox !== 0) ellOK = false;
 }
 ok('the Hopf leaves at the release density: 24 leaves as 48 primitive '+
-   'front/back arcs, alphas 0.35/0.12, identical in both views; no '+
-   'voxels, polylines, or extra curves; every arc bounded', ellOK);
+   'grey front/back arcs (alphas 0.35/0.12) in both views, plus, in '+
+   'the Subject view only, the 24 faint cyan curl-trace arcs (alpha 0.10) '+
+   'from base to bead along each leaf; no voxels, polylines, or other '+
+   'extras; every arc bounded', ellOK);
 
 // 10. the section test: at a paused state the two representations
 // share every node dot and every label exactly -- the toggle switches
@@ -313,11 +331,11 @@ vm.runInContext('frac = 0', sandbox);
 render('subject', 3, 51, 0);
 ok('the interpolated mode: midpoint geometry is the exact average of '+
    'the tick geometries, frac = 1 hands off to the next tick, the '+
-   'quarter class steps +1 per chronon everywhere, and the labels '+
-   'read the tick alone (the Subject-view geometry now carries the '+
-   'observable flow smoothly)',
+   'quarter class steps +1 per chronon everywhere, and the labels and '+
+   'the Subject-view positions read the tick alone (the curl is '+
+   'lookback-anchored, fraction-free)',
    interpP.mid < 1e-9 && interpP.hand < 1e-9 && interpP.clsOK &&
-   Lh === L0 && D0.length > 0);
+   Lh === L0 && D0 === pos(recs.spc));
 
 // 15. the frame dilation (00:Y5), the pure fiber flow in the
 // sheet-fair chart. Stations exact and gauge-free: at the half the
@@ -371,24 +389,21 @@ const dilP = vm.runInContext(`
     rmaxMin = Math.min(rmaxMin, Math.max(...rr));
   }
   view = "subject";
-  const nsQ = skyState(0, 58).nodes[40];
-  const subQ = Math.hypot(...nsQ.wF.map((c, i) => c - nsQ.w[i]));
-  let subH = 0;
-  for (const n of skyState(0, 116).nodes) subH = Math.max(subH,
-    Math.hypot(...n.wF.map((c, i) => c + n.w[i])));
+  // the Subject-view curl is Carrier-tick invariant: the same at any bC
+  const nA = skyState(0, 58).nodes[40], nB = skyState(0, 116).nodes[40];
+  const subInv = Math.hypot(...nA.wF.map((c, i) => c - nB.wF[i]));
   view = "carrier";
-  return { dH, dHome, band, dmin, rminE, rmaxMin, subQ, subH };
+  return { dH, dHome, band, dmin, rminE, rmaxMin, subInv };
 })()`, sandbox);
-ok('the frame dilation, the pure fiber flow in the sheet-fair chart, '+
-   'observable in both views: the half station is the congruent '+
-   'parity image wF = -w to 1e-9 at full scale in the Carrier AND the '+
-   'Subject view; home at the cycle; the quarter disperses the sharp '+
-   'shell into a radial band, visibly flowing in the Subject view '+
-   'too; every bead rides its own leaf to sub-pixel; the ensemble '+
-   'breathes without collapse',
+ok('the frame dilation: in the Carrier view the common flow holds its '+
+   'exact stations -- the congruent parity image wF = -w to 1e-9 at '+
+   'the half, home at the cycle, the dual\'s radial band at the '+
+   'quarter -- every bead rides its own leaf to sub-pixel and the '+
+   'ensemble breathes without collapse; the Subject-view curl stands '+
+   'invariant under the Carrier tick (pure gauge removed)',
    dilP.dH < 1e-9 && dilP.dHome < 1e-12 && dilP.band > 30 &&
    dilP.dmin < 0.15 && dilP.rminE > 60 && dilP.rmaxMin > 140 &&
-   dilP.subQ > 10 && dilP.subH < 1e-9);
+   dilP.subInv < 1e-9);
 
 // 16. the spinor half-turn: at the pair return (696 chronons) the
 // sheet is flipped and the sky stands rotated by exactly pi ABOUT THE
@@ -415,6 +430,39 @@ ok('the spinor half-turn: the sheet flip rotates the sky by exactly '+
    'pi about the polar axis (to 1e-9), is NOT the spatial antipode, '+
    'and the double flip closes exactly: 696 spinor-half, 1392 full',
    sigP.dTurn < 1e-9 && sigP.dAnti > 1 && sigP.dClose === 0);
+
+// 17. the production clock: closure exercised through stepChronon
+// itself -- at tick 696 the pair is home with the sheet flipped and
+// the Carrier sky axially half-turned; at tick 1392 the full triple
+// and the rendered geometry are home
+const clkP = vm.runInContext(`
+(() => {
+  view = "carrier"; frac = 0;
+  tS = 0; tC = 0; sigC = 0; pT = 0;
+  const A = skyState(0, 0).nodes.map(n => n.wF.slice());
+  for (let i = 0; i < 696; i++) stepChronon();
+  const half = { tS, tC, sigC };
+  const B = skyState(tS, tC).nodes;
+  let dTurn = 0;
+  for (let i = 0; i < A.length; i++)
+    dTurn = Math.max(dTurn, Math.hypot(B[i].wF[0]+A[i][0],
+      B[i].wF[1]+A[i][1], B[i].wF[2]-A[i][2]));
+  for (let i = 0; i < 696; i++) stepChronon();
+  const full = { tS, tC, sigC };
+  const C3 = skyState(tS, tC).nodes;
+  let dHome = 0;
+  for (let i = 0; i < A.length; i++)
+    dHome = Math.max(dHome, Math.hypot(...C3[i].wF.map((c, j) => c - A[i][j])));
+  tS = 0; tC = 0; sigC = 0; pT = 0;
+  return { half, full, dTurn, dHome };
+})()`, sandbox);
+ok('the production clock: after 696 stepChronon calls the pair is '+
+   'home with sigma flipped and the Carrier sky exactly axially '+
+   'half-turned; after 1392 the full triple and the geometry are '+
+   'home', clkP.half.tS === 0 && clkP.half.tC === 0 &&
+   clkP.half.sigC === 1 && clkP.dTurn < 1e-9 &&
+   clkP.full.tS === 0 && clkP.full.tC === 0 && clkP.full.sigC === 0 &&
+   clkP.dHome === 0);
 
 console.log(fails ? `\n${fails} FAILURES` : '\nall checks pass');
 process.exit(fails ? 1 : 0);
