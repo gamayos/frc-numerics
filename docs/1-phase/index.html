@@ -154,10 +154,10 @@
 
   <div class="bridge" style="display:flex; gap:22px; flex-wrap:wrap; align-items:center">
     <span>fibre tints, the rung s=
-      <span style="color:#c98500">&#9679;: 0</span>&nbsp;
-      <span style="color:#d060c0">&#9679;: 1</span>&nbsp;
-      <span style="color:#a8a5a0">&#9679;: 2</span></span>
-    <span>arrows, the quarter r= &#8594;: 0 &#8593;: 1 &#8592;: 2 &#8595;: 3</span>
+      <span style="color:#c98500">&#9679; 0</span>&nbsp;
+      <span style="color:#d060c0">&#9679; 1</span>&nbsp;
+      <span style="color:#a8a5a0">&#9679; 2</span></span>
+    <span>arrows, the quarter r= &#8594; 0&nbsp; &#8593; 1&nbsp; &#8592; 2&nbsp; &#8595; 3</span>
     <span>now: r = &tau; mod 4 = <b id="rOut">0</b>,
       i<sup>&tau;</sup> = &times;<b class="twochar" id="iOut">1</b>,
       fibre &alpha; = &tau; mod 3 = <b id="aOut">0</b></span>
@@ -802,29 +802,6 @@ function drawSphere(aS, bC){
       sc.globalAlpha = 1;
     }
   }
-  // the q/p reference basis (Carrier view), anchored at the unit cell
-  // and glued to the register: q rides the radial, p the zonal, A = 0
-  // in the comb's local basis. As the register drifts, the basis
-  // advances one tick-angle per chronon past the standing quarters and
-  // flips its Carrier address x h at each cardinal: the relative drift
-  // is the precession, 6/29 quarter per orbit (00:C17, 00:C18).
-  if (isCar){
-    const pu = proj(beta(1), fprime);
-    const bA = beta(1), sA = Math.sin(fprime + AZ), cA = Math.cos(fprime + AZ);
-    const er = [Math.sin(bA)*sA, -Math.sin(bA)*cA, Math.cos(bA)];
-    const el = [cA, sA, 0];
-    for (const [dth, col] of [[0, ACC], [-Math.PI/2, MER]]){
-      const qr = Math.cos(dth), qz = Math.sin(dth);
-      const Ax = qr*er[0] + qz*el[0], Ay = qr*er[1] + qz*el[1],
-            Az = qr*er[2] + qz*el[2];
-      const vx = 16*Ax, vy = 16*(-Az*cosE - Ay*sinE);
-      sc.strokeStyle = col; sc.lineWidth = 1.2; sc.globalAlpha = 0.8;
-      sc.beginPath();
-      sc.moveTo(pu.x - vx, pu.y - vy);
-      sc.lineTo(pu.x + vx, pu.y + vy);
-      sc.stroke(); sc.globalAlpha = 1;
-    }
-  }
   // the antipode of the origin: not a cell
   const anti = proj(Math.PI, 0);
   if (anti.d > 0){
@@ -832,11 +809,9 @@ function drawSphere(aS, bC){
     sc.beginPath(); sc.arc(anti.x, anti.y, 3, 0, 7); sc.stroke();
   }
   // the Observer origin at the pole: the fixed cell of the register section,
-  // value 0, no phase; the gold ring marks it as the comb's thirteenth cell
+  // value 0, no phase
   const pole = proj(0, 0);
   sc.fillStyle = ACC; sc.beginPath(); sc.arc(pole.x, pole.y, 4.5, 0, 7); sc.fill();
-  sc.strokeStyle = TURN; sc.lineWidth = 1.2;
-  sc.beginPath(); sc.arc(pole.x, pole.y, 8, 0, 7); sc.stroke();
   sc.fillStyle = INK; sc.font = "12px sans-serif";
   sc.fillText("0 · Observer", pole.x, pole.y - 16);
 
