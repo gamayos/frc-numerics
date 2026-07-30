@@ -649,8 +649,8 @@ function qpDial(ctx, X, Y, bC, peri){
     ctx.fillText(lab, X + (AR+9)*c, Y - (AR+9)*s);
   }
   ctx.fillStyle = INK3; ctx.font = "10px sans-serif";
-  ctx.fillText("quarter " + Math.floor(bC/58), X, Y + AR + 16);
-  ctx.fillText("perihelion tick " + peri, X, Y + AR + 28);
+  ctx.fillText("precession quarter " + Math.floor(bC/58), X, Y + AR + 14);
+  ctx.fillText("perihelion tick " + peri, X, Y + AR + 26);
 }
 
 // ---------- left: the sphere (Carrier view) ----------
