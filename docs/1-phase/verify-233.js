@@ -531,6 +531,28 @@ ok('fold hand residues: i^tau = 1, 5, 12, 8', [0,1,2,3].every(t =>
      'mass-ratio reading of D2; the trivial pair concurs at 1/10',
      (P - 1) * S === (OM - 1) * 3 && gcd(3, S) === 1 &&
      4 * 10 === 40 * 1 && gcd(1, 10) === 1);
+  // the mass--energy channel (00:Y5, closed): the winding cycle meets the
+  // boost torus in the sign alone, its spinor cover in exactly the quarter
+  // core Q4 -- gcd(p-1, 2(p+1)) = 4 for every p = 4 kappa + 1 -- and the
+  // quarter is spinorial: i^2 = -1 gives N(i) = -1, the sheet crossing
+  // forced. The per-tick boost step is the winding rate's Q4 class on the
+  // cover; the full (53,13) kill test lives in the ledger's check_y5.
+  {
+    let univ = true;
+    for (let k = 1; k <= 10000; k++)
+      if (gcd(4*k, 4*(2*k + 1)) !== 4 || gcd(4*k, 4*k + 2) !== 2) univ = false;
+    ok('the mass--energy channel (00:Y5): gcd(p-1, p+1) = 2 and '+
+       'gcd(p-1, 2(p+1)) = 4 for every p = 4 kappa + 1 (kappa <= 1e4) -- '+
+       'the sign on the base, the quarter core Q4 on the spinor cover; '+
+       'here gcd(232, 14) = 2, gcd(232, 28) = 4',
+       univ && gcd(232, 14) === 2 && gcd(232, 28) === 4);
+    ok('the quarter is spinorial: on both shells i^2 = -1 forces norm '+
+       'N(i) = i * conj(i) = i^2 = -1 (i Frobenius-fixed) -- the Subject '+
+       'i = 5 on F13, the Carrier root 78^58 = 89 squaring to -1 on F233: '+
+       'the mass-energy transport crosses the sheet',
+       (5 * 5) % 13 === 12 && pwm(78, 58, OM) === 89 &&
+       (89 * 89) % OM === OM - 1);
+  }
 }
 
 process.exit(fails ? 1 : 0);

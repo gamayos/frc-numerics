@@ -408,7 +408,10 @@ ok('the frame dilation: in the Carrier view the common flow holds its '+
 // 16. the spinor half-turn: at the pair return (696 chronons) the
 // sheet is flipped and the sky stands rotated by exactly pi ABOUT THE
 // POLAR AXIS -- the axial half-turn (x, y, z) -> (-x, -y, z), not the
-// spatial antipode -- and the double flip closes: full closure 1392
+// spatial antipode -- and the double flip closes: full closure 1392.
+// The closure numbers are proxy-chart data (696 = S x 12): checks 16
+// and 17 verify the declaring chart's clock; the pair's own
+// registered datum is the monotone dephasing
 const sigP = vm.runInContext(`
 (() => {
   view = "carrier"; frac = 0;

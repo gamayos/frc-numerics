@@ -148,13 +148,33 @@ ok('the drive enters the Carrier as a PGL2 element: 2 is a non-residue '+
 }
 
 // ---- 9. the rank-3 horizon ----
-ok('the frame space of E2: |SL2(F13)| = p(p^2 - 1) = 2184; the three tori '+
-   'split 12, unipotent 13, nonsplit 14 counted from the norm form '+
-   'a^2 - 2b^2 = 1',
+ok('the frame space of E2: |SL2(F13)| = p(p^2 - 1) = 2184; the three cyclic sectors '+
+   '-- the split torus C12, the unipotent translation subgroup C13, the '+
+   'nonsplit torus C14 counted from the norm form a^2 - 2b^2 = 1',
    P * (P * P - 1) === 2184 && (() => { let n1 = 0;
      for (let a = 0; a < P; a++) for (let b = 0; b < P; b++)
        if (mod(a * a - 2 * b * b, P) === 1) n1++;
      return n1 === 14; })());
+
+// ---- 10b. the curl's Carrier algebra: delta_k = u^k in the declared
+// C232 chart (generator 78 = 3^{-1}); the curl is exact Carrier-chart
+// algebra -- a homomorphism landing on the cardinals: delta_58 = h =
+// 89, delta_116 = -1, delta_232 = 1; the C14-valued form remains the
+// open derivation
+{
+  const OM = 233, U = 78;
+  const dk = k => { let x = 1; for (let i = 0; i < k; i++) x = x*U % OM; return x; };
+  let hom = true;
+  for (let a2 = 0; a2 < 30; a2++) for (let b2 = 0; b2 < 30; b2++)
+    if (dk(a2 + b2) !== dk(a2)*dk(b2) % OM) hom = false;
+  let ord = 1, x = U;
+  while (x !== 1){ x = x*U % OM; ord++; }
+  ok('the curl algebra: delta_k = 78^k is a homomorphism on the declared '+
+     'C232 chart, 78 primitive (order 232), landing exactly on the '+
+     'cardinals: delta_58 = h = 89, delta_116 = -1 = 232, delta_232 = 1',
+     hom && ord === 232 && dk(58) === 89 && dk(116) === 232 &&
+     dk(232) === 1);
+}
 
 // ---- 10. the permutation spectrum and the spectral generator ----
 // Two faces, kept separate: the active register advances as R_{tau+1}

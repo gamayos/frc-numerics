@@ -1,19 +1,23 @@
 # 1-phase-5: Schrodinger dynamics with the observable Dirac flow
 
 Single-file interactive visualisation: `index.html`. No dependencies.
-External verification: `verify-233.js` (82 checks: the pair dynamics,
-the events, the oriented octant bridge, the precession theorem),
-`verify-sky.js` (27 checks: the sky map, the fibered covers, the
-radial ladder with the tau+2 completion as sets), `verify-space.js`
-(24 checks: the register, the cone arithmetic, the frame counts,
-and the permutation spectrum with its spectral generator: H_wind
+External verification: `verify-233.js` (84 checks: the pair dynamics,
+the events, the oriented octant bridge, the precession theorem, the
+mass--energy channel: sign on the base, quarter core on the spinor
+cover, the quarter of norm minus one),
+`verify-sky.js` (28 checks: the sky map, the fibered covers, the
+radial ladder with the tau+2 completion as sets, and the central
+product proven as an isomorphism: phi(a, b) = 13a + 12b mod 312
+with kernel exactly the identified sign pair), `verify-space.js`
+(25 checks: the register, the cone arithmetic, the frame counts,
+the permutation spectrum with its spectral generator: H_wind
 chi_k = k chi_k and P_g = zeta_12^{-H_wind}, the energy of a mode
-its winding rate; H_wind is distinct from the Cayley kinetic
-H_kin = 2I - T - T^{-1} of verify-f13),
+its winding rate -- H_wind distinct from the Cayley kinetic
+H_kin = 2I - T - T^{-1} of verify-f13 -- and the curl algebra:
+delta_k = 78^k a homomorphism on the declared C232 chart, landing
+on the cardinals, delta_58 = h),
 `verify-f13.js` (25 checks: the shell operator core of [2] -- H^7 =
-0, ord(U) = 13, U exactly unitary; the winding-spectrum check now
-states the spectral generator: H chi_k = k chi_k and P_g =
-zeta_12^{-H}), `verify-hopf.js` (9 checks: the finite Hopf fibration -- the free
+0, ord(U) = 13, U exactly unitary), `verify-hopf.js` (9 checks: the finite Hopf fibration -- the free
 boost action, the unique factorization, the global section, the
 horizon-circle fiber coordinate, at p = 13 and Omega-blind at p = 5,
 with the SL2 spin contrast), and `verify-render.js` (18 checks: the
@@ -36,7 +40,9 @@ and Carrier-tick invariant, the spinor half-turn: the sheet flip is
 the exact axial pi-rotation, not the spatial antipode, and the
 production clock: 696 stepChronon calls land the flipped sheet and
 the exact half-turn, 1392 the full home);
-node, all passing, all integer arithmetic in the exact suites. The screen projection is
+node, all passing, all integer arithmetic in the exact suites;
+`node run-all.js` runs the six suites and exits nonzero on any
+failure. The screen projection is
 a labelled chart approximation; every state shown is exact and
 discrete. The instance is the minimal non-trivial pair (13, 233),
 kappa = 3, Objectless.
@@ -47,7 +53,20 @@ The drive x -> gx as the shell's exact unitary evolution -- the
 Schrodinger evolution of the windings [3], with its unitary and
 spinor structure from [2] -- read through three complementary
 square panels of one state, at one scale, under one Subject/Carrier
-toggle:
+toggle.
+
+The headline symbol psi is the register itself: the wave function
+is phase, each pure mode a power map u -> u^k of the residues [3].
+The step g psi therefore carries three exact readings, two of
+which the lab draws as its two views: the permutation
+P_g|a> = |ga> (Carrier view: the slots turn), the pointwise value
+walk (Subject view: every registered value multiplies by g), and
+the mode chart, phase g^{-k} per chronon on the winding-k
+character. The first two coincide because the values are residue
+powers -- multiplying a value by g is shifting a slot by one --
+and the label-law checks of verify-render pin both. An amplitude
+layer over the residues, with free coefficients, arrives only with
+an Object [3]. The panels:
 
 The symmetry shell: the F13 arithmetic symmetry sphere -- meridians,
 latitudes, the rotating frame, and the register comb on the frame's
@@ -128,10 +147,9 @@ part is the azimuthal drift the panels already draw. The boost part
 is motion along the Hopf fiber: the frame dilation, the mass phase
 of 00:Y5 -- the boost torus is the Dirac layer's exclusive mass
 channel [2], and the mass sector's standard-model interaction face
-is [5]. As of 1-phase-5 (review-3 correction) the observability is
-stated relationally, per the quotient structure: a pure boost is
-unobservable at the quotient (00:Y3 -- the review-3 argument, which
-is our own ledger row), so the COMMON fiber flow is gauge and draws
+is [5]. The observability is relational, per the quotient
+structure: a pure boost is
+unobservable at the quotient (00:Y3), so the COMMON fiber flow is gauge and draws
 only in the harness view, as the Carrier-referenced chart
 realization anchored at the exact C4 stations. The Subject's
 observable is the relative fiber displacement between base points
@@ -139,7 +157,11 @@ observable is the relative fiber displacement between base points
 and the retardation supplies its exact form: the image at lookback
 k lags the common flow by k tick-angles, the boost-curl of 00:C18
 (one Carrier tick-angle per chronon of lookback into the boost
-direction, verified in verify-space). The Subject view draws this
+direction). The displacement is the group element delta_k = u_C^k
+with u_C = 78 the boost unit: a homomorphism in k, primitive of
+order 232, delta_58 = h -- and the drawn angle is its chart,
+Delta_k = chart(delta_k) = k pi/116 (the curl-algebra check in
+verify-space). The Subject view draws this
 static, integer-exact, gauge-free curl: the gravitational face of
 the Objectless lab, gravitation as phase synchronisation [4], the
 apsidal reading of 00:Y2. The curl is drawn as the difference it
@@ -165,7 +187,10 @@ shell disperses into a radial band, the Fourier dual's spread
 (the dual has the units of the inverse: localized to dispersed);
 at the half the pattern reassembles as the congruent parity image,
 wF = -w exactly at full scale; home with the Carrier cycle, the
-pattern with the pair at 696. The chart radius along a leaf is
+pattern with the pair at 696 (the joint return, a proxy-chart
+datum: S = 58 Subject-cycles out, registered by the declaring
+chart; the pair itself registers the monotone dephasing). The
+chart radius along a leaf is
 bounded below by the flow-invariant |z1|, so the ensemble breathes
 and never collapses. The leaves keep the established closed-ellipse
 rendering at the release density in both views. Each event's drawn
@@ -186,11 +211,20 @@ the axis leaf: the Subject's own dilation. The rung-ladder
 exchange stays as the discrete arithmetic face of the same
 inversion; with the exact per-tick boost step (which C14 element,
 via the octant bridge) it is the open derivation that would also
-promote 00:Y5. The derivation carries a proven constraint
-(review-1): gcd(232, 14) = 2, so no homomorphism C232 -> C14
-exceeds order two -- the tick-level bridge cannot be homomorphic,
-and the exact identification must route through the pair's spinor
-structure. The C4 station face IS homomorphic (gcd(232, 4) = 4):
+promote 00:Y5 -- now closed (00:Y5, theorem). The winding cycle
+meets the boost torus in the sign alone (gcd(232, 14) = 2) and its
+spinor cover in exactly the quarter core Q4 (gcd(232, 28) = 4;
+universally gcd(p-1, 2(p+1)) = 4 for every p = 4kappa+1): the
+per-tick boost step is the Q4 class of the winding rate, carried
+on the cover. The quarter is spinorial -- i^2 = -1 gives
+N(i) = -1, norm minus one -- so the transport crosses the sheet,
+and the sheet-dependent stations draw exactly this. The kill test
+at (53, 13) in Carrier 157 passed: the Object drive factors
+canonically over C12 = Q4 x C3 into core quarter times outcome,
+the winding exponent projects to the same quarter (117 x 13 = 117
+mod 156, gen^117 = 28, the published core of [3]), and mass phase
+= winding rate as one Q4 datum (ledger validation check_y5).
+The C4 station face is homomorphic (gcd(232, 4) = 4):
 the quarter, parity, and home stations are group-exact; the
 continuous fiber phase between them is the chart realization.
 
@@ -223,27 +257,26 @@ under the panels. The control card -- with the unified view toggle
 where the panels stack vertically; in landscape they span the full
 width.
 
-## Revision 2 (review-1)
+## The octant bridge and the Borel count
 
 The octant bridge is oriented by the corpus rule: dlog(3w) = 105 = 1
 (mod 8), whence i = gen^42 = 5 and c(iu) = h c(u) with the half-lift
-carrying one octant step. Two distinct factors of two, kept apart:
-the totality decomposition completes over {tau, tau+2}, checked as
-disjoint sets with full union -- that two doubles 156 to 312; the
-48 per shell counts the 24 simultaneous images with their two
-spinor lifts eta and -eta = eta_{tau+12} -- that two doubles 24 to
-48. The exact allocation of the Borel count (review-3 correction):
-72 + 72 + 12 = 156 -- the images of tau and of tau + 2 plus the
-origin clock's twelve null events build the 156, per verify-sky's
-2 x 72 + 12 check; the doubling 2 x 156 = 312 comes from the
-shared-sign cover alone. The two covers share exactly the one
-sign, gcd(24, 26) = 2: the joint cover is the central product
-(C24 x C26)/<(12, 13)>, the quotient identifying the two signs,
-cyclic of order 24 x 26 / 2 = 312. (Review-2 correction: the
-parity pullback is a different order-312 subgroup that does not
-identify the signs -- the C24 sign is parity-even, in the kernel
-of its sign map -- so the central product is the construction
-that states the sharing.) The observable frame group is
+carrying one octant step. The Borel count and its cover, kept
+strictly apart. The base events:
+156 = 72 + 72 + 12 -- the images of tau and of tau + 2 plus the
+origin clock's twelve null events, by the explicit bijection
+(c, e) -> [x -> g^e x + c]: 144 nonzero-translation events plus
+the 12-element origin stabilizer; the visible 48 per shell means
+the 24 images at tau with the 24 at tau + 2, base events, never
+spin states. The spinor lifts eta and -eta = eta_{tau+12} live
+entirely on the cover: the two temporal/spatial covers share
+exactly the one sign, gcd(24, 26) = 2, and their central product
+(C24 x C26)/<(12, 13)> -- the quotient identifying the two signs,
+proven an isomorphism onto C312 by phi(a, b) = 13a + 12b (kernel
+exactly {(0,0), (12,13)}, [(1,1)] of order 312) -- is a two-to-one
+EVENT-SET cover of the 156, 2 x 156 = 312 (a cyclic group has no
+nonabelian AGL(1, 13) quotient; the cover is of sets, not groups).
+The observable frame group is
 PGL2(F13): its Borel is the affine group AGL(1, 13) of 156 cells,
 its nonsplit C14 acts regularly on the fourteen points of P1, 2184 =
 156 x 14 stabilizer times transversal; SL2 is the spin double cover
@@ -252,7 +285,8 @@ and T share the sign -I and |BT| = 1092.
 The sky's leak drift is a half-angle on the Carrier's spinor
 cover (C464 inside F_233^2, 464 | 54288): the sheet sigC flips at
 the Carrier wrap, the drift steps uniformly through it, and the
-sky closes with the pair's spinor recurrence, 2 x 696.
+sky closes with the pair's spinor recurrence, 2 x 696 -- a
+proxy-chart datum, tagged in the frame-leak section.
 
 ## The frame leak (00:C17, 00:C18)
 
@@ -271,29 +305,41 @@ per the standing audit). Carrier view: the quarters stand (hbar on
 top), the drive turns the frame ray and the sky, and the register
 drifts clockwise past them, prograde -- the sky at the half rate on
 the spinor cover (the sheet sigC carrying continuity through the
-Carrier wrap, closure at the spinor recurrence 2 x 696). The q/p
+Carrier wrap, closure at the spinor recurrence 2 x 696, a
+proxy-chart datum). The q/p
 dial is one instrument, identical in both views: it reports q's
 Carrier address -- a relational datum of the pair -- turning
 clockwise one tick-angle per chronon, the address flipping x h per
 quarter: q lands on the h cardinal at tau = S = 58. The
-frame returns at 232 but the pair phase does not: closure only at
-696, spinor 2 x 696; at cosmological S the recurrence is beyond
-every Subject year and the dephasing is monotone -- C18's winding
+frame returns at 232 but the pair phase does not: the joint
+closure at 696 = lcm(12, 232), spinor 2 x 696. The closure numbers
+are proxy-chart data, tagged as such: a return needs a marked
+origin and a memory that spans it, and both belong to the
+declaring chart -- the Carrier is a timeless torsor, and the
+Subject's faithful budget is its own 12-cycle. The law is
+canonical, the event is bookkeeping, and the number reads the
+capacity: 696 = S x 12 = kappa x 232, the joint return exactly
+S = 58 Subject-cycles out (gcd(kappa, S) = 1), the capacity bound
+in the time domain; the spinor double 2S x 12 = 1392 rides the
+cover, representation bookkeeping. What the pair itself registers
+is the monotone dephasing, one tick-angle per chronon: at
+cosmological S the recurrence outruns
+every Subject year and C18's winding is
 read as the arrow of time.
 
 ## Provenance
 
 1-phase-5 extends the stable episode 1-phase-4 (kept frozen as the
-stable release, two review rounds absorbed) with the relational
+stable release) with the relational
 dilation: the Subject view draws the retarded boost-curl (00:C18),
 the gauge-free observable face of the Dirac flow -- the
 gravitational face -- while the harness view keeps the common flow
-as the Carrier-referenced chart realization (review-3 absorbed). 1-phase-4 extended 1-phase-3 (frozen)
+as the Carrier-referenced chart realization. 1-phase-4 extended 1-phase-3 (frozen)
 with the frame dilation in the sheet-fair chart, the leaf-riding
 beads, and the clock bead; 1-phase-3 extended 1-phase-2 (frozen)
 with the Hopf representation toggle, the frame-leak view
 semantics, and the interpolated mode; the shell and phase panels
-derive from the standing episode 1-phase-1 (review-2 line), the
+derive from the standing episode 1-phase-1, the
 sky panel from the standing episode 1-space (rev 18). All source
 episodes remain frozen; the doctrine sections below the panels
 carry their standing constructive descriptions.
@@ -305,4 +351,4 @@ carry their standing constructive descriptions.
 [3] Quantum Observation over Finite Relational Substrate, pp202606.1160.
 [4] Gravitation as Phase Synchronisation over a Finite Relational Substrate, pp202606.1018.
 [5] Standard-Model Interactions over Finite Relational Substrate, pp202606.1328.
-[6] https://github.com/gamayos/frc-numerics/tree/main/docs/1-phase-4
+[6] https://github.com/gamayos/frc-numerics/tree/main/docs/1-phase

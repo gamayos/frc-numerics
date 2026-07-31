@@ -66,12 +66,35 @@ const eqPH = (u, v) => u[0] === v[0] && u[1] === v[1];
      'drive cycle and C26 = 2p doubles the space circle, both below '+
      'the totality; they share exactly the one sign, gcd(24, 26) = 2: '+
      'the central product glued over the common -1 has cardinality '+
-     '24 x 26 / 2 = 312 = 2 x 156, twice the Borel count; the base '+
-     'cycles are coprime, gcd(13, 24) = 1',
+     '24 x 26 / 2 = 312 = 2 x 156, a two-to-one event-set cover of '+
+     'the Borel count; the base cycles are coprime, gcd(13, 24) = 1',
      24 === 2 * 12 && 26 === 2 * P && 24 < 233 && 26 < 233 &&
      (() => { const g = (x, y) => y ? g(y, x % y) : x;
        return g(24, 26) === 2 && g(13, 24) === 1 &&
               24 * 26 / 2 === 312 && 312 === 2 * P * (P - 1); })());
+  // the central product proven as a structure, not a count: phi(a, b) =
+  // 13a + 12b mod 312 is a homomorphism C24 x C26 -> C312 whose kernel
+  // is exactly the identified sign pair, and [(1, 1)] generates
+  {
+    const ker = [];
+    for (let a = 0; a < 24; a++) for (let b = 0; b < 26; b++)
+      if ((13*a + 12*b) % 312 === 0) ker.push(a + ',' + b);
+    let hom = true;
+    for (let i = 0; i < 200; i++){
+      const a1 = i % 24, b1 = (i*7) % 26, a2 = (i*5) % 24, b2 = (i*11) % 26;
+      const lhs = (13*((a1 + a2) % 24) + 12*((b1 + b2) % 26)) % 312;
+      const rhs = ((13*a1 + 12*b1) + (13*a2 + 12*b2)) % 312;
+      if (lhs !== rhs) hom = false;
+    }
+    const g312 = (13*1 + 12*1) % 312;
+    const gcd2 = (x, y) => y ? gcd2(y, x % y) : x;
+    ok('the central product exactly: phi(a, b) = 13a + 12b mod 312 has '+
+       'kernel {(0,0), (12,13)} -- the identified signs and nothing '+
+       'else -- and [(1,1)] = 25 has order 312: (C24 x C26)/<(12,13)> '+
+       '= C312 as an isomorphism, not a cardinality',
+       ker.join('|') === '0,0|12,13' && hom &&
+       312 / gcd2(g312, 312) === 312);
+  }
   ok('the horizon falls strictly between rows 6 and 7: 6 x 180 < 90 x '+
      '13 < 7 x 180: the direct/echo boundary, and nothing is registered '+
      'on it', 6 * 180 < 90 * 13 && 90 * 13 < 7 * 180);
@@ -286,8 +309,9 @@ const eqPH = (u, v) => u[0] === v[0] && u[1] === v[1];
      '{tau, tau + 2} the cells sweep 2 x 72 = 144 = the affine '+
      'translation count, and the origin stabilizer, the pure drive, is '+
      'the observer\'s own clock, 12 null events: 144 + 12 = 156 = '+
-     'p(p - 1) (00:Y3); the 48 per shell counts the 24 simultaneous '+
-     'images with their two spinor lifts',
+     'p(p - 1) (00:Y3), the bijection (c, e) -> [x -> g^e x + c]; the '+
+     '48 per shell counts the 24 images at tau with the 24 at tau + 2 '+
+     '-- base events; the spinor lifts live on the 312 cover alone',
      six && comp2 && 2 * 72 + 12 === P * (P - 1) &&
      3 * 48 + 12 === P * (P - 1) && 48 === 2 * 24);
 }
