@@ -142,7 +142,7 @@
       <div class="cap">
         <span id="capCone">The observable sky sector spanned by four rays per meridians of <span style="color:#3987e5">M&#8320; (space)</span> and <span style="color:#d0453c">M&#8323; (momentum)</span>: Observer to horizon (emission); horizon to the Observer (absorption); and their backwards-in-time shadows. The radius is the scale coordinate R&middot;|sin(2a&pi;/13)|: the photon travels through scales, never through the Observer. Carrier view: the frame's common Dirac flow. Subject view: the static gauge-free curl.
         </span>
-        <span id="capHelix" style="display:none">The sky spanned by &kappa; = 3 nested fibers at radii R&middot;sin(2a&pi;/p), the Observer central; each shell one double-helix loop through both poles &mdash; twelve cells by two routes. Fibers one rung apart, &times;3 = g&#8308;, mounted 120&deg;: arrows repeat, tints cycle, values &divide;3 inward; labels ride the outer fiber. Carrier view: the frame's common flow, chart-realized: dual's band at the quarter, parity image at the half, home with the cycle. Subject view: Pure static space-time geometry of the frame.
+        <span id="capHelix" style="display:none">The sky spanned by &kappa; = 3 nested latitudes <span style="color:#58a35e">L&#8321; (time)</span>, L&#8322; and L&#8323, at radii R&middot;sin(2a&pi;/p), the Observer central; each shell one double-helix loop through both poles &mdash; twelve cells by two routes. Fibers one rung apart, &times;3 = g&#8308;, mounted 120&deg;: arrows repeat, tints cycle, values &divide;3 inward; labels ride the outer fiber. Carrier view: the frame's common Dirac flow. Subject view: Pure static space-time geometry of the frame.
         </span>
         <span id="capHopf" style="display:none"> The sky spanned by Hopf fibration. The ball charts S&sup3;, its silhouette the horizon; each node rides the exact Hopf leaf through it, on the 24 outer nodes &mdash; the section of PGL&#8322;/C&#8321;&#8324; a boost slides along the fiber, unobservable. The clock fiber (&tau;, 0) is the polar axis, its cyan bead the clock. Carrier view: the frame's common flow, chart-realized: dual's band at the quarter, parity image at the half, home with the cycle. Subject view: Pure static space-time geometry of the frame.
       </span></div>
@@ -1496,9 +1496,9 @@ function drawM3(m3){
       for (let j = 0; j <= N; j++)
         pts.push(proj3(m3.pos(ray, a0 + j*(a1 - a0)/N)));
       for (const front of [false, true]){
-        sp.strokeStyle = MER; sp.lineWidth = am === 1 ? 1.1 : 0.9;
+        sp.strokeStyle = MER; sp.lineWidth = front ? 1.35 : 1.1;
         sp.lineJoin = "round"; sp.lineCap = "round";
-        sp.globalAlpha = (front ? 0.3 : 0.14)*am;   // half strength: M0 first
+        sp.globalAlpha = (front ? 0.75 : 0.14)*am;  // subordinate to M0
         sp.beginPath();
         let pen = false, prev = null;
         for (const p of pts){
@@ -1548,9 +1548,9 @@ function drawM0(m0){
       for (let j = 0; j <= N; j++)
         pts.push(proj3(m0.pos(e, a0 + j*(a1 - a0)/N)));
       for (const front of [false, true]){
-        sp.strokeStyle = ACC; sp.lineWidth = am === 1 ? 1.2 : 1;
+        sp.strokeStyle = ACC; sp.lineWidth = front ? 1.55 : 1.2;
         sp.lineJoin = "round"; sp.lineCap = "round";
-        sp.globalAlpha = (front ? 0.55 : 0.26)*am;
+        sp.globalAlpha = (front ? 1 : 0.26)*am;
         sp.beginPath();
         let pen = false, prev = null;
         for (const p of pts){
@@ -1673,9 +1673,10 @@ function drawHelix(aS, bC){
       // the outer fiber is the L1 time latitude (the drive orbit through
       // the unit): green, matching the phase panel's middle ring and the
       // shell panel's L1
-      sp.strokeStyle = outer ? GRN : "#8a877f"; sp.lineWidth = outer ? 1.4 : 1.1;
+      sp.strokeStyle = outer ? GRN : "#8a877f";
+      sp.lineWidth = front ? (outer ? 1.75 : 1.35) : (outer ? 1.4 : 1.1);
       sp.lineJoin = "round"; sp.lineCap = "round";
-      sp.globalAlpha = front ? (outer ? 0.70 : 0.48) : 0.24;
+      sp.globalAlpha = front ? (outer ? 1 : 0.75) : 0.24;
       sp.beginPath();
       let pen = false, prev = null;
       for (const p of P3){
