@@ -1,4 +1,4 @@
-// run-all.js -- aggregate runner for the 1-phase-6 verification suites.
+// run-all.js -- aggregate runner for the 1-phase-5 verification suites.
 // Runs each suite as a child node process, reports one line per suite,
 // exits nonzero if any suite fails. No dependencies.
 

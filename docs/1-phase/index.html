@@ -83,6 +83,8 @@
   .seg .vbtn{border:0; border-radius:0; margin:0; padding:4px 12px;
              background:transparent; color:var(--ink)}
   .seg .vbtn.on{background:var(--acc); color:#fff}
+  .seg .vbtn + .vbtn{border-left:1px solid var(--edge)}
+  .seg .vbtn.on + .vbtn, .seg .vbtn + .vbtn.on{border-left-color:transparent}
   .seg .vbtn:focus-visible{outline:2px solid var(--ink); outline-offset:-2px}
   .doctrine{margin-top:16px; color:var(--ink2); font-size:13px}
   .doctrine p{margin-top:6px}
@@ -97,7 +99,7 @@
   .twochar{display: inline-block; min-width: 2ch; text-align: right;}
 </style>
 </head>
-<body data-palette="#3987e5,#c98500" data-episode="1-phase-5" data-rev="1">
+<body data-palette="#3987e5,#c98500" data-episode="1-phase-6" data-rev="1">
 <div class="wrap">
   <h1>FRC Lab: Schr&ouml;dinger&mdash;Dirac dynamics of the total state over the (13, 233) substrate: i&#295;&thinsp;&part;&psi;/&part;t = &Hcirc;&psi; ⇌ &psi;<sub>&tau;+1</sub> = g&middot;&psi;<sub>&tau;</sub></h1>
   <div class="sub">A complete universe-in-a-lab, the smallest non-trivial configuration: the Subject shell F&#8321;&#8323; (&kappa; = 3) rides the Carrier F&#8322;&#8323;&#8323; (S = 58), Objectless. The state is the framed space-time geometry itself, and the drive x &#8614; gx is its Schr&ouml;dinger evolution &mdash; the rigid rotation of the sky's holographic projection. One law, exact term by term: i&#295; the Subject's quarter-turn composed with the Carrier's action quantum <a href="#ref3">[3]</a>; &psi; the register of Subject field's residues &mdash; the total wave function <a href="#ref3">[3]</a>; &Hcirc; the winding rate with spectrum &Hcirc;&chi;<sub>k</sub> = k&chi;<sub>k</sub>; &part;t the chronon, the step the permutation P<sub>g</sub>|a&#10217; = |ga&#10217;: g multiplies the residues &mdash; unitary exactly, spinor-covered exactly <a href="#ref2">[2]</a>. Energy is the registered winding, E = hf an identity; mass is the frame's time dilation through the Carrier count, the Dirac mass channel. Every exact claim is integer arithmetic and machine-verified; the continuum enters only as labelled charts.</div>
@@ -131,12 +133,18 @@
       <div class="trow">
         <h2 id="skyTitle">The sky &middot; Carrier view</h2>
         <span class="seg" role="group" aria-label="sky representation">
-          <button id="mHelix" class="vbtn on" aria-pressed="true">Double helix</button>
+          <button id="mCone" class="vbtn on" aria-pressed="true">Light cone</button>
+          <button id="mHelix" class="vbtn" aria-pressed="false">Drive orbits</button>
           <button id="mHopf" class="vbtn" aria-pressed="false">Hopf fibers</button>
         </span>
       </div>
       <canvas id="spc" width="1040" height="1040" role="img" aria-label="The Subject's sky spanned by three nested spheres at the axial latitude radii, each carrying the complete double-helix fiber of twenty-four node images on one smooth closed loop through both poles; consecutive fibers one rung apart, arrows repeating and tints cycling; the Observer at the center"></canvas>
-      <div class="cap"><span id="capHelix">The sky spanned by &kappa; = 3 nested fibers at radii R&middot;sin(2a&pi;/p), the Observer central; each shell one double-helix loop through both poles &mdash; twelve cells by two routes. Fibers one rung apart, &times;3 = g&#8308;, mounted 120&deg;: arrows repeat, tints cycle, values &divide;3 inward; labels ride the outer fiber. Carrier view: the frame's common flow, chart-realized: dual's band at the quarter, parity image at the half, home with the cycle. Subject view: Pure static space-time geometry of the frame. </span><span id="capHopf" style="display:none"> The sky spanned by Hopf fibration. The ball charts S&sup3;, its silhouette the horizon; each node rides the exact Hopf leaf through it, on the 24 outer nodes &mdash; the section of PGL&#8322;/C&#8321;&#8324; a boost slides along the fiber, unobservable. The clock fiber (&tau;, 0) is the polar axis, its cyan bead the clock. Carrier view: the frame's common flow, chart-realized: dual's band at the quarter, parity image at the half, home with the cycle. Subject view: Pure static space-time geometry of the frame.
+      <div class="cap">
+        <span id="capCone">The observable sky sector spanned by four rays per meridian <span style="color:#3987e5">M&#8320; (space)</span> and <span style="color:#d0453c">M&#8323; (momentum)</span> fiber geodesics &mdash; Observer to horizon is the emission; horizon to the Observer is the absorption; their backwards-in-time shadows. The radius is the scale coordinate R&middot;|sin(2a&pi;/13)|: the photon travels through scales, never through the Observer. Carrier view: the frame's common Dirac flow. Subject view: the static gauge-free curl.
+        </span>
+        <span id="capHelix" style="display:none">The sky spanned by &kappa; = 3 nested fibers at radii R&middot;sin(2a&pi;/p), the Observer central; each shell one double-helix loop through both poles &mdash; twelve cells by two routes. Fibers one rung apart, &times;3 = g&#8308;, mounted 120&deg;: arrows repeat, tints cycle, values &divide;3 inward; labels ride the outer fiber. Carrier view: the frame's common flow, chart-realized: dual's band at the quarter, parity image at the half, home with the cycle. Subject view: Pure static space-time geometry of the frame.
+        </span>
+        <span id="capHopf" style="display:none"> The sky spanned by Hopf fibration. The ball charts S&sup3;, its silhouette the horizon; each node rides the exact Hopf leaf through it, on the 24 outer nodes &mdash; the section of PGL&#8322;/C&#8321;&#8324; a boost slides along the fiber, unobservable. The clock fiber (&tau;, 0) is the polar axis, its cyan bead the clock. Carrier view: the frame's common flow, chart-realized: dual's band at the quarter, parity image at the half, home with the cycle. Subject view: Pure static space-time geometry of the frame.
       </span></div>
     </div>
     <div class="panel">
@@ -562,6 +570,33 @@
       numbers &mdash; an Object's orbital structure on the &kappa;<sub>O</sub> ladder
       (00:Y1) &mdash; live inside that chart as Object physics; the toy previews the
       geometry, and contains no orbitals to scale. Visibility is depth alone.</p>
+    <p><span class="k">The light cone: the meridian is the scale-tower circuit (00:C20, 00:Y3) <a href="#ref2">[2,</a> <a href="#ref3">3]</a>.</span>
+      The meridian law runs colatitude a&pi;/13 at radius R&middot;|sin(2a&pi;/13)|
+      &mdash; |sin| of the tower angle, one full period per cycle, period points at
+      a = 0, 13/2, 13. The radius is the scale coordinate: the approach to the origin
+      is the decoherence descent L&#8323; &#8594; L&#8322; &#8594; L&#8321; into
+      registration, absorption the completed cascade, the continuation down the
+      scale-periodic tower; between the quarter folds the circuit runs below
+      resolution &mdash; unobservable, undrawn. The cycle closes because the tower is
+      periodic: &kappa; scale steps of four heights each, 4&kappa; = p &minus; 1, one
+      drive revolution &mdash; and the drive step factors exactly,
+      g = g&#8308;&middot;g&#8315;&sup3; = 3&middot;i on F&#8321;&#8323;: one chronon =
+      one scale step &times; one quarter turn, &psi;<sub>&tau;+1</sub> =
+      i&middot;(3&psi;<sub>&tau;</sub>). The capacity rule 4d &lt; 13 selects the
+      twelve exact stations per meridian; the winding family m = 1&hellip;12 under the
+      one law covers all 72 nodes, 24 per shell &mdash; each drawn meridian one label
+      of the covering family, isotropy at the resolved mesh, refined down the tower
+      within capacity. One Dirac flow in every representation; the Subject's own locus
+      is never dressed (ownership): every ray anchors at the drawn Observer at every
+      clock state, the gauge's half-turn acting as the chart's exact point reflection
+      &mdash; fixing the Observer &mdash; and the quarter sweep kissing the tangency
+      rim, the drawn spinorial quarter of 00:C20. M&#8320; and M&#8323; (winding
+      5 = g&#8313; = &minus;g&sup3;, the &plusmn;i line) are the field pair
+      F = E + iB: co-propagating at the unregistered origin, quarter-separated through
+      the shells, fused pairwise at the four horizon fold points &mdash; the duality
+      exchange with route and time both flipped; all four M&#8323; rays pass the
+      half-cell point 13/2 exactly, the ramification of the double cover. The clock
+      bead displays the frame phase.</p>
     <p><span class="k">The sequel (E2): the frame chart is projective.</span> The
       observer's chart is the projective line, so the observable frame group is
       PGL&#8322;(F&#8321;&#8323;), order 12 &times; 13 &times; 14 = 2184: its Borel
@@ -1074,9 +1109,12 @@ function ring3(zc, style, w, aB, aF){
     sp.stroke(); sp.globalAlpha = 1;
   }
 }
-let skyMode = "helix";               // the sky representation toggle
+let skyMode = "cone";                // the sky representation toggle:
+                                     // "helix" world lines, "cone" the
+                                     // light cone, "hopf" the Hopf fibers
 function drawSpace(aS, bC){
   if (skyMode === "hopf") return drawHopf(aS, bC);
+  if (skyMode === "cone") return drawCone(aS, bC);
   return drawHelix(aS, bC);
 }
 // ---------- the guard chart of S3, shared by both representations ----------
@@ -1084,6 +1122,9 @@ function drawSpace(aS, bC){
 // radius RSIL, clearing the outer shell; the lift inverts the projection on
 // the chosen sheet
 const W0H = 1.1, RSIL = 206, S3H = RSIL*Math.sqrt(W0H*W0H - 1);
+// the seam crossing of the meridian radius law R|sin(2t pi/13)|, R = 202:
+// the exact parameter where the base radius equals the mid-sphere seam
+const TSEAM = Math.asin((S3H/W0H)/202)*13/(2*Math.PI);
 const liftS3 = (w, sheet) => {
   const x = [w[0]/S3H, w[1]/S3H, w[2]/S3H];
   const x2 = x[0]*x[0] + x[1]*x[1] + x[2]*x[2];
@@ -1100,9 +1141,16 @@ const chart3 = q => {                      // S3 -> the chart ball
 // the sheet-fair chart: each point projects from the guard on ITS side
 // of S3, so the antipodal map is the exact point reflection of the
 // ball, chartF(-q) = -chartF(q): the parity station is congruent by
-// the chart itself, gauge-free
+// the chart itself, gauge-free. ONE chart for every drawn object.
+// The atlas fold |q4| is C1-smoothed in the equator sliver [approx]:
+// exact beyond delta, the Huber parabola within, so every drawn curve
+// bends smoothly at its sheet crossings and every structure -- node
+// or meridian -- lands on the same image to the bit
+const DLTQ = 0.06;
+const hubQ = q4 => { const a4 = Math.abs(q4);
+  return a4 >= DLTQ ? a4 : (q4*q4 + DLTQ*DLTQ)/(2*DLTQ); };
 const chartF = q => {
-  const d = W0H - Math.abs(q[3]);
+  const d = W0H - hubQ(q[3]);
   return [S3H*q[0]/d, S3H*q[1]/d, S3H*q[2]/d];
 };
 const ptF3 = (v, u, t) => {                // a leaf point, on screen
@@ -1168,8 +1216,8 @@ function skyState(aS, bC){
   // half, home with the cycle); the two views are the two sections,
   // their difference the observable Delta. Time-VARYING dilation is
   // relational between systems of different rates: it arrives with
-  // the first Object. The exact C14 tick bridge remains the open
-  // derivation
+  // the first Object. The per-tick boost step is closed: the winding
+  // rate's Q4 class on the spinor cover, its sign on the base (00:C20)
   const PHI = isCar ? -(bC + F)*Math.PI/116 : 0;
   const CURL = Math.PI/116;                    // one tick-angle per lookback chronon
   const TICK2 = Math.PI/232;                     // the halved tick-angle
@@ -1209,8 +1257,23 @@ function skyState(aS, bC){
   // carries the common frame flow PHI; the Subject view carries only
   // the retarded boost-curl, k tick-angles at lookback k -- the
   // relational observable (00:C18)
+  // the retarded common flow -- ONE law for every drawn structure:
+  // row k shows the state k chronons ago, so it carries the flow of
+  // its emission chronon, phi(k) = -(bC - k) pi/116 = PHI + k CURL.
+  // The Carrier view is the Subject view plus the gauge: the subject
+  // curl k CURL is the gauge-invariant residue of the retarded flow.
+  // At the quarter station bC = S = 58 the origin's twist is exactly
+  // -pi/2: the retardation is a quarter turn, continuously
+  // distributed over the distance from the origin, decaying one
+  // tick-angle per row of lookback
+  // ONE flow for all three sky modes: the Dirac flow is the drawn
+  // phenomenon, and the mode switch changes the representation, never
+  // the dynamics. Every registered row carries the retarded flow
+  // phi(k) = PHI + k CURL (the common frame flow in the Carrier view,
+  // its gauge-invariant curl residue in the Subject view), identically
+  // in the helix, cone, and Hopf representations
   const flowF = (w3, kk) => {
-    const phi = isCar ? PHI : (kk || 0)*CURL;
+    const phi = (isCar ? PHI : 0) + (kk || 0)*CURL;
     if (!phi) return w3;
     const v = liftS3(w3, false);
     if (!v) return w3;
@@ -1219,6 +1282,21 @@ function skyState(aS, bC){
     return chartF([cc*v[0]+ss*u2[0], cc*v[1]+ss*u2[1],
                    cc*v[2]+ss*u2[2], cc*v[3]+ss*u2[3]]);
   };
+  // ---- the space meridian M0: the third torus C13 ----
+  // The shell's additive great circle read down the main axis: the sky
+  // chart flattens the meridian circle (cell a at colatitude 2a pi/13)
+  // to the diameter, cell a at the signed radius r_a = R sin(2a pi/13)
+  // -- the sky's own radial law, so cells 1, 2, 3 ride the three drawn
+  // shells exactly. The photon bead walks one cell per chronon,
+  // uniform on the circle; the chart shows the fold: out through the
+  // kappa = 3 resolved radial steps, the rim touch at the quarter seam
+  // a = 13/4 (sin = 1: the horizon class [1:0], C17's quarter flip,
+  // the null face), the folded return through 4, 5, 6 (the ladder
+  // aliasing beyond capacity -- the chart face of horizon dilation),
+  // the centre crossing at the half seam a = 13/2, between -1/2 = 6
+  // and +1/2 = 7 (the 1-algebra half: the second origin passage), the
+  // mirrored negative ray, home at 13. The walk's spin cover is
+  // C26 = 2p, the spatial cover: the sheet shM flips at 13, home at
   const nodes = [];
   for (let s = 0; s < 3; s++){
     const R = RSH[s], outer = s === 2, scl = R / RSH[2];
@@ -1241,7 +1319,260 @@ function skyState(aS, bC){
                    outer, scl, prof: pn.d > 0.02 ? (2 - s) : 3 });
     }
   }
-  return { RH, RSH, TH3, PH3, sph, nodes, PHI, flowF };
+  // ---- the observable meridian M0: the kappa-step trace ----
+  // The meridian is a light-cone object like everything drawn: cell a
+  // at lookback a, radial step a. The capacity bound 4a < p resolves
+  // exactly kappa = 3 radial steps, so the observable segment threads
+  // the existing nodes cell +-a on shell L_a -- (e, k = a, s = a - 1)
+  // -- and terminates at the quarter fold a = 13/4, radius R, grazed
+  // by the third node (sin(6 pi/13) = 0.9927): beyond it the meridian
+  // runs back down the cone, past the observational horizon, where no
+  // nodes exist to register it. The trace alternates sides by exactly
+  // 11 pi/12 + pi/13 + pi/232 per step -- a near half-turn: its
+  // deviation from a flat great circle is pi/156 - pi/232 per step,
+  // the totality half-angle against the halved Carrier tick, the
+  // leak's signature on the space trace; the route-minus steps differ
+  // (the route half-angle sign), the echo pair's chirality
+  // the continuous retarded-meridian law: at lookback a the meridian
+  // sits at colatitude a pi/13, azimuth by the transport law (the same
+  // terms as PH3 with s = a - 1), radius R sin(2 a pi/13) -- the
+  // radial decoherence ladder, continuous -- flowed like every drawn
+  // object. It passes the cell +-a nodes exactly at integer a and
+  // reaches the horizon (radius R) at the quarter fold a = 13/4
+  // the meridian flows through the nodes' own map -- the one
+  // sheet-fair chart, the one retarded flow -- so threading is
+  // image-identity at every station, at every clock state, in both
+  // views. The meridian flow adds the NORTH FOLD: the sub-equatorial lift is
+  // reflected through the S3 equator (q4 -> |q4|), continuous at the
+  // equator, stations untouched (their far lifts are already
+  // northern). The fold carries the sheet sign: the drawn first step
+  // passes the tangency circle -- the rim kiss between the origin and
+  // L1: the sheet crossing of the first step, the spinorial quarter
+  // of 00:C20, drawn
+  // OWNERSHIP GRADING: the flow dresses registered rows -- other
+  // cells' registrations -- and the Subject's own locus is the frame
+  // origin, never dressed: the Observer is the origin of the
+  // observation, and no chart displaces its source. The meridian
+  // parameter passes the Subject's own cell at a = 0, 13/2, 13 (the
+  // here-now, the null self-echo, the closure), so the dressing
+  // carries the ownership factor own(a) -- 1 at every station
+  // (registered rows, node law, threading exact at every clock
+  // state), 0 on the self-locus, C1 within the unit chart cell
+  // between [approx: the ramp is chart interpolation]. Every arc
+  // emanates from and returns to the drawn Observer, at every bC:
+  // the figure breathes with the Dirac flow and closes with the
+  // register. The drawn gauge sweep takes the balanced representative
+  // (the rotation is mod 2pi; the chart interpolates the short way)
+  const smQ = t => t <= 0 ? 0 : t >= 1 ? 1 : t*t*t*(t*(6*t - 15) + 10);
+  const own = a => smQ(Math.min(a, 13 - a, Math.abs(a - 6.5)));
+  const PHIB = isCar ? PHI - 2*Math.PI*Math.round(PHI/(2*Math.PI)) : 0;
+  // THE HALF-TURN IS EXACT, NOT SWEPT: the fiber rotation by pi is the
+  // lift's antipode, and the sheet-fair chart is odd, chartF(-q) =
+  // -chartF(q) -- so the gauge's pi-branch acts on the drawn ball as
+  // the exact point reflection, which FIXES the Observer. The dressing
+  // therefore splits: the branch pi n (one branch per clock state,
+  // taken at the curve's mid-span, exact congruence, no unwind needed)
+  // and the balanced residual phi_r, alone graded by ownership. Near
+  // the parity states the residual is small and the figure homes by
+  // congruence; near the quarter states the residual sweep passes the
+  // tangency circle -- the rim kiss, the drawn spinorial quarter of
+  // 00:C20
+  const NBR = Math.round((PHIB + 6.5*CURL)/Math.PI);
+  const RFL = NBR % 2 === 0 ? 1 : -1;
+  const flow3 = (w3, kk, gg) => {
+    const phi = (PHIB + (kk || 0)*CURL - Math.PI*NBR)*(gg === undefined ? 1 : gg);
+    let v = liftS3(w3, false);
+    if (!v) return w3;
+    // the north fold rides the same Huber law as the chart [approx]:
+    // exact |q4| beyond the sliver (every station's base lift lies
+    // there -- threading exact to the bit), C1 within, renormalized
+    // to S3
+    const q4f = hubQ(v[3]);
+    if (q4f !== v[3]){
+      const xy2 = 1 - v[3]*v[3], xy2f = Math.max(1e-12, 1 - q4f*q4f);
+      const sc = Math.sqrt(xy2f/Math.max(1e-12, xy2));
+      v = [v[0]*sc, v[1]*sc, v[2]*sc, q4f];
+    }
+    if (RFL < 0) v = [-v[0], -v[1], -v[2], -v[3]];
+    if (!phi) return chartF(v);
+    const u2 = [-v[1], v[0], -v[3], v[2]];
+    const cc = Math.cos(phi), ss = Math.sin(phi);
+    return chartF([cc*v[0]+ss*u2[0], cc*v[1]+ss*u2[1],
+                   cc*v[2]+ss*u2[2], cc*v[3]+ss*u2[3]]);
+  };
+  // the complete meridian cycle, a in [0, 13], is the SCALE-TOWER
+  // CIRCUIT: the radius R |sin(2a pi/13)| is |sin| of the tower angle
+  // 2a pi/13 -- one full period per cycle, the period points at
+  // a = 0, 13/2 (the 1-algebra half), 13 -- so the photon travels the
+  // scales of the space, never through the Observer's position, and
+  // absorption is the completed decoherence cascade at the origin.
+  // The shell index follows the tent law s(a) = a - 1 before the
+  // half, 12 - a after, so the ONE continuous law threads the direct
+  // nodes (cells +-1..3) AND their echoes (k = 13 - d on the return,
+  // colatitudes summing to pi: the distributed sign), landing the
+  // azimuth 80 - 5a on the echo nodes exactly. The cycle closes
+  // because the tower is periodic: kappa scale steps of four heights
+  // each, 4 kappa = p - 1, one drive revolution -- and the drive step
+  // factors exactly, g = g^4 g^{-kappa} = 3 i on F13 (heights
+  // 4 - 3 = 1): one chronon = one scale step times one quarter turn,
+  // psi_{tau+1} = g psi_tau = i (3 psi_tau). The meridian family
+  // (windings m = 1..12, both rays) covers the node field completely
+  // -- 72 of 72, 24 per shell, multiplicity 1 on odd rows, 3 on even
+  // (the sheet parity: 36 nodes once, 36 thrice, 144 slots) -- so each drawn
+  // meridian is ONE LABEL of the covering family: isotropy at the
+  // resolved mesh, refined down the tower within capacity
+  const baseM0 = (e, a) => {
+    const sA = a <= 6.5 ? a - 1 : 12 - a;
+    const ph = ((isCar ? t24 + F : 0) + 3*a + 8*(sA - 2))*Math.PI/12
+               + (e > 0 ? a : 13 - a)*Math.PI/13
+               + a*TICK2 + drift3;
+    // the unsigned radius: the second sign flip lives here -- with |r|
+    // the echo arcs land on the echo nodes exactly, and the middle
+    // BOUNCES at the centre at a = 13/2 instead of passing through:
+    // the null self-echo relaunches from the origin, the counter-jet
+    return sph(TH3(a), ph, 0, RH*Math.abs(Math.sin(2*a*Math.PI/13)));
+  };
+  const posM0 = (e, a) => flow3(baseM0(e, a), a, own(a));
+  const m0 = { pos: posM0, trace: {}, traceE: {} };
+  for (const e of [1, -1]){
+    m0.trace[e] = [1, 2, 3].map(a =>
+      nodes.find(n => n.s === a - 1 && n.e === e && n.k === a));
+    m0.traceE[e] = [10, 11, 12].map(k =>
+      nodes.find(n => n.s === 12 - k && n.e === e && n.k === k));
+  }
+  // ---- M3: the momentum-quarter dual (the field pair, tagged) ----
+  // The walk in the derived quarter direction Ihat = g^{-kappa} = 5:
+  // the SAME meridian law at winding five. The double-cover coordinate
+  // u = 5t (mod 26) folds to the node indices -- k = u on even
+  // half-winds with the ray's route, k = 26 - u on odd half-winds with
+  // the route flipped (the lift alternation, the two routes on one
+  // curve, the helix motif) -- and the azimuth IS the node law PH3
+  // with these continuous arguments, so the twelve stations (cells
+  // +-5t at the tent shells) are threaded by construction, residual
+  // zero. Every break hides where azimuth is undefined: the origin
+  // bounce at t = 13/2 and the four pole passages ON the clock axis
+  // (the degenerate leaf) at t = 2.6, 5.2, 7.8, 10.4 -- the winding-5
+  // curve must cross the poles four times mid-cycle. M0 is the same
+  // law at winding one: the meridian family is the winding ladder,
+  // and the M0-M3 pair -- windings 1 and Ihat -- is the additive
+  // Fourier pair, the field pair in the E-B sense [reading]
+  const baseM3 = (ray, t) => {
+    const u = 5*t, mW = Math.floor(u/13 + 1e-9);
+    const even = mW % 2 === 0;
+    const kk = even ? u - 13*mW : 13*(mW + 1) - u;
+    const ee = even ? ray : -ray;
+    const sA = t <= 6.5 ? t - 1 : 12 - t;
+    const ph = ((isCar ? t24 + F : 0) + 3*kk + 8*(sA - 2))*Math.PI/12
+               + (ee > 0 ? kk : 13 - kk)*Math.PI/13
+               + kk*TICK2 + drift3;
+    // the curl rides the ROW: the sky retards by the colatitude row k,
+    // so the station's image carries k CURL -- the curve dresses with
+    // the row's lookback k(t), not the step count (for M0 the two
+    // coincide, k = t)
+    return [sph(TH3(kk), ph, 0, RH*Math.abs(Math.sin(2*t*Math.PI/13))), kk];
+  };
+  const posM3 = (ray, t) => { const b = baseM3(ray, t); return flow3(b[0], b[1], own(t)); };
+  const m3 = { pos: posM3, st: {} };
+  for (const ray of [1, -1])
+    m3.st[ray] = [1, 2, 3, 10, 11, 12].map(t => {
+      const u = 5*t, mW = Math.floor(u/13), even = mW % 2 === 0;
+      const kk = even ? u - 13*mW : 13*(mW + 1) - u;
+      const ee = even ? ray : -ray;
+      const sh = t <= 3 ? t - 1 : 12 - t;
+      return nodes.find(n => n.s === sh && n.e === ee && n.k === kk);
+    });
+  return { RH, RSH, TH3, PH3, sph, nodes, PHI, flowF, m0, m3 };
+}
+// M3 on screen: the momentum meridian in momentum red -- the same
+// four rays as M0 at winding five: the retarded pair and the advanced
+// pair, Observer to horizon fold; between the folds the circuit runs
+// below resolution, down the scale tower -- not observable, not
+// drawn. Denser sampling: the winding-5 sweep moves five times faster
+function drawM3(m3){
+  const SEGS = [[0, 3.25, 1, 960], [9.75, 13, 1, 960]];
+  for (const ray of [1, -1]){
+    for (const [a0, a1, am, N] of SEGS){
+      const pts = [];
+      for (let j = 0; j <= N; j++)
+        pts.push(proj3(m3.pos(ray, a0 + j*(a1 - a0)/N)));
+      for (const front of [false, true]){
+        sp.strokeStyle = MER; sp.lineWidth = am === 1 ? 1.1 : 0.9;
+        sp.lineJoin = "round"; sp.lineCap = "round";
+        sp.globalAlpha = (front ? 0.3 : 0.14)*am;   // half strength: M0 first
+        sp.beginPath();
+        let pen = false, prev = null;
+        for (const p of pts){
+          if ((p.d > 0) === front){
+            if (!pen){ sp.moveTo((prev || p).x, (prev || p).y);
+                       if (prev) sp.lineTo(p.x, p.y); }
+            else sp.lineTo(p.x, p.y);
+            pen = true;
+          } else pen = false;
+          prev = p;
+        }
+        sp.stroke();
+      }
+    }
+    for (const aF of [3.25, 9.75]){
+      const pF = proj3(m3.pos(ray, aF));
+      sp.globalAlpha = 0.3; sp.lineWidth = 1;
+      sp.beginPath(); sp.arc(pF.x, pF.y, 3, 0, 7); sp.stroke();
+    }
+  }
+  sp.globalAlpha = 1;
+}
+// the observable meridian on screen: the smooth retarded-meridian
+// spiral, one per route, from the here-now out through the L1, L2, L3
+// nodes to the open horizon tick at the quarter fold. Its three laws
+// are its shape: the sine radial growth (the decoherence ladder), the
+// near-half-turn azimuthal pitch (the transport; the two routes'
+// pitches differ -- the echo chirality), and the termination at the
+// quarter (the observational horizon)
+function drawM0(m0){
+  // FOUR RAYS per meridian -- ray meaning fiber geodesic, the full
+  // retarded-spiral geometry, not a straight line: per route the
+  // retarded ray (rows 1, 2, 3 -- the absorption descent L3, L2, L1
+  // into registration; walked outward, the emission) and the advanced
+  // ray (rows 10, 11, 12, cells -1, -2, -3: the backwards-in-time
+  // shadow, the advanced cone x g^-1), each from the drawn Observer
+  // to the observational horizon at the quarter fold. The four rays
+  // at the origin realize the four quarter classes -- the Q4 channel
+  // (00:C20), drawn. Between the folds the circuit continues below
+  // resolution, down the scale-periodic tower (the radius IS the
+  // scale coordinate; heights mod p-1 close the tower with the
+  // drive): not part of the observable sector, not drawn
+  const SEGS = [[0, 3.25, 1, 480], [9.75, 13, 1, 480]];
+  for (const e of [1, -1]){
+    for (const [a0, a1, am, N] of SEGS){
+      const pts = [];
+      for (let j = 0; j <= N; j++)
+        pts.push(proj3(m0.pos(e, a0 + j*(a1 - a0)/N)));
+      for (const front of [false, true]){
+        sp.strokeStyle = ACC; sp.lineWidth = am === 1 ? 1.2 : 1;
+        sp.lineJoin = "round"; sp.lineCap = "round";
+        sp.globalAlpha = (front ? 0.55 : 0.26)*am;
+        sp.beginPath();
+        let pen = false, prev = null;
+        for (const p of pts){
+          if ((p.d > 0) === front){
+            if (!pen){ sp.moveTo((prev || p).x, (prev || p).y);
+                       if (prev) sp.lineTo(p.x, p.y); }
+            else sp.lineTo(p.x, p.y);
+            pen = true;
+          } else pen = false;
+          prev = p;
+        }
+        sp.stroke();
+      }
+    }
+    // the capacity folds: small open rings
+    for (const aF of [3.25, 9.75]){
+      const pF = proj3(m0.pos(e, aF));
+      sp.globalAlpha = 0.35; sp.lineWidth = 1;
+      sp.beginPath(); sp.arc(pF.x, pF.y, 3, 0, 7); sp.stroke();
+    }
+  }
+  sp.globalAlpha = 1;
 }
 function drawSkyGuides(RH, RSH){
   // guides: the polar axis, the horizon sphere, the three shells
@@ -1255,13 +1586,24 @@ function drawSkyGuides(RH, RSH){
   }
   sp.globalAlpha = 1;
 }
-function drawSkyMarks(nodes){
+function drawSkyMarks(nodes, skel){
   // the node marks: the quarter arrow i^r, the dot, the outer labels --
   // identical in both representations; the four visibility profiles:
   // front side graded by shell (outer brightest, V = 1), the whole dark
   // side one dim profile; brightness carries the grade at full opacity,
   // the tints keeping hue and saturation at every level
   const F = interp ? frac : 0;
+  if (skel){
+    // the skeleton backdrop: every node an 8% dot, no arrows, no
+    // labels -- the causal skeleton carries the reading
+    for (const n of nodes){
+      sp.fillStyle = SKYN[n.prof]; sp.globalAlpha = 0.08;
+      sp.beginPath(); sp.arc(n.pn.x, n.pn.y, 2.0*Math.max(n.scl, 0.6), 0, 7);
+      sp.fill();
+    }
+    sp.globalAlpha = 1;
+    return;
+  }
   for (const n of nodes){
     const { wF, pn, ph, x, cls, outer, scl, prof } = n;
     // the marks anchor at the flowed position; the arrow basis is
@@ -1349,6 +1691,27 @@ function drawHelix(aS, bC){
     }
     sp.globalAlpha = 1;
   }
+  if (view !== "carrier") drawCurlTraces(S.nodes);
+  drawClockBead(S.PHI);
+  drawSkyMarks(S.nodes);
+  drawSkyObserver();
+}
+
+// ---------- the sky, light-cone representation (00:Y3) ----------
+// The same sky, the same nodes: the fibers are the light-cone
+// structure -- the observable meridians. M0 is the first: the smooth
+// retarded-meridian spiral per route; further meridians M_m join here
+function drawCone(aS, bC){
+  sp.clearRect(0,0,520,520);
+  sp.fillStyle = "#161615"; sp.fillRect(0,0,520,520);
+  sp.textBaseline = "middle"; sp.textAlign = "center";
+  const S = skyState(aS, bC);
+  drawSkyGuides(S.RH, S.RSH);
+  // the full node field anchors all three modes; the meridians thread
+  // its twelve exact stations and anchor at the drawn Observer -- the
+  // origin of the observation -- at every clock state
+  drawM3(S.m3);
+  drawM0(S.m0);
   if (view !== "carrier") drawCurlTraces(S.nodes);
   drawClockBead(S.PHI);
   drawSkyMarks(S.nodes);
@@ -1530,23 +1893,31 @@ document.getElementById("vCar").onclick = () => setView("carrier");
 document.getElementById("vSub").onclick = () => setView("subject");
 function setSkyMode(m2){
   skyMode = m2;
-  const h = document.getElementById("mHelix"), o = document.getElementById("mHopf");
-  h.className = "vbtn" + (m2 === "helix" ? " on" : "");
-  o.className = "vbtn" + (m2 === "hopf" ? " on" : "");
-  h.setAttribute("aria-pressed", m2 === "helix" ? "true" : "false");
-  o.setAttribute("aria-pressed", m2 === "hopf" ? "true" : "false");
+  for (const [id, mm] of [["mHelix","helix"],["mCone","cone"],["mHopf","hopf"]]){
+    const b = document.getElementById(id);
+    b.className = "vbtn" + (m2 === mm ? " on" : "");
+    b.setAttribute("aria-pressed", m2 === mm ? "true" : "false");
+  }
   document.getElementById("capHelix").style.display = m2 === "helix" ? "" : "none";
+  document.getElementById("capCone").style.display = m2 === "cone" ? "" : "none";
   document.getElementById("capHopf").style.display = m2 === "hopf" ? "" : "none";
   document.getElementById("spc").setAttribute("aria-label", m2 === "helix"
     ? "The Subject's sky: three nested spheres, each carrying the complete "+
       "double-helix fiber of twenty-four node images on one smooth closed "+
       "loop through both poles; the Observer at the center"
+    : m2 === "cone"
+    ? "The Subject's sky, light-cone representation: the observable "+
+      "meridian M0 as four fiber-geodesic rays -- the retarded pair "+
+      "and their backwards-in-time shadows, Observer to horizon, "+
+      "twelve exact stations -- with the M3/M9 momentum dual at "+
+      "half strength"
     : "The Subject's sky, Hopf representation: the same nodes with the "+
       "exact Hopf leaf through each of the 24 outer nodes; in the Carrier "+
       "view the nodes translate along their fibers; the Observer at the "+
       "center");
 }
 document.getElementById("mHelix").onclick = () => setSkyMode("helix");
+document.getElementById("mCone").onclick = () => setSkyMode("cone");
 document.getElementById("mHopf").onclick = () => setSkyMode("hopf");
 function setInterp(v){
   interp = v;

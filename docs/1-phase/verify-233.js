@@ -1,4 +1,4 @@
-// Exact verification for 1-phase-5 on the minimal non-trivial pair (13, 233).
+// Exact verification for 1-phase-6 on the minimal non-trivial pair (13, 233).
 // 1-phase-1 = the 1-phase episode plus the Carrier quarter-turn mechanism
 // (00:C15, 00:C17, 00:C18; face 00:Y2): the flip x h, the 6/29 precession, the
 // double cover, and the perihelion trace. Supersedes the 3-phase folder.
@@ -310,8 +310,8 @@ ok('fold hand residues: i^tau = 1, 5, 12, 8', [0,1,2,3].every(t =>
   ok('deployed fold notation is i^r 3^s and never i^r g^s',
      html.includes('i<sup>r</sup>&middot;3<sup>s</sup>') &&
      !html.includes('i<sup>r</sup>&middot;g<sup>s</sup>'));
-  ok('the page carries the episode marker (1-phase-5)',
-     html.includes('data-episode="1-phase-5"'));
+  ok('the page carries the episode marker (1-phase-6)',
+     html.includes('data-episode="1-phase-6"'));
 }
 
 // ---- 12. the register and coefficient readings, the trivial pair, the octant lift ----

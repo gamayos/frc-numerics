@@ -1,4 +1,4 @@
-# 1-phase-5: Schrodinger dynamics with the observable Dirac flow
+# 1-phase-6: the light-cone sky and the observable meridian
 
 Single-file interactive visualisation: `index.html`. No dependencies.
 External verification: `verify-233.js` (84 checks: the pair dynamics,
@@ -17,10 +17,12 @@ H_kin = 2I - T - T^{-1} of verify-f13 -- and the curl algebra:
 delta_k = 78^k a homomorphism on the declared C232 chart, landing
 on the cardinals, delta_58 = h),
 `verify-f13.js` (25 checks: the shell operator core of [2] -- H^7 =
-0, ord(U) = 13, U exactly unitary), `verify-hopf.js` (9 checks: the finite Hopf fibration -- the free
+0, ord(U) = 13, U exactly unitary), `verify-hopf.js` (10 checks: the finite Hopf fibration -- the free
 boost action, the unique factorization, the global section, the
 horizon-circle fiber coordinate, at p = 13 and Omega-blind at p = 5,
-with the SL2 spin contrast), and `verify-render.js` (18 checks: the
+with the SL2 spin contrast and the Cayley station theorem: phi
+bijects P1 onto the norm-one C14, origin to 1, horizon class [1:0]
+to -1), and `verify-render.js` (20 checks: the
 production rendering itself -- the pair sweep over both sky
 representations, the caption-free canvases, the label laws, the
 double-cover closures in the Carrier view, the drive-hiding of the
@@ -89,12 +91,26 @@ the totality of the observable (00:Y3).
 
 ## The Hopf representation (00:C19, 00:Y3, 00:Y4)
 
-The sky panel carries a representation toggle: Double helix / Hopf
-fibers. The two representations share one sky: the same node
-computation, the same marks, the same labels -- the toggle switches
-the fibers and only the fibers. The helix mode draws the drive
-orbits (the time factor); the Hopf mode draws the fiber orbits (the
-boost factor) as a global structure. The chart: the guard
+The sky panel carries a representation toggle with three modes:
+Drive orbits / Light cone / Hopf fibers. The three representations
+share one sky: the same node computation, the same marks, the same
+labels -- the toggle switches the fibers and only the fibers. The
+drive-orbit mode draws the orbits of x -> gx (the time factor, the
+helices -- the retarded stitching of the time histories, per the
+arrival reading); the light-cone mode draws the OBSERVABLE SECTOR:
+one Dirac flow shared by every mode -- each registered row carries
+the retarded flow phi(k) = PHI + k CURL (the Subject view its
+gauge-free curl, static and closing with the register; the Carrier
+view the frame's common flow) -- while the Subject's own locus is
+the frame origin, never dressed: every arc anchors at the drawn
+Observer at every clock state; over the full node field ride the
+twelve exact stations (the nodes are their own marks), the
+capacity folds, M0 solid and the M9 dual (the oriented face of
+the +-i line, 5 = g^9 = -g^3) at half strength; the clock bead
+displays the frame phase; the Hopf mode draws
+the fiber orbits (the boost factor) as a global structure -- the
+three cyclic sectors of the frame group as the three fiber layers
+over one node set. The chart: the guard
 projection (center at w0 = 1.1 outside S3) maps the whole S3 onto
 the ball whose silhouette is the horizon sphere, so the sky ball is
 a chart of the whole S3 (00:Y4). The chart is two-sheeted -- the
@@ -124,8 +140,14 @@ a selective-highlight mode, not a full palette. The nodes are the section of the
 (00:C19); motion along a fiber is a boost, it changes the observer,
 and is unobservable -- observation is the Hopf section (00:Y3). The
 13 marks on the outer fibers are the C14 boost points, the node the
-fourteenth: the fiber coordinate t -> t(infinity), the cells plus
-infinity. The observer lifts to the pole (0, +-i), the degenerate
+fourteenth: the fiber coordinate runs over the projective line, the
+thirteen cells plus the horizon class [1:0] -- the frame's own
+registration direction, fixed by every translation. Its finite
+identity is exact in every chart: additively it is the sign seam of
+the exact half, between -1/2 = (p-1)/2 = 6 and +1/2 = (p+1)/2 = 7
+(the 1-algebra half theorem; at Carrier scale between 116 = dlog(-1)
+and 117, the pair's half event); multiplicatively it is the
+half-turn, Cayley-registered as -1. The observer lifts to the pole (0, +-i), the degenerate
 leaf: the clock fiber (tau, 0) is the polar axis segment, the
 stabilizer, the pure drive. The screen map per leaf is projective
 in the circle parameter, so every leaf is an exact ellipse, in
@@ -327,10 +349,200 @@ cosmological S the recurrence outruns
 every Subject year and C18's winding is
 read as the arrow of time.
 
+## The observable meridian M0 (00:Y3, 00:Y5)
+
+The meridian is a light-cone object, exactly as everything the sky
+draws: cell a of the additive line is registered at lookback a,
+radial step a -- the sky is the past light cone (00:Y3), each
+latitude step one chronon deep, the labels retarded (render check
+3). The capacity bound resolves exactly kappa radial steps within
+the observational horizon (4a < p iff a <= kappa = 3), and these
+are the three drawn shells: the observable segment of M0 therefore
+threads the existing nodes, cell +-a on shell L_a -- (e, k = a,
+s = a - 1) -- machine-pinned at the exact shell radii. The third
+node grazes the horizon (sin(6 pi/13) = 0.9927), and the trace
+ends at the quarter fold a = 13/4, radius R, marked by an open
+tick: beyond the quarter the meridian continues below resolution,
+down the scale tower -- past the observational horizon, where no
+nodes exist to register it. The unobservable remainder of the
+meridian and the absence of shells beyond kappa are one fact: the
+capacity bound.
+
+The meridian law is one continuous law per route over a in
+[0, 13], and it is the SCALE-TOWER CIRCUIT: colatitude a pi/13,
+radius R |sin(2a pi/13)| -- |sin| of the tower angle 2a pi/13, one
+full period per cycle, the period points at a = 0, 13/2 (the
+1-algebra half, between -1/2 = 6 and +1/2 = 7), and 13. The
+radius is the scale coordinate: the photon travels the scales of
+the space, never through the Observer's position; its approach to
+the origin is the decoherence descent L3 -> L2 -> L1, and
+absorption is the completed cascade at registration. The azimuth
+follows the transport law with the shell index on the tent
+s(a) = a - 1 before the half and 12 - a after, threading the
+direct nodes (cells 1, 2, 3 on L1, L2, L3) AND their echoes
+(cells -3, -2, -1 at k = 10, 11, 12, azimuth 80 - 5a landing on
+the echo nodes exactly; colatitudes of direct and echo sum to pi
+-- the distributed sign, machine-pinned residual zero at ten of
+the twelve stations). The DRAWN figure is the observable sector
+of this circuit: FOUR RAYS per meridian -- ray meaning fiber
+geodesic, the full retarded-spiral geometry -- the retarded pair
+(per route, the absorption descent; walked outward, the emission)
+and the advanced pair, their backwards-in-time shadows (the
+advanced cone x g^-1), each from the drawn Observer to the
+observational horizon at the quarter fold. The four rays at the
+origin realize the four quarter classes: the Q4 channel (00:C20),
+drawn. Between the folds the circuit runs below resolution, down
+the scale-periodic tower -- unobservable, and not drawn in the
+observable sector. The cycle closes because the tower is
+periodic: kappa scale steps of four heights each, 4 kappa =
+p - 1, one drive revolution. And the drive step factors exactly:
+the scale step is the rung ladder x3 = g^4 (order kappa), the
+quarter is Ihat = g^{-kappa} = 5 = i (order 4), and heights
+4 - 3 = 1 give
+
+    g = g^4 * g^{-3} = 3 * 5 = 2   on F13:
+
+one chronon = one scale step times one quarter turn,
+psi_{tau+1} = g psi_tau = i (3 psi_tau) -- the scale descent and
+the drive step are one act, seen radially versus temporally (the
+CRT factorization C12 = C4 x C3, the channel of 00:C20; the unit
+exponents are exact at kappa = 3). Isotropy of emission and
+absorption is the family, not the label: the winding family
+m = 1..12 under this one law covers the node field completely --
+72 of 72 nodes, 24 per shell, multiplicity 1 on odd rows and 3 on
+even -- the sheet parity: 36 odd-row nodes once, 36 even-row
+nodes thrice, 144 = 36 + 108 slots -- so each drawn
+meridian is one label of the covering family, and the mesh
+refines down the tower within capacity [approx: density is the
+profinite tower statement, capacity-bounded].
+
+The pair geometry is the field pair drawn -- F = E + iB, the two
+quadratures of one field (the packaging of [3]). At the
+unregistered origin the eight rays launch tangent to the clock
+axis, the drive direction: the two quadratures co-propagate, and
+no transverse label exists at the origin (ownership; isotropy) --
+machine-pinned at under 0.03 degrees. The internal quarter
+appears off the origin: the M0/M3 tangents separate through 90
+degrees inside the first shell, and at the observational horizon
+the pair fuses exactly -- M0's retarded fold point on route e IS
+M3's advanced fold point on route -e, and conversely: the quarter
+fold enacts the quarter, the duality exchange E <-> B with route
+and time both flipped, four horizon points fusing the eight
+ray-ends pairwise (residual zero, every clock state). The
+winding-m family is ramified at the half cell: all four M3 rays
+pass one point exactly at t = 13/10 and 13 - 13/10 -- cell 13/2,
+the 1-algebra half, where route and tent degenerate (6.5 =
+13 - 6.5); M0's ramification point is the origin itself
+(r(13/2) = 0, absorbed in the self-echo). The visible ray
+crossings are these exact incidences -- the half-cell
+ramification, the axis passages of the winding-5 walk, the
+horizon fusions -- plus sub-pixel cell-coincidence passes where
+a = +-5t (mod 26); none is accidental. The meridian
+parameter passes the Subject's own cell at a = 0, 13/2, 13, and
+there the dressing vanishes by ownership: the flow dresses
+registered rows -- other cells' registrations -- and no chart
+displaces the origin of the observation. Every ray therefore
+anchors at the drawn Observer, at every clock state.
+The gauge's half-turn needs no unwinding at all: the fiber
+rotation by pi is the lift's antipode and the sheet-fair chart is
+odd, so the pi-branch acts on the ball as the exact point
+reflection, which fixes the Observer; only the balanced quarter
+residual sweeps, and near the quarter states its sweep passes the
+tangency circle -- the rim kiss, the drawn spinorial quarter
+(00:C20). The four rays about the clock axis: the quasar figure.
+The deep-lookback rows cross the
+atlas sheet under their curl (the lift's q4 through zero); with
+the one shared flow map the meridians cross with them, the
+crossing visible as the seam bend. Station incidence, causal
+ordering, winding, and the registered flow are exact; the
+connecting curves are the declared spacetime chart (the guard
+projection, the |sin| radial interpolation, the tent law, the
+sheet-fair fold, and the ownership ramp are chart conventions,
+each declared).
+
+M3, the momentum-quarter dual, joins M0 in the light-cone mode in
+momentum red -- and it is the SAME meridian law at winding five.
+The walk in the derived quarter direction Ihat = g^{-kappa} = 5
+reaches cell +-5t at radial step t; unfolding the colatitude on
+the C26 double cover, u = 5t, the node indices follow the fold --
+k = u - 13m on even half-winds with the ray's route, k = 26 - u on
+odd half-winds with the route flipped, the lift alternating per
+half-wind exactly as the helices carry two routes on one loop --
+and the azimuth IS the node law PH3 with these continuous
+arguments, the curl riding the row k(t) (the sky retards by row;
+for M0 the row and the step coincide). The twelve stations per
+ray-pair (cells 5, 10, 2 out; 11, 3, 8 home, at the tent shells)
+are threaded at residual zero by construction, machine-pinned.
+The winding-five curve crosses the poles four times mid-cycle at
+exact heights on the clock axis (192.1, 118.7 -- the degenerate
+leaf, azimuth-free), and every break of the law hides there or at
+the origin bounce. Nodes and guides share ONE
+flow law, the retarded common flow: the sky is retarded, so row k
+carries the flow of its emission chronon,
+phi(k) = -(bC - k) pi/116 = PHI + k CURL. The Carrier view is the
+Subject view plus the gauge -- the subject curl k CURL is the
+gauge-invariant residue of the retarded flow -- and at the quarter
+station bC = S = 58 the origin's twist is exactly -pi/2: the
+retardation is a quarter turn, continuously distributed over the
+distance from the origin, decaying one tick-angle per row of
+lookback. With one law there is nothing to stitch: every station
+of both meridians threads exactly in both views at every state
+(machine-pinned), the stations are ROW-GRADED -- row k reaches its
+congruent parity image at bC = 116 + k and its home at bC = k,
+each row at its own retarded epoch (machine-pinned). The guides
+anchor at the OBSERVER: the gauge is a property of the registered
+rows, so it turns on with registration -- full at k >= 1 (the
+stations carry the node law exactly), zero at the origin, the
+unregistered here-now, drawn at the centre in every view. The
+meridians therefore emanate from the Observer at every state
+(machine-pinned to zero), winding the gauge on across the first
+row -- the onset coil at the jet base -- while the clock bead
+remains the gauge's own display. The meridian flow carries the NORTH FOLD: the
+sub-equatorial lift reflects through the S3 equator (q4 -> |q4|,
+continuous, stations untouched) -- the sheet sign that aligns the
+origin's lift with the bead's pole -- and in consequence the drawn
+first step passes the tangency circle: the rim kiss between the
+origin and L1, the sheet crossing of the first step, the spinorial
+quarter of 00:C20 drawn as geometry. Flowed curves bend where they
+cross the atlas seam, as the drive loops do. The 4-sector
+structure is M0's: direct arc, horizon fold, beyond-horizon middle
+(ultra-faint), far fold, echo arc, closure through the here-now.
+M0 and M3 are windings one and Ihat of one law: the meridian
+family is the winding ladder, the additive Fourier pair is the
+winding pair (1, Ihat), and the E-B reading [tagged] gets its
+exact face -- the momentum meridian's delocalization in the
+position sky is its five-lobed sweep about the axis, the winding
+number drawn. Each lookback step advances the azimuth
+by 11 pi/12 + pi/13 + pi/232 -- a near half-turn, sides
+alternating, so the spiral is nearly a flat great circle
+through the Observer region; its residual per step is
+pi/12 - pi/13 - pi/232 = pi/156 - pi/232, the totality half-angle
+against the halved Carrier tick: the leak's signature written on
+the space trace. The route-minus ray steps by 11 pi/12 - pi/13 +
+pi/232 (the route half-angle flips sign): the echo pair's
+chirality, visible as the two rays' different pitch. The
+supporting geometry stands machine-checked: no plane through the
+Observer contains more than two outer nodes, so no single geodesic
+threads the full node field -- the full thirteen-cell meridian is
+past the horizon, and its complete, simultaneous reconstruction
+lives where the register lives, on the shell panel, where M0
+crosses every latitude orthogonally at its node. The two panels
+draw one structure through two charts: the shell shows space as
+the register holds it, the sky shows the kappa steps of it that
+light can deliver. The horizon class [1:0] keeps its boost-chart
+address, the Cayley half-turn -1 (the Cayley station theorem,
+verify-hopf). Lensing and path multiplicity are relational and
+arrive with the first Object; emission directions are frame data,
+p - 1 azimuths, one drive orbit.
+
 ## Provenance
 
-1-phase-5 extends the stable episode 1-phase-4 (kept frozen as the
-stable release) with the relational
+1-phase-6 extends the stable episode 1-phase-5 (kept frozen as the
+stable release) with the light-cone reading of the sky made
+explicit and the observable meridian: the kappa-step trace of M0
+through the L1, L2, L3 nodes to the quarter fold, the coplanarity
+obstruction theorem, and the Cayley station theorem for the
+horizon class. 1-phase-5 extended 1-phase-4 (frozen) with the relational
 dilation: the Subject view draws the retarded boost-curl (00:C18),
 the gauge-free observable face of the Dirac flow -- the
 gravitational face -- while the harness view keeps the common flow

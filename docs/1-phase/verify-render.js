@@ -45,7 +45,7 @@ const render = (v, s, c, sg, mode) => { for (const k in recs) recs[k].length = 0
 // 1. the full pair sweep, both views, three panels
 let swept = true;
 try {
-  for (const mode of ['helix', 'hopf'])
+  for (const mode of ['helix', 'cone', 'hopf'])
     for (const v of ['subject', 'carrier'])
       for (let t = 0; t < 696; t++)
         render(v, t % 12, t % 232, Math.floor(t / 232) % 2, mode);
@@ -187,7 +187,7 @@ for (const [v, s, c, sg] of [['subject',0,0,0],['subject',7,113,0],['carrier',11
   const vox = recs.spc.filter(r => r[0] === 'arc' && r[3] < 1.2).length;
   if (ells.length !== 48 + wantT || grey.length !== 48 ||
       nF !== 24 || nB !== 24 || cyan.length !== wantT || nT !== wantT ||
-      nseg !== 217 || !rimOK || vox !== 0) ellOK = false;
+      nseg !== 217 || !rimOK || vox !== 0) ellOK = false;   // the spirals live in the light-cone mode alone
 }
 ok('the Hopf leaves at the release density: 24 leaves as 48 primitive '+
    'grey front/back arcs (alphas 0.35/0.12) in both views, plus, in '+
@@ -216,16 +216,19 @@ ok('the section test: pausing and toggling the representation keeps '+
    invOK);
 
 // 11. the helix guide loops are single strokes: two depth passes per
-// shell, six grey strokes in all -- no per-segment strokes, so the
+// shell, six strokes in all -- four grey (inner shells) and two green
+// (the outer L1 time latitude) -- no per-segment strokes, so the
 // joints carry no segment overlaps
 let helixOK = true;
 for (const [v, s, c, sg] of [['subject',0,0,0],['carrier',5,117,1]]){
   render(v, s, c, sg, 'helix');
   const grey = recs.spc.filter(r => r[0] === 'stroke' && r[1] === '#8a877f');
-  if (grey.length !== 6) helixOK = false;
+  const grn = recs.spc.filter(r => r[0] === 'stroke' && r[1] === '#58a35e');
+  if (grey.length !== 4 || grn.length !== 2) helixOK = false;
 }
 ok('the helix guide loops draw as six single strokes (two depth '+
-   'passes per shell), with no per-segment stroking', helixOK);
+   'passes per shell): four grey, two green -- the outer loop the L1 '+
+   'time latitude -- with no per-segment stroking', helixOK);
 
 // 12. the frame leak (00:C17, 00:C18): each view holds its own frame.
 // Subject view: the register stands (east slot reads 1 at every bC)
@@ -348,18 +351,21 @@ ok('the interpolated mode: midpoint geometry is the exact average of '+
 // Subject view stands unflowed
 const dilP = vm.runInContext(`
 (() => {
-  view = "carrier"; sigC = 0; frac = 0;
+  view = "carrier"; skyMode = "hopf"; sigC = 0; frac = 0;
   const outN = S => S.nodes.filter(n => n.outer);
-  // half: the congruent parity image
-  let dH = 0;
-  const stH = skyState(0, 116);
-  for (const n of stH.nodes) dH = Math.max(dH,
-    Math.hypot(...n.wF.map((c, i) => c + n.w[i])));
-  // home at the cycle
-  let dHome = 0;
-  const stC = skyState(0, 0);
-  for (const n of stC.nodes) dHome = Math.max(dHome,
-    Math.hypot(...n.wF.map((c, i) => c - n.w[i])));
+  // the retarded stations are ROW-GRADED: row k carries the flow of
+  // its emission chronon, phi(k) = -(bC - k) pi/116, so it reaches
+  // its congruent parity image at bC = 116 + k and its home at
+  // bC = k -- each row at its own retarded epoch
+  let dH = 0, dHome = 0;
+  for (let k = 1; k <= 12; k++){
+    const stH = skyState(0, 116 + k);
+    for (const n of stH.nodes) if (n.k === k) dH = Math.max(dH,
+      Math.hypot(...n.wF.map((c, i) => c + n.w[i])));
+    const stC = skyState(0, k);
+    for (const n of stC.nodes) if (n.k === k) dHome = Math.max(dHome,
+      Math.hypot(...n.wF.map((c, i) => c - n.w[i])));
+  }
   // quarter: the shell dispersed into a radial band
   const rQ = outN(skyState(0, 58)).map(n => Math.hypot(...n.wF));
   const band = Math.max(...rQ) - Math.min(...rQ);
@@ -395,12 +401,14 @@ const dilP = vm.runInContext(`
   view = "carrier";
   return { dH, dHome, band, dmin, rminE, rmaxMin, subInv };
 })()`, sandbox);
-ok('the frame dilation: in the Carrier view the common flow holds its '+
-   'exact stations -- the congruent parity image wF = -w to 1e-9 at '+
-   'the half, home at the cycle, the dual\'s radial band at the '+
-   'quarter -- every bead rides its own leaf to sub-pixel and the '+
-   'ensemble breathes without collapse; the Subject-view curl stands '+
-   'invariant under the Carrier tick (pure gauge removed)',
+ok('the frame dilation under the retarded common flow (phi(k) = '+
+   'PHI + k CURL, one law, the Carrier view the Subject view plus '+
+   'the gauge): the stations are row-graded -- row k reaches its '+
+   'congruent parity image wF = -w to 1e-9 at bC = 116 + k and its '+
+   'home at bC = k, each row at its own retarded epoch -- the dual\'s '+
+   'radial band at the quarter, every bead rides its own leaf to '+
+   'sub-pixel, the ensemble breathes without collapse, and the '+
+   'Subject-view curl stands invariant under the Carrier tick',
    dilP.dH < 1e-9 && dilP.dHome < 1e-12 && dilP.band > 30 &&
    dilP.dmin < 0.15 && dilP.rminE > 60 && dilP.rmaxMin > 140 &&
    dilP.subInv < 1e-9);
@@ -466,6 +474,303 @@ ok('the production clock: after 696 stepChronon calls the pair is '+
    clkP.half.sigC === 1 && clkP.dTurn < 1e-9 &&
    clkP.full.tS === 0 && clkP.full.tC === 0 && clkP.full.sigC === 0 &&
    clkP.dHome === 0);
+
+// 18. the space-meridian obstruction (1-phase-6): the sky is the past
+// light cone, not space. The labels are retarded (check 3) and the
+// azimuth law twists each latitude step by one transport step, so
+// simultaneous space -- the additive line at one instant -- admits no
+// geodesic image: NO plane through the Observer contains more than two
+// of the outer nodes. The orthogonal meridian through all cells lives
+// on the shell panel (the register chart); the sky shows only its
+// retarded image, the helix chain. Machine form: sweep all outer node
+// pairs, count nodes coplanar with each pair and the Observer; the
+// maximum is exactly 2 -- the obstruction, verified
+{
+  const outer = JSON.parse(vm.runInContext(
+    'JSON.stringify(skyState(0,0).nodes.filter(n => n.outer).map(n => n.w))',
+    sandbox));
+  const cross = (a, b) => [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2],
+                           a[0]*b[1]-a[1]*b[0]];
+  let maxCop = 0;
+  for (let i = 0; i < outer.length; i++)
+    for (let j = i + 1; j < outer.length; j++){
+      const nv = cross(outer[i], outer[j]);
+      const L = Math.hypot(...nv);
+      if (L < 1e-6) continue;
+      let cnt = 0;
+      for (const w of outer)
+        if (Math.abs((w[0]*nv[0] + w[1]*nv[1] + w[2]*nv[2])/L) < 1e-6) cnt++;
+      maxCop = Math.max(maxCop, cnt);
+    }
+  ok('the space-meridian obstruction: no plane through the Observer '+
+     'contains more than two outer nodes (maximum coplanar count = 2 '+
+     'over all 276 pairs) -- simultaneous space has no geodesic image '+
+     'in the light-cone sky; the meridian through all cells lives on '+
+     'the shell panel, its retarded image is the helix chain',
+     maxCop === 2);
+}
+
+// 19. the observable meridian: the kappa-step trace (1-phase-6). The
+// meridian is a light-cone object; the capacity bound 4a < p resolves
+// exactly kappa = 3 radial steps, and the observable segment threads
+// the existing nodes cell +-a on shell L_a, terminating at the quarter
+// fold. The trace alternates sides by exactly 11 pi/12 + pi/13 +
+// pi/232 per step (route +; the route half-angle flips sign on route
+// -): the deviation from a flat great circle is pi/156 - pi/232 per
+// step -- the totality half-angle against the halved Carrier tick
+{
+  let capOK = true, nodeOK = true, azOK = true, drawOK = true;
+  for (let a = 1; a <= 4; a++) if ((4*a < 13) !== (a <= 3)) capOK = false;
+  const tr = JSON.parse(vm.runInContext(
+    `(() => { skyMode = "cone"; const S = skyState(0,0); view = "subject";
+       return JSON.stringify([1,-1].map(e => S.m0.trace[e].map(n =>
+         ({ s: n.s, e: n.e, k: n.k, c: n.c, w: n.w })))); })()`, sandbox));
+  const RSH = JSON.parse(vm.runInContext(
+    'JSON.stringify(skyState(0,0).RSH)', sandbox));
+  for (const [ri, e] of [[0, 1], [1, -1]].map((x, i) => [i, x[1]]))
+    for (let a = 1; a <= 3; a++){
+      const n = tr[ri][a - 1];
+      if (n.s !== a - 1 || n.e !== e || n.k !== a ||
+          n.c !== md(e*a, 13)) nodeOK = false;
+      if (Math.abs(Math.hypot(...n.w) - RSH[a - 1]) > 1e-9) nodeOK = false;
+    }
+  const m2 = x => { while (x > Math.PI) x -= 2*Math.PI;
+                    while (x < -Math.PI) x += 2*Math.PI; return x; };
+  for (const [ri, e] of [[0, 1], [1, -1]].map((x, i) => [i, x[1]])){
+    const want = -(11*Math.PI/12 + e*Math.PI/13 + Math.PI/232);
+    for (let a = 1; a <= 2; a++){
+      const A = tr[ri][a - 1].w, B = tr[ri][a].w;
+      const d = m2(Math.atan2(B[1], B[0]) - Math.atan2(A[1], A[0]));
+      if (Math.abs(m2(d - want)) > 1e-9) azOK = false;
+    }
+  }
+  // the residual identity: |step + pi| = pi/12 - pi/13 - pi/232 = pi/156 - pi/232
+  const residOK = Math.abs((Math.PI/12 - Math.PI/13 - Math.PI/232) -
+                           (Math.PI/156 - Math.PI/232)) < 1e-12;
+  // the guide is smooth in every view and state: no seam kink, no
+  // sheet jump (one Huber-smoothed sheet-fair chart, the pi-branch
+  // an exact point reflection, the quarter residual alone swept)
+  let smoothOK = true;
+  for (const [vv, ss, cc] of [['subject',0,0],['subject',5,117],
+                              ['carrier',5,117],['carrier',0,58],
+                              ['carrier',2,110],['carrier',6,174]]){
+    const mx = +vm.runInContext(
+      `(() => { view = "${vv}"; skyMode = "cone"; frac = 0; const S = skyState(${ss},${cc});
+         let mx = 0;
+         for (const e of [1,-1]){ let prev = null;
+           for (let j = 0; j <= 2600; j++){ const a = j*13/2600, p = S.m0.pos(e, a);
+             if (prev && Math.abs(a - 6.5) > 0.02)
+               mx = Math.max(mx, Math.hypot(p[0]-prev[0],
+                                     p[1]-prev[1], p[2]-prev[2]));
+             prev = p; } }
+         return mx; })()`, sandbox);
+    if (mx > 45) smoothOK = false;   // the quarter-residual sweep peaks near ~40 at the deepest flow; genuine jumps measured well above
+  }
+  vm.runInContext('view = "subject"; tS = 0; tC = 0', sandbox);
+  if (!smoothOK) drawOK = false;
+  // the smooth spiral passes the nodes exactly and terminates at the
+  // fold: the continuous law at integer a equals the drawn node
+  const resid = +vm.runInContext(
+    `(() => { view = "subject"; frac = 0; const S = skyState(0,0);
+       let w = 0;
+       for (const e of [1,-1]) for (let a = 1; a <= 3; a++){
+         const n = S.m0.trace[e][a-1], p = S.m0.pos(e, a);
+         w = Math.max(w, Math.hypot(p[0]-n.wF[0], p[1]-n.wF[1], p[2]-n.wF[2]));
+       } return w; })()`, sandbox);
+  if (resid > 1e-9) drawOK = false;
+  // ONE flow map: the guides flow through flowF, the nodes' own map,
+  // so every station of both meridians threads exactly in both views
+  // at every state -- direct and echo, including the dispersion
+  // stations, where the meridians delocalize WITH their nodes
+  let uniOK = true;
+  for (const [vv, ss, cc] of [['subject',0,0],['carrier',3,51],
+                              ['carrier',0,58],['carrier',5,117],
+                              ['carrier',2,110],['carrier',6,174],
+                              ['carrier',8,200]]){
+    const res = +vm.runInContext(
+      `(() => { view = "${vv}"; skyMode = "cone"; frac = 0; const S = skyState(${ss},${cc});
+         let r = 0;
+         for (const e of [1,-1]){
+           for (let a = 1; a <= 3; a++){
+             const n = S.m0.trace[e][a-1], p = S.m0.pos(e, a);
+             r = Math.max(r, Math.hypot(p[0]-n.wF[0], p[1]-n.wF[1], p[2]-n.wF[2]));
+           }
+           [[0,10],[1,11],[2,12]].forEach(([i,k]) => {
+             const n = S.m0.traceE[e][i], p = S.m0.pos(e, k);
+             r = Math.max(r, Math.hypot(p[0]-n.wF[0], p[1]-n.wF[1], p[2]-n.wF[2]));
+           });
+           [1,2,3,10,11,12].forEach((t,i) => {
+             const n = S.m3.st[e][i], p = S.m3.pos(e, t);
+             r = Math.max(r, Math.hypot(p[0]-n.wF[0], p[1]-n.wF[1], p[2]-n.wF[2]));
+           });
+         }
+         return r; })()`, sandbox);
+    if (res > 1e-9) uniOK = false;
+  }
+  vm.runInContext('view = "subject"; tS = 0; tC = 0', sandbox);
+  if (!uniOK) drawOK = false;
+  render('subject', 0, 0, 0, 'cone');
+  const acc = recs.spc.filter(r => r[0] === 'stroke' && r[1] === '#3987e5');
+  // FOUR RAYS: 2 routes x (2 rays x 2 depth passes + 2 fold rings) =
+  // 12 strokes; the Observer dot the one fill (the nodes are their
+  // own station marks); the below-resolution tower interior between
+  // the folds is not drawn
+  if (acc.length !== 12) drawOK = false;
+  const accF = recs.spc.filter(r => r[0] === 'fill' && r[1] === '#3987e5');
+  if (accF.length !== 1) drawOK = false;
+  // OWNERSHIP: the Subject's own locus is the frame origin, never
+  // dressed -- every arc of both meridians anchors at the drawn
+  // Observer (a = 0, 13), and the null self-echo bounces at the
+  // centre (a = 13/2), at every clock state in both views
+  let ancOK = true;
+  for (const [vv, ss, cc] of [['subject',0,0],['carrier',0,58],
+                              ['carrier',5,117],['carrier',2,110],
+                              ['carrier',6,174],['carrier',3,231]]){
+    const mx = +vm.runInContext(
+      `(() => { view = "${vv}"; skyMode = "cone"; frac = 0; const S = skyState(${ss},${cc});
+         let mx = 0;
+         for (const e of [1,-1]) for (const a of [0, 6.5, 13]){
+           mx = Math.max(mx, Math.hypot(...S.m0.pos(e, a)),
+                             Math.hypot(...S.m3.pos(e, a)));
+         } return mx; })()`, sandbox);
+    if (mx > 1e-9) ancOK = false;
+  }
+  vm.runInContext('view = "subject"; tS = 0; tC = 0', sandbox);
+  if (!ancOK) drawOK = false;
+  // ONE Dirac flow across the three representations: the node images
+  // are computed by the same flow law in helix, cone, and Hopf modes
+  // -- the toggle changes the fibers, never the dynamics
+  const modeEq = JSON.parse(vm.runInContext(
+    `(() => { view = "carrier"; frac = 0;
+       const im = m => { skyMode = m;
+         return skyState(5, 117).nodes.map(n => n.wF.map(x => +x.toFixed(9))); };
+       const a = JSON.stringify(im("helix"));
+       const ok = a === JSON.stringify(im("cone")) &&
+                  a === JSON.stringify(im("hopf"));
+       view = "subject"; skyMode = "cone"; return JSON.stringify(ok); })()`,
+    sandbox));
+  if (!modeEq) drawOK = false;
+  // M3, the momentum-quarter dual: the same meridian law at winding
+  // five. The double-cover coordinate u = 5t mod 26 selects the lift
+  // (k = u even half-winds with the ray's route, 26 - u odd with the
+  // route flipped); the azimuth is the node law PH3 with continuous
+  // arguments, the curl rides the row k(t): the twelve stations
+  // (cells +-5t at the tent shells) are threaded at residual zero.
+  // Drawn as 2 routes x (2 rays x 2 passes + 2 fold ticks) = 12 red
+  // strokes -- the same four-ray assembly as M0, in momentum red
+  const mer = recs.spc.filter(r => r[0] === 'stroke' && r[1] === '#d0453c');
+  if (mer.length !== 12) drawOK = false;
+  // THE DRIVE STEP FACTORS EXACTLY (the tower identity): the scale
+  // step is the rung ladder x3 = g^4 (order kappa = 3), the quarter
+  // is Ihat = g^{-kappa} = 5 = i (order 4, the M3/M9 direction), and
+  // heights 4 - 3 = 1 give g = g^4 g^{-3} = 3 * 5 = 2 on F13:
+  // one chronon = one scale step times one quarter turn -- the CRT
+  // factorization C12 = C4 x C3 (00:C20's channel), so kappa scale
+  // steps of four heights close one drive revolution (4 kappa = p-1)
+  const md13f = x => ((x % 13) + 13) % 13;
+  const powm = (b, e) => { let r = 1; for (let i = 0; i < e; i++) r = md13f(r*b); return r; };
+  const facOK = powm(2,4) === 3 && powm(2,9) === 5 && md13f(3*5) === 2 &&
+                powm(3,3) === 1 && powm(3,1) !== 1 &&
+                powm(5,4) === 1 && powm(5,2) === 12;
+  if (!facOK) drawOK = false;
+  // THE COVERING (isotropy at the resolved mesh): the winding family
+  // m = 1..12 under the ONE meridian law -- stations at t in
+  // {1,2,3,10,11,12}, tent shells, the C26 double-cover fold with the
+  // route flip on odd half-winds -- covers the node field completely:
+  // 72 of 72 nodes, 24 per shell, multiplicity 1 on odd rows and 3 on
+  // even rows (the sheet parity: 36 nodes once, 36 thrice, 144 slots).
+  // Each drawn meridian is ONE LABEL of the covering family
+  const covM = new Map();
+  for (let m = 1; m <= 12; m++)
+    for (const ray of [1, -1])
+      for (const t of [1, 2, 3, 10, 11, 12]){
+        const mW = Math.floor(m*t/13), even = mW % 2 === 0;
+        const kk = even ? m*t - 13*mW : 13*(mW+1) - m*t;
+        const ee = even ? ray : -ray;
+        const s = t <= 3 ? t - 1 : 12 - t;
+        const key = s + ',' + ee + ',' + kk;
+        covM.set(key, (covM.get(key) || 0) + 1);
+      }
+  let covOK = covM.size === 72;
+  for (const [key, mult] of covM){
+    const kk = +key.split(',')[2];
+    if (mult !== (kk % 2 === 1 ? 1 : 3)) covOK = false;
+  }
+  for (let s = 0; s < 3; s++)
+    if ([...covM.keys()].filter(k => k.startsWith(s + ',')).length !== 24)
+      covOK = false;
+  if (!covOK) drawOK = false;
+  // THE PAIR GEOMETRY IS EXACT: (a) the eight rays launch tangent to
+  // the clock axis at the unregistered origin -- the drive direction:
+  // the two quadratures of F = E + iB co-propagate, and no transverse
+  // label exists at the origin (ownership; isotropy); (b) the quarter
+  // fold enacts the quarter: the horizon ends fuse pairwise, M0(e)
+  // retarded fold = M3(-e) advanced fold and M0(e) advanced fold =
+  // M3(-e) retarded fold -- the duality exchange E <-> B, route and
+  // time both flipped, four horizon points fusing eight ray-ends;
+  // (c) the winding-5 family is ramified at the half cell: all four
+  // M3 rays pass one point exactly at t = 13/10 and 13 - 13/10
+  // (cell 13/2, the 1-algebra half: route and tent degenerate,
+  // 6.5 = 13 - 6.5); M0's ramification point is the origin itself
+  // (r(13/2) = 0, absorbed in the self-echo)
+  let pairOK = true;
+  for (const [vv, ss, cc] of [['subject',0,0],['carrier',5,117]]){
+    const r = JSON.parse(vm.runInContext(
+      `(() => { view = "${vv}"; skyMode = "cone"; frac = 0; const S = skyState(${ss},${cc});
+         const d = (a,b) => Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]);
+         let mx = 0;
+         for (const e of [1,-1]){
+           mx = Math.max(mx, d(S.m0.pos(e,3.25), S.m3.pos(-e,9.75)));
+           mx = Math.max(mx, d(S.m0.pos(e,9.75), S.m3.pos(-e,3.25)));
+         }
+         const P = S.m3.pos(1, 1.3);
+         for (const ray of [1,-1]) for (const t of [1.3, 11.7])
+           mx = Math.max(mx, d(S.m3.pos(ray,t), P));
+         let tmx = 0;
+         const h = 1e-4;
+         for (const e of [1,-1])
+           for (const [f, a0, dir] of [[S.m0.pos,0,1],[S.m0.pos,13,-1],
+                                       [S.m3.pos,0,1],[S.m3.pos,13,-1]]){
+             const p1 = f(e, a0 + dir*h), p2 = f(e, a0 + dir*2*h);
+             const dv = [p2[0]-p1[0], p2[1]-p1[1], p2[2]-p1[2]];
+             tmx = Math.max(tmx, Math.acos(Math.abs(dv[2])/Math.hypot(...dv)));
+           }
+         return JSON.stringify([mx, tmx]); })()`, sandbox));
+    if (r[0] > 1e-9 || r[1] > 0.002) pairOK = false;
+  }
+  vm.runInContext('view = "subject"; tS = 0; tC = 0', sandbox);
+  if (!pairOK) drawOK = false;
+
+  const m3law = JSON.parse(vm.runInContext(
+    `(() => { skyMode = "cone"; const S = skyState(0,0); const md13 = x => ((x%13)+13)%13;
+       let good = true;
+       for (const ray of [1,-1]) [1,2,3,10,11,12].forEach((t,i) => {
+         const u = 5*t, mW = Math.floor(u/13), even = mW % 2 === 0;
+         const kk = even ? u - 13*mW : 13*(mW+1) - u;
+         const ee = even ? ray : -ray;
+         const sh = t <= 3 ? t - 1 : 12 - t;
+         const n = S.m3.st[ray][i];
+         if (!n || n.e !== ee || n.k !== kk || n.s !== sh ||
+             md13(n.e*n.k) !== md13(ray*5*t)) good = false;
+       });
+       return JSON.stringify(good); })()`, sandbox));
+  if (!m3law) drawOK = false;
+  // the spirals live in the light-cone mode alone; nodes identical
+  for (const mm of ['helix', 'hopf']){
+    render('subject', 0, 0, 0, mm);
+    if (recs.spc.some(r => r[0] === 'stroke' && r[1] === '#3987e5'))
+      drawOK = false;
+  }
+  ok('the observable meridian: the kappa-step trace threads the nodes '+
+     'cell +-a on shell L_a exactly (capacity bound 4a < p: three steps), '+
+     'alternating sides by exactly 11pi/12 + pi/13 + pi/232 per step '+
+     '(residual from a flat great circle: pi/156 - pi/232, the leak '+
+     'signature; route-minus mirrored), and the smooth retarded-meridian '+
+     'spiral passes the nodes exactly (residual 0) and terminates at the '+
+     'quarter-fold tick, one retarded flow law shared with the nodes '+
+     '-- drawn in the light-cone mode alone',
+     capOK && nodeOK && azOK && residOK && drawOK);
+}
 
 console.log(fails ? `\n${fails} FAILURES` : '\nall checks pass');
 process.exit(fails ? 1 : 0);
