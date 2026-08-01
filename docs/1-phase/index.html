@@ -586,9 +586,8 @@
       twelve exact stations per meridian; the winding family m = 1&hellip;12 under the
       one law covers all 72 nodes, 24 per shell &mdash; each drawn meridian one label
       of the covering family, isotropy at the resolved mesh, refined down the tower
-      within capacity. The family is drawn: the ten sibling windings ride ultra-faint
-      behind the pair (on-tick exact), every node collected once on odd rows and
-      thrice on even &mdash; the sheet parity of the fold decides each slot, and the
+      within capacity; every node is collected once on odd rows and thrice on
+      even &mdash; the sheet parity of the fold decides each slot, and the
       completeness is a corollary of that parity law. One Dirac flow in every representation; the Subject's own locus
       is never dressed (ownership): every ray anchors at the drawn Observer at every
       clock state, the gauge's half-turn acting as the chart's exact point reflection
@@ -1711,49 +1710,6 @@ function drawHelix(aS, bC){
 // The same sky, the same nodes: the fibers are the light-cone
 // structure -- the observable meridians. M0 is the first: the smooth
 // retarded-meridian spiral per route; further meridians M_m join here
-// ---------- the covering family layer (00:Y3; the parity law) ----------
-// The winding family m = 1..12 under the one meridian law covers the
-// node field 72/72 -- multiplicity 1 on odd rows, 3 on even, the sheet
-// parity of the fold deciding every slot -- and the drawn pair M0
-// (winding 1), M3 (winding 5) is two labels of it. The ten siblings
-// ride ultra-faint behind the pair: the SAME law posMW, rendered at
-// the tick state F = 0 and cached per clock state (the interpolated
-// frames reuse the tick's layer -- on-tick exact, like the
-// interpolation itself a chart convenience). Sandbox-safe: without
-// document.createElement the layer is skipped; the suites pin the pair
-// and the nodes, the family's arithmetic is pinned in 38-s13
-// (check_o2.js, check_o3.js)
-const famCv = typeof document !== "undefined" && document.createElement
-  ? document.createElement("canvas") : null;
-if (famCv){ famCv.width = famCv.height = 520; }
-const famCx = famCv ? famCv.getContext("2d") : null;
-let famKey = null;
-function drawFamily(aS, bC){
-  if (!famCx) return;
-  const key = aS + "|" + bC + "|" + view + "|" + sigC;
-  if (famKey !== key){
-    famKey = key;
-    const S0 = skyState(aS, bC, 0);
-    famCx.clearRect(0, 0, 520, 520);
-    famCx.lineJoin = "round"; famCx.lineCap = "round";
-    famCx.strokeStyle = "#9a9a97"; famCx.lineWidth = 0.55;
-    famCx.globalAlpha = 0.05;
-    for (let mw = 2; mw <= 12; mw++){
-      if (mw === 5) continue;
-      for (const ray of [1, -1]) for (const seg of [[0, 3.25], [9.75, 13]]){
-        const N = 120*mw;      // the winding-mw sweep moves mw times faster
-        famCx.beginPath();
-        for (let j = 0; j <= N; j++){
-          const p = proj3(S0.posMW(mw, ray, seg[0] + j*(seg[1] - seg[0])/N));
-          j ? famCx.lineTo(p.x, p.y) : famCx.moveTo(p.x, p.y);
-        }
-        famCx.stroke();
-      }
-    }
-    famCx.globalAlpha = 1;
-  }
-  sp.drawImage(famCv, 0, 0);
-}
 function drawCone(aS, bC){
   sp.clearRect(0,0,520,520);
   sp.fillStyle = "#161615"; sp.fillRect(0,0,520,520);
@@ -1762,9 +1718,7 @@ function drawCone(aS, bC){
   drawSkyGuides(S.RH, S.RSH);
   // the full node field anchors all three modes; the meridians thread
   // its twelve exact stations and anchor at the drawn Observer -- the
-  // origin of the observation -- at every clock state; the covering
-  // family rides behind the pair
-  drawFamily(aS, bC);
+  // origin of the observation -- at every clock state
   drawM3(S.m3);
   drawM0(S.m0);
   if (view !== "carrier") drawCurlTraces(S.nodes);
