@@ -18,15 +18,15 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Finite Ring Cosmology Laboratory: Exact Schr&ouml;dinger&ndash;Dirac dynamics of the total state on the (13, 233) holographic substrate">
 <meta property="og:description" content="A complete universe-in-a-lab in the smallest non-trivial realisation. The drive x &#8614; gx is the Schr&ouml;dinger evolution itself: exact, integer arithmetic, machine-verified by six public suites. Three synchronized panels of one entity; the observable sky, and its total state as the register of the holographic encoding. The continuum enters only as a labelled chart. The current implementation is intended as a numerical laboratory, and a model existence proof, not currently a pedagogical exhibit.">
-<meta property="og:url" content="https://frc-lab.gamma.earth/38-s13/">
-<meta property="og:image" content="https://frc-lab.gamma.earth/38-s13-og/38-s13-og.png">
+<meta property="og:url" content="https://frc-lab.gamma.earth/1-phase/">
+<meta property="og:image" content="https://frc-lab.gamma.earth/1-phase/1-phase-og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="627">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="FRC Lab: Schr&ouml;dinger&ndash;Dirac dynamics of the total state over the (13, 233) substrate">
 <meta name="twitter:description" content="The free Schr&ouml;dinger evolution running exactly, in integer arithmetic, on the minimal pair (13, 233). Every claim machine-verified; kill criteria published.">
-<meta name="twitter:image" content="https://frc-lab.gamma.earth/38-s13/38-s13-og.png">
-<link rel="code-repository" href="https://github.com/gamayos/frc-numerics/tree/main/docs/38-s13">
+<meta name="twitter:image" content="https://frc-lab.gamma.earth/1-phase/1-phase-og.png">
+<link rel="code-repository" href="https://github.com/gamayos/frc-numerics/tree/main/docs/1-phase">
 <style>
   :root{
     --surface:#0c0c0c; --panel:#212120; --edge:#33322f;
@@ -1722,16 +1722,38 @@ function drawHelix(aS, bC){
   // the flow: in the harness view the helices screw along their
   // leaves -- the dilation ([1:C6])
   for (let s = 0; s < 3; s++){
-    const R = S.RSH[s], outer = s === 2;
+    // THE RUNG INDEX IS THE LATITUDE INDEX (corrected 14 Aug, from
+    // 39-s173/lab/index13-1.html). This loop used to colour the OUTERMOST
+    // fibre green and call it the L1 time latitude, on the strength of the
+    // unit multiplier sitting there (M3[2] = 1), and claimed it matched
+    // "the phase panel's middle ring and the shell panel's L1". The claim was
+    // false in both halves: those two are latitude 1, the outer fibre is
+    // latitude 3. Shell s carries latitude a = s + 1, and the sky and the
+    // shell panel lay it on the ONE radial law R sin(2a pi / p), so:
+    //   L1, the TIME latitude, is a = 1 -- the INNERMOST rung, 27.69 deg off
+    //     the Observer pole at 0.465 R. It is the ring the shell panel draws
+    //     green (a === 1 above) and the phase panel carries as its middle
+    //     ring, and it takes the green here, at the 1.75 nominal.
+    //   L3 = L_kappa is a = 3 -- the OUTERMOST rung, 83.08 deg at 0.993 R,
+    //     the last latitude before the equator (which falls at p/4 = 3.25),
+    //     one inside L4 = L_{kappa+1}, the purple energy latitude.
+    //   L2 and L3 both stand grey at 1.35: neither carries a cardinal role,
+    //     and L1 is the sky's one named fibre. The helix caption already
+    //     numbered them L1, L2, L3 inward to outward -- it was true of the
+    //     caption and false of this loop; both agree now.
+    // DECLARED, not corrected: the x3 ladder is still anchored so M3 = 1
+    // falls on the OUTER rung, so the zero shift sits at L3 while the index
+    // says L1. Re-anchoring moves every drawn value, a separate decision.
+    // The colour-to-nominal pairing is unchanged, so verify-render check 11
+    // (which keys the nominal off the colour) still holds exactly.
+    const R = S.RSH[s], lat = s + 1;
+    const isL1 = lat === 1;                    // the sky's one named fibre
     const pts = [];
     for (let q = 0; q <= 91; q++) pts.push([ 1, q*13/91]);
     for (let q = 0; q <= 91; q++) pts.push([-1, 13 - q*13/91]);
     const P3 = pts.map(([e, k]) =>
       proj3(S.flowF(S.sph(S.TH3(k), S.PH3(e, k, s), 0, R), k)));
-    // the outer fiber is the L1 time latitude (the drive orbit through
-    // the unit): green, matching the phase panel's middle ring and the
-    // shell panel's L1; nominals keep the page's own weights
-    bezStroke(P3, outer ? GRN : GRY, outer ? 1.75 : 1.35);
+    bezStroke(P3, isL1 ? GRN : GRY, isL1 ? 1.75 : 1.35);
   }
   if (view !== "carrier") drawCurlTraces(S.nodes);
   drawClockBead(S.PHI);
