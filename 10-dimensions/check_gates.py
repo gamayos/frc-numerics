@@ -41,7 +41,7 @@ for pat, label in role_patterns:
     gate(f"role gate x0: {label}", len(hits) == 0, f"{len(hits)}")
 
 # 3. blacklist (corpus standard)
-blacklist = [r"phase carrier", r"h *= *\(2G\)", r"\\hbar *= *\\It", r"G *= *1/4\\pi",
+blacklist = [r"seat", r"phase carrier", r"h *= *\(2G\)", r"\\hbar *= *\\It", r"G *= *1/4\\pi",
              r"Z/\(", r"total entropy", r"carrier-internal", r"Carrier's drive"]
 for pat in blacklist:
     hits = re.findall(pat, allt)
@@ -66,11 +66,11 @@ gate("'symmetry-complete' invoked exactly once", sc == 1, f"count = {sc}")
 rev_required = [
     ("internal flag theorem present", r"contains exactly one subgroup of order four"),
     ("crossing degree defined", r"crossing degree"),
-    ("face-transport definition present", r"residue reading"),
+    ("pair form of the defining congruences present", r"root pair of"),
     ("reframing action defined", r"Admissible reframing"),
     ("admissibility triple stated", "pmod3"),
     ("temperature corollary present", r"acceleration domain"),
-    ("no-band remark present", r"not a residue-band rule"),
+    ("h-form remark present", r"h-form"),
 ]
 for label, pat in rev_required:
     hits = re.findall(pat, allt)
@@ -92,8 +92,8 @@ for pat, label in rev_banned:
 r02_required = [
     ("pushforward action named", "pushforward"),
     ("window covariance stated", "Window covariance"),
-    ("residue reading defined", "residue reading"),
-    ("orientation question stated open", "left open"),
+    ("representative convention stated inert", "inert"),
+    ("co-orientation deferred to coupling layers", "o-orientation of a Subject frame"),
     ("positive-root branch stated", "positive square root"),
 ]
 for label, pat in r02_required:
@@ -136,13 +136,13 @@ for pat, label in r03_banned:
 
 # 9. round-04 gates
 r04_required = [
-    ("declared seat linkage", "declared seat linkage"),
+    ("pair linkage identity", "pair identity"),
     ("window ladder present", "window ladder"),
     ("coherence window imported", "coherence window"),
     ("atomic chronon remark", "the chronon is atomic"),
     ("equal-crossing-degree scope", "equal crossing degree"),
     ("meridian transport proposition", "Meridian transport onto the flag"),
-    ("bridge premises restatement", "Proof over the premises"),
+    ("realisation content restatement", "Proof over the realisation"),
     ("import in table key", "\\tI\\ import"),
 ]
 for label, pat in r04_required:
@@ -159,6 +159,68 @@ r04_banned = [
 for pat, label in r04_banned:
     hits = allt.count(pat)
     gate(f"r04 x0: {label}", hits == 0, f"{hits}")
+
+
+# 10. round-05 gates (recentring: pair form; the Carrier layer subordinate)
+r05_required = [
+    ("defining congruences stated at pair level", "at pair level"),
+    ("instantiation subsection present", "Carrier Instantiation"),
+    ("Omega-hard thesis sentence present", "registrable manifestation"),
+    ("linkage derived not declared", "derived rather than declared"),
+    ("minimal-pair figure in the registers section", "smallest admissible scale"),
+]
+for label, pat in r05_required:
+    hits = allt.count(pat)
+    gate(f"r05: {label}", hits >= 1, f"{hits}")
+
+r05_banned = [
+    ("orientation of \\(\\hbar", "orientation of hbar"),
+    ("selects the root", "root-selection language"),
+    ("residue reading", "residue reading apparatus"),
+    ("declared residue linkage", "linkage as declaration"),
+    ("half-plane", "half-plane predicate"),
+    ("band rule", "band rule"),
+    ("left open here", "manufactured open question"),
+    ("minimal-material-mode", "orientation import (hbar)"),
+    ("registrability class", "orientation import (c)"),
+    ("count positivity", "orientation import ground"),
+    ("named imports", "sign-count phrase"),
+    ("orientation rule", "orientation-rule layer"),
+    ("the signed residue-face reading", "signed-reading phrase"),
+]
+for pat, label in r05_banned:
+    hits = allt.count(pat)
+    gate(f"r05 x0: {label}", hits == 0, f"{hits}")
+
+# 11. round-06 gates (the holographic doctrine; bridges retired for realisations)
+r06_required = [
+    ("new title present", "Dimensional Analysis over Finite Holographic Substrate"),
+    ("holographic-substrate remark present", "The holographic substrate"),
+    ("encoding condition stated", "encoding condition"),
+    ("finite holographic substrate named", "finite holographic substrate"),
+    ("realisation legend present", "constitutive rather than interpretive"),
+    ("h-form pair named", r"\(h\)-form pair"),
+    ("s13 instance cited", "akhtman2026s13"),
+]
+for label, pat in r06_required:
+    hits = allt.count(pat)
+    gate(f"r06: {label}", hits >= 1, f"{hits}")
+
+falsifier_count = len(re.findall(r"falsifier", allt))
+gate("r06: three falsifiers stated (>=3 mentions)", falsifier_count >= 3, f"{falsifier_count}")
+
+frc_full = len(re.findall(r"Finite Ring Cosmology", allt))
+gate("r06: 'Finite Ring Cosmology' expanded exactly once (the primer)", frc_full == 1, f"count = {frc_full}")
+
+r06_banned = [
+    (r"\bbridge\b", "bridge as a doctrinal term"),
+    (r"bridge-class", "bridge-class label"),
+    (r"interpretive content", "interpretive-layer concession"),
+    (r"in Finite Ring Cosmology", "old title residue"),
+]
+for pat, label in r06_banned:
+    hits = re.findall(pat, allt, re.I)
+    gate(f"r06 x0: {label}", len(hits) == 0, f"{len(hits)}")
 
 sys.exit(1 if fail else 0)
 

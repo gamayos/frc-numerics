@@ -8,11 +8,13 @@ Layers:
   B. the quartet at the unit face (symbolic, exact rationals over free
      exponents): action identity, pairing closure rank, cancellation identity,
      mechanical table re-derivation
-  C. the pins on the lab Carrier (S = 602,140, Omega = 2,408,561): existence,
-     exhaustive root enumeration, uniqueness of the stated selections,
-     register identities
+  C. the defining congruences on the lab Carrier (S = 602,140, Omega = 2,408,561): existence,
+     exhaustive root enumeration, root pairs, register identities
+  H. pair layer (round 05): pair-well-definedness of every congruence identity and
+     the representative-inertness sweep over all admissible sign assignments
 
-Every check is integer or exact-rational arithmetic; no floats, no RNG.
+Every check is integer or exact-rational arithmetic; no floats, no RNG
+(the window-ladder orderings are compared by integer squares).
 Domains are triples (r mod p, s mod p-1, n mod 4): free [L],[T] exponents
 and the flag.
 """
@@ -67,7 +69,7 @@ check("group identity", dmul(ONE, L) == L)
 check("inverses", dmul(L, dinv(L)) == ONE and dmul(FLAG, dinv(FLAG)) == ONE)
 check("flag order four", dmul(dmul(FLAG, FLAG), dmul(FLAG, FLAG)) == ONE)
 # fork B: the flag is internal, Iq = [T]^kappa; realized label of (r,s;j) is
-# (r mod p, (s + j*kappa) mod (p-1)) with seat j mod 4
+# (r mod p, (s + j*kappa) mod (p-1)) with sector j mod 4
 def realize(a):
     return (a[0] % P, (a[1] + a[2] * KAPPA) % (P - 1))
 check("realized flag label = (0, kappa)", realize(FLAG) == (0, KAPPA))
@@ -225,7 +227,7 @@ check("E = hbar/t (unit face)", E == hbar_u / t)
 check("{l,t,hbar} determine c, G", c_u == l / t and G_num == l ** 2 * (l / t) ** 3 / hbar_u)
 
 # =====================================================================
-# C. the pins on the lab Carrier
+# C. the defining congruences on the lab Carrier
 # =====================================================================
 S = 602_140
 Om = 4 * S + 1
@@ -243,26 +245,26 @@ def is_prime(n):
 check("admissibility: S even, S=1 mod 3, Om prime",
       S % 2 == 0 and S % 3 == 1 and is_prime(Om))
 
-# pin 1: 2G + 1 = 0 -- linear, unique
+# congruence 1: 2G + 1 = 0 -- linear, unique
 G_pin = [x for x in (pow(2, -1, Om) * (Om - 1) % Om,) ]
 G_val = (Om - 1) // 2
-check("pin 2G+1=0 unique: G = 2S = 1,204,280", (2 * G_val + 1) % Om == 0 and G_val == 2 * S == 1_204_280)
+check("congruence 2G+1=0 unique: G = 2S = 1,204,280", (2 * G_val + 1) % Om == 0 and G_val == 2 * S == 1_204_280)
 
-# quadratic pins: exhaustive-root verification via the known values
+# quadratic defining congruences: exhaustive-root verification via the known values
 hbar_val = 18_688
 kB_val = 1_880_160
-check("pin hbar^2 = -1", (hbar_val * hbar_val) % Om == Om - 1)
-check("pin k_B^2 = -2", (kB_val * kB_val) % Om == Om - 2)
+check("congruence hbar^2 = -1", (hbar_val * hbar_val) % Om == Om - 1)
+check("congruence k_B^2 = -2", (kB_val * kB_val) % Om == Om - 2)
 c2 = (2 * S + 1) % Om
-check("pin 2c^2 = 1: c^2 = 2S+1", (2 * c2) % Om == 1)
-# each quadratic pin has exactly two roots: x and Om - x
+check("congruence 2c^2 = 1: c^2 = 2S+1", (2 * c2) % Om == 1)
+# each quadratic congruence has exactly two roots: x and Om - x
 for name, val, target in (("hbar", hbar_val, Om - 1), ("k_B", kB_val, Om - 2)):
     other = Om - val
     check(f"{name}: two roots {{x, -x}}", (other * other) % Om == target and other != val)
-# sign selections: k_B c = -hbar fixes k_B relative to hbar and c
+# linkage consistency: the stated representatives satisfy k_B c = -hbar
 c_val = (-hbar_val * pow(kB_val, -1, Om)) % Om
 check("c from k_B c = -hbar", (kB_val * c_val) % Om == (Om - hbar_val) % Om)
-check("c^2 lands on the pin", (c_val * c_val) % Om == c2)
+check("c^2 lands on the congruence", (c_val * c_val) % Om == c2)
 check("register identities: G = -c^2, G^2 = 4^-1",
       (G_val + c2) % Om == 0 and (4 * G_val * G_val) % Om == 1)
 check("h = 2 pi hbar = -hbar = k_B c", (Om - hbar_val) % Om == (kB_val * c_val) % Om)
@@ -290,7 +292,7 @@ for Om_, R in CARRIERS.items():
     check(f"[{Om_}] admissibility triple: S even, S=1 mod 3, Om prime",
           S_ % 2 == 0 and S_ % 3 == 1 and is_prime(Om_))
     check(f"[{Om_}] two-way class: S even <=> Om = 1 mod 8", Om_ % 8 == 1)
-    # pin equations of the residue reading
+    # congruence equations of the residue reading
     check(f"[{Om_}] B: 2G = -1", (2 * G_ + 1) % Om_ == 0)
     check(f"[{Om_}] B: c^2 = 2^-1", (2 * c_ * c_) % Om_ == 1)
     check(f"[{Om_}] B: hbar^2 = -1", (hb * hb) % Om_ == Om_ - 1)
@@ -302,24 +304,25 @@ for Om_, R in CARRIERS.items():
     check(f"[{Om_}] closure: G^2 = 4^-1", (4 * G_ * G_) % Om_ == 1)
     check(f"[{Om_}] closure: hbar^4 = 1", pow(hb, 4, Om_) == 1)
     check(f"[{Om_}] closure: (k_B c)^2 = -1", pow(kB * c_, 2, Om_) == Om_ - 1)
-    check(f"[{Om_}] closure: hbar c G^-1 = k_B (m_P^2 monomial face on k_B seat)",
+    check(f"[{Om_}] closure: hbar c G^-1 = k_B (m_P^2 monomial face on the k_B residue)",
           (hb * c_ * pow(G_, -1, Om_)) % Om_ == kB)
-    check(f"[{Om_}] monomial face nonzero: seat declaration is not a congruence",
+    check(f"[{Om_}] monomial face nonzero: horizon declaration is not a congruence",
           (hb * c_ * pow(G_, -1, Om_)) % Om_ != 0)
-    # pins have exactly two roots each
+    # defining congruences have exactly two roots each
     for name, val, tgt in (("hbar", hb, Om_ - 1), ("kB", kB, Om_ - 2)):
         roots = sorted(((val) % Om_, (Om_ - val) % Om_))
         check(f"[{Om_}] {name}: root pair valid", all((x * x) % Om_ == tgt for x in roots))
 
-# orientation is not a residue-band rule (rem:no-band)
+# representative half-planes are chart data (suite annex): band predicates
+# carry no invariant content, as the pair form requires
 r233 = sqrt_roots(58, 233)
 check("233: sqrt(S) roots {72,161}", r233 == [72, 161])
-check("233: selecting root is UPPER half (161 -> hbar=89)",
+check("233: hbar-representative from the upper-half root of S (161 -> 89): chart datum",
       (2 * 161) % 233 == 89 and 161 > 233 // 2)
-check("233: lower root gives h, not hbar", (2 * 72) % 233 == 144)
-check("lab: selecting root is LOWER half (9344 -> hbar)",
+check("233: the other root gives the pair partner h (72 -> 144)", (2 * 72) % 233 == 144)
+check("lab: hbar-representative from the lower-half root of S (9344): chart datum",
       (2 * 9344) % 2_408_561 == 18_688 and 9344 < 2_408_561 // 2)
-check("no half-plane rule selects hbar on both Carriers",
+check("half-plane of the hbar-representative differs across Carriers: band = chart data",
       (161 > 233 // 2) and (9344 < 2_408_561 // 2))
 
 # -1 is QR unconditionally (Om = 4S+1 = 1 mod 4), S even needed only for 2
@@ -368,7 +371,7 @@ def real2(r, s, j):
 win = [(r, s, j) for r in range(-5, 6) for s in range(-5, 6) for j in (-1, 0, 1)]
 check("faithful realization on window (p=229, H=5, |j|<=1)",
       len({(real2(*w), w[2] % 4) for w in win}) == len(win))
-check("seat saturates mod 4: hbar^4 realizes as identity seat",
+check("sector saturates mod 4: hbar^4 realizes at sector zero",
       (4 * K2) % (P2 - 1) == 0)
 
 
@@ -379,7 +382,7 @@ check("seat saturates mod 4: hbar^4 realizes as identity seat",
 
 # (a) regression: the naive character on Z_p-reduced labels is ill-defined
 inv2 = pow(2, -1, 13)
-check("r02: character ill-defined on Z_p seat (r=3 vs r=16 differ)",
+check("r02: character ill-defined on the modular projection (r=3 vs r=16 differ)",
       pow(inv2, 3, 13) != pow(inv2, 16, 13))
 # (b) regression: (p-1, 0) has trivial character yet is non-neutral
 check("r02: (p-1,0) trivial character for all m",
@@ -394,20 +397,20 @@ H = 5
 check("r02: window dilation: trivial character forces r=0 in window",
       all(not all(pow(m, -r, 13) == 1 for m in range(2, 13))
           for r in range(-H, H + 1) if r != 0))
-# pushforward invariant sublattice on the seat is {0, pi}
+# pushforward invariant sublattice on the realized lattice is {0, pi}
 units12 = [e for e in range(1, 12) if __import__("math").gcd(e, 12) == 1]
 inv_labels = [s_ for s_ in range(12) if all((e * s_) % 12 == s_ for e in units12)]
-check("r02: pushforward-invariant seats are exactly {0, pi}", inv_labels == [0, 6])
+check("r02: pushforward-invariant labels are exactly {0, pi}", inv_labels == [0, 6])
 check("r02: eps=-1 admissible always", __import__("math").gcd(11, 12) == 1)
 # flag pair behaviour under pushforward: eps mod 4 in {1,3} decides fix/swap
-check("r02: quarter seats fixed iff eps=1 mod 4",
+check("r02: quarter-turn labels fixed iff eps=1 mod 4",
       all(((e * 3) % 12 == 3) == (e % 4 == 1) for e in units12))
 
-# orientation data (Remark 5, weakened form)
-check("r02: hbar is lower-half root of -1 on 233", 89 < 233 // 2 and (89 * 89) % 233 == 232)
-check("r02: hbar is lower-half root of -1 on lab",
+# representative-convention data (chart-side record; no invariant content)
+check("r02: hbar representative lower-half on 233 (chart datum)", 89 < 233 // 2 and (89 * 89) % 233 == 232)
+check("r02: hbar representative lower-half on lab (chart datum)",
       18_688 < 2_408_561 // 2 and (18_688 ** 2) % 2_408_561 == 2_408_560)
-check("r02: c halves differ across Carriers (irreducible)",
+check("r02: c representative halves differ across Carriers (chart data)",
       (159 > 233 // 2) and (171_106 < 2_408_561 // 2))
 check("r02: +-c one residue class (-1 is QR)", pow(89, 2, 233) == 233 - 1)
 
@@ -452,8 +455,8 @@ for P_, K_ in ((13, 3), (229, 57)):
              == (e * (s_ + j * K_)) % (P_ - 1)
              for e in U_ for s_ in range(0, P_ - 1, max(1, (P_ - 1) // 12)) for j in (-2, -1, 0, 1, 2))
     check(f"r03: sigma-twist equivariant on p={P_}", ok)
-check("r03: witness e=7,(2;1) matches seat action", ((7 * 2) % 12 + sigma(7) * 3) % 12 == (7 * 5) % 12)
-check("r03: witness e=-1,(0;1) matches seat action", ((11 * 0) % 12 + sigma(11) * 3) % 12 == (11 * 3) % 12)
+check("r03: witness e=7,(2;1) matches realized action", ((7 * 2) % 12 + sigma(7) * 3) % 12 == (7 * 5) % 12)
+check("r03: witness e=-1,(0;1) matches realized action", ((11 * 0) % 12 + sigma(11) * 3) % 12 == (11 * 3) % 12)
 check("r03: plain lift fails for e=7,(2;1) (regression)", ((7 * 2) % 12 + 3) % 12 != (7 * 5) % 12)
 check("r03: sigma multiplicative mod 4",
       all(sigma(a * b) == sigma(a) * sigma(b) for a in units12 for b in units12))
@@ -471,26 +474,29 @@ check("r03: delta_S flag-free", dS_(L)[2] == 0 and dS_(T)[2] == 0)
 
 
 # =====================================================================
-# G. round-04 layer: seat action, j-restriction, ladder, k_B linkage typing
+# G. round-04 layer: realized action, j-restriction, ladder, k_B linkage typing
 # =====================================================================
 import math as _mm
 
-# seat action composes with residue classes; Z^3 representatives do not
+# realized action composes with residue classes; Z^3 representatives do not
 u0 = 5
-check("r04: seat action composes (5*5=1 in Z_12^x)", ((5 * (5 * u0)) % 12) == ((25 % 12) * u0) % 12 == u0 % 12)
+check("r04: realized action composes (5*5=1 in Z_12^x)", ((5 * (5 * u0)) % 12) == ((25 % 12) * u0) % 12 == u0 % 12)
 check("r04: integer representatives do not compose on Z (25s != s)", 25 * 2 != 2)
 
 # j-suppression witness: (0,0;1) moves under eps=-1 (flag-free restriction needed)
-check("r04: (0,0;1) seat moves under eps=-1", ((-1) * (0 + 3)) % 12 == 9 != 3)
+check("r04: (0,0;1) sector moves under eps=-1", ((-1) * (0 + 3)) % 12 == 9 != 3)
 
-# window ladder: nested for kappa >= 17; toy fails
+# window ladder: nested for kappa >= 17; toy fails.  All orderings exact:
+# 2 sqrt(k) < k/2  <=>  (4 sqrt(k))^2 < k^2  <=>  16 k < k^2  <=>  k > 16.
 def ladder(k):
-    return 2 * _mm.sqrt(k) < k / 2 < k < 2 * k
-check("r04: ladder nested for kappa=17,387,602140", all(ladder(k) for k in (17, 387, 602140)))
+    return 16 * k < k * k and 0 < k
+check("r04: ladder nested for kappa=17,387,602140 (integer-square ordering)",
+      all(ladder(k) for k in (17, 387, 602140)))
 check("r04: toy kappa=3 below nesting threshold", not ladder(3))
-check("r04: coherence window = sqrt(p-1) exactly", all(abs(2 * _mm.sqrt(k) - _mm.sqrt(4 * k)) < 1e-9 for k in (3, 387, 602140)))
-check("r04: totality coherence ~ saturating scale (2*sqrt(S) ~ sqrt(Om))",
-      abs(2 * _mm.sqrt(602140) - _mm.sqrt(2408561)) < 0.01)
+check("r04: coherence window identity (2 sqrt kappa)^2 = 4 kappa = p-1 exactly",
+      all((2 * 2 * k == 4 * k) and (4 * k == (4 * k + 1) - 1) for k in (3, 387, 602140)))
+check("r04: totality closure exact: (2 sqrt S)^2 = Om - 1",
+      4 * 602140 == 2408561 - 1)
 
 # F/a is flagged (equal-crossing-degree correction): [F]=(-1,-1;1), [a]=(1,-2;0)
 F3 = (-1, -1, 1); A3 = (1, -2, 0)
@@ -501,12 +507,56 @@ check("r04: F/a crossing degree 1 (flagged, = [m])", ratio == (-2, 1, 1))
 for P_, K_ in ((13, 3), (29, 7), (229, 57)):
     check(f"r04: meridian transport p={P_}", (P_ % P_, (P_ * K_) % (P_ - 1)) == (0, K_))
 
-# k_B sign is NOT internal: both roots of -2 satisfy every pin individually;
-# only the declared seat linkage selects
+# both roots of -2 satisfy the congruence individually (the pair is the canonical
+# object); the stated representative is the linkage-consistent one
 for Om_, R in CARRIERS.items():
     kB = R["kB"]; other = Om_ - kB
-    check(f"r04 [{Om_}]: both k_B roots satisfy the pin", (other * other) % Om_ == Om_ - 2)
-    check(f"r04 [{Om_}]: seat linkage selects the stated root",
+    check(f"r04 [{Om_}]: both k_B roots satisfy the congruence", (other * other) % Om_ == Om_ - 2)
+    check(f"r04 [{Om_}]: stated representative is linkage-consistent, its partner is not",
           (kB * R["c"]) % Om_ == (Om_ - R["hbar"]) % Om_ and (other * R["c"]) % Om_ != (Om_ - R["hbar"]) % Om_)
+
+
+# =====================================================================
+# H. round-05 pair layer: pair-well-definedness and representative inertness
+# =====================================================================
+# pair multiplication {±a}{±b} = {±ab} is well defined: the four member
+# products fall in one pair
+for Om_, R in CARRIERS.items():
+    a_, b_ = R["kB"], R["c"]
+    prods = {(sa * a_ * sb * b_) % Om_ for sa in (1, -1) for sb in (1, -1)}
+    check(f"H [{Om_}]: pair product well defined ({{±k_B}}{{±c}} is one pair)",
+          prods == {(a_ * b_) % Om_, (-a_ * b_) % Om_})
+    # linkage as a pair THEOREM: (k_B c)^2 = -1, so the product pair is the
+    # root pair of -1, which is {±hbar}
+    check(f"H [{Om_}]: (k_B c)^2 = -1 (linkage derived at pair level)",
+          pow(a_ * b_, 2, Om_) == Om_ - 1)
+    check(f"H [{Om_}]: product pair equals {{±hbar}}",
+          prods == {R["hbar"] % Om_, (Om_ - R["hbar"]) % Om_})
+    # (hbar c / G)^2 = -2: the monomial lands in the k_B pair
+    mono = (R["hbar"] * R["c"] * pow(R["G"], -1, Om_)) % Om_
+    check(f"H [{Om_}]: (hbar c/G)^2 = -2, landing in the k_B pair",
+          pow(mono, 2, Om_) == Om_ - 2 and mono in {R["kB"], Om_ - R["kB"]})
+    # representative inertness: exactly the assignments with s_h = s_c*s_k are
+    # admissible (a (Z/2)^2 group), and every checked identity holds on each
+    admissible_count = 0
+    for s_c in (1, -1):
+        for s_h in (1, -1):
+            for s_k in (1, -1):
+                hb2, c2_, kB2 = (s_h * R["hbar"]) % Om_, (s_c * R["c"]) % Om_, (s_k * R["kB"]) % Om_
+                quad = ((2 * c2_ * c2_) % Om_ == 1 and (hb2 * hb2) % Om_ == Om_ - 1
+                        and (kB2 * kB2) % Om_ == Om_ - 2)
+                link = (kB2 * c2_) % Om_ == (Om_ - hb2) % Om_
+                if quad and link:
+                    admissible_count += 1
+                    h2 = (Om_ - hb2) % Om_
+                    check(f"H [{Om_}] ({s_c},{s_h},{s_k}): h-form holds", h2 == (-hb2) % Om_)
+                    check(f"H [{Om_}] ({s_c},{s_h},{s_k}): monomial lands on this assignment's k_B",
+                          (hb2 * c2_ * pow(R["G"], -1, Om_)) % Om_ == kB2)
+                assert quad, "quadratic defining congruences are sign-blind"
+    check(f"H [{Om_}]: admissible assignments form (Z/2)^2 (exactly four)",
+          admissible_count == 4)
+# hbar-flip relabels within the pair: {hbar, h} -> {h, hbar}
+check("H: hbar-flip relabels the {hbar,h} pair (233: 89 <-> 144)",
+      (233 - 89) % 233 == 144 and (233 - 144) % 233 == 89)
 
 print(f"{len(passed)}/{len(passed)} exact checks pass")
