@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Finite Ring Cosmology Lab: Schr&ouml;dinger&mdash;Dirac dynamics of the total state over (13, 233) substrate</title>
+<title>Finite Ring Cosmology Lab: Schr&ouml;dinger&mdash;Dirac dynamics of the total state over the (13, 233) holographic substrate</title>
 <link rel="icon" type="image/png" href="../frc-logo-fav.png">
 <meta name="author" content="Yosef Akhtman">
 <meta name="robots" content="index, follow">
@@ -18,21 +18,35 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Finite Ring Cosmology Laboratory: Exact Schr&ouml;dinger&ndash;Dirac dynamics of the total state on the (13, 233) holographic substrate">
 <meta property="og:description" content="A complete universe-in-a-lab in the smallest non-trivial realisation. The drive x &#8614; gx is the Schr&ouml;dinger evolution itself: exact, integer arithmetic, machine-verified by six public suites. Three synchronized panels of one entity; the observable sky, and its total state as the register of the holographic encoding. The continuum enters only as a labelled chart. The current implementation is intended as a numerical laboratory, and a model existence proof, not currently a pedagogical exhibit.">
-<meta property="og:url" content="https://frc-lab.gamma.earth/1-phase/">
-<meta property="og:image" content="https://frc-lab.gamma.earth/1-phase/1-phase-og.png">
+<meta property="og:url" content="https://frc-lab.gamma.earth/38-s13/">
+<meta property="og:image" content="https://frc-lab.gamma.earth/38-s13-og/38-s13-og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="627">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="FRC Lab: Schr&ouml;dinger&ndash;Dirac dynamics of the total state over the (13, 233) substrate">
 <meta name="twitter:description" content="The free Schr&ouml;dinger evolution running exactly, in integer arithmetic, on the minimal pair (13, 233). Every claim machine-verified; kill criteria published.">
-<meta name="twitter:image" content="https://frc-lab.gamma.earth/1-phase/1-phase-og.png">
-<link rel="code-repository" href="https://github.com/gamayos/frc-numerics/tree/main/docs/1-phase">
+<meta name="twitter:image" content="https://frc-lab.gamma.earth/38-s13/38-s13-og.png">
+<link rel="code-repository" href="https://github.com/gamayos/frc-numerics/tree/main/docs/38-s13">
 <style>
   :root{
     --surface:#0c0c0c; --panel:#212120; --edge:#33322f;
     --ink:#ffffff; --ink2:#c9c6c0; --ink3:#8f8c86;
     --acc:#3987e5; --turn:#c98500; --lat:#7da354;
+    --mer:#d0453c; --grn:#58a35e; --pur:#9b7fd4;
+    --dot0:#c98500; --dot1:#d060c0; --dot2:#c9c6c0; --link:#6f9fd8;
   }
+  /* the light print scheme of the sibling copy, as a body toggle */
+  body.light{
+    --surface:#ffffff; --panel:#ffffff; --edge:#d8d6d2;
+    --ink:#1a1a1a; --ink2:#44433f; --ink3:#6e6b66;
+    --turn:#a86f00; --lat:#337538;
+    /* --acc/--mer/--grn/--pur inherit: the cardinals are scheme-stable */
+    --dot0:#e69f00; --dot1:#cc79a7; --dot2:#5c5c5c; --link:#2a6fb0;
+  }
+  #schemeTog{position:fixed; top:10px; right:10px; z-index:9;
+    background:none; border:0; padding:4px; cursor:pointer;
+    color:var(--ink3); opacity:.38; line-height:0}
+  #schemeTog:hover{opacity:.85}
   *{box-sizing:border-box; margin:0; padding:0}
   body{background:var(--surface); color:var(--ink);
        font:14px/1.45 "Avenir Next","Segoe UI",system-ui,sans-serif; padding:22px}
@@ -89,17 +103,25 @@
   .doctrine{margin-top:16px; color:var(--ink2); font-size:13px}
   .doctrine p{margin-top:6px}
   .doctrine .k{color:var(--ink); font-weight:600}
-  a[href^="#ref"]{color:#6f9fd8; text-decoration:none}
-  .doctrine a{color:#6f9fd8; text-decoration:none}
+  a[href^="#ref"]{color:var(--link); text-decoration:none}
+  .doctrine a{color:var(--link); text-decoration:none}
   .badge{display:inline-block; margin-top:10px; padding:3px 10px; border:1px solid var(--edge);
          border-radius:20px; color:var(--ink3); font-size:12px}
   .refs{margin-top:14px; color:var(--ink3); font-size:12px; line-height:1.7}
   .refs .reg{text-transform:uppercase; letter-spacing:.8px; font-size:11px}
-  .refs a{color:#6f9fd8; text-decoration:none}
+  .refs a{color:var(--link); text-decoration:none}
   .twochar{display: inline-block; min-width: 2ch; text-align: right;}
 </style>
 </head>
 <body data-palette="#3987e5,#c98500" data-episode="1-phase-6" data-rev="1">
+<button id="schemeTog" title="Light / dark scheme" aria-label="Toggle the light print scheme" aria-pressed="false">
+  <svg viewBox="0 0 100 100" width="19" height="19" aria-hidden="true">
+    <circle cx="50" cy="50" r="48" fill="currentColor"/>
+    <path d="M50 11 A39 39 0 0 0 50 89 Z" fill="var(--surface)"/>
+    <path d="M50 29 A21 21 0 0 0 50 71 Z" fill="currentColor"/>
+    <path d="M50 29 A21 21 0 0 1 50 71 Z" fill="var(--surface)"/>
+  </svg>
+</button>
 <div class="wrap">
   <h1>FRC Lab: Schr&ouml;dinger&mdash;Dirac dynamics of the total state over the (13, 233) holographic substrate: i&#295;&thinsp;&part;&psi;/&part;t = &Hcirc;&psi; ⇌ &psi;<sub>&tau;+1</sub> = g&middot;&psi;<sub>&tau;</sub></h1>
   <div class="sub">A complete universe-in-a-lab, the smallest non-trivial configuration: the Subject shell F&#8321;&#8323; (&kappa; = 3) rides the Carrier F&#8322;&#8323;&#8323; (S = 58), Objectless. The state is the framed space-time geometry itself, and the drive x &#8614; gx is its Schr&ouml;dinger evolution &mdash; the rigid rotation of the sky's holographic projection. One law, exact term by term: i&#295; the Subject's quarter-turn composed with the Carrier's action quantum <a href="#ref4">[4]</a>; &psi; the register of Subject field's residues &mdash; the total wave function <a href="#ref4">[4]</a>; &Hcirc; the winding rate with spectrum &Hcirc;&chi;<sub>k</sub> = k&chi;<sub>k</sub>; &part;t the chronon, the step the permutation P<sub>g</sub>|a&#10217; = |ga&#10217;: g multiplies the residues &mdash; unitary exactly, spinor-covered exactly <a href="#ref3">[3]</a>. Energy is the registered winding, E = hf an identity; mass is the frame's time dilation through the Carrier count, the Dirac mass channel. Every exact claim is integer arithmetic and machine-verified <a href="#ref1">[1]</a>; the continuum enters only as labelled charts.</div>
@@ -140,9 +162,9 @@
       </div>
       <canvas id="spc" width="1040" height="1040" role="img" aria-label="The Subject's sky spanned by three nested spheres at the axial latitude radii, each carrying the complete double-helix fiber of twenty-four node images on one smooth closed loop through both poles; consecutive fibers one rung apart, arrows repeating and tints cycling; the Observer at the center"></canvas>
       <div class="cap">
-        <span id="capCone">The observable sky sector spanned by four rays per meridian of <span style="color:#3987e5">M&#8320; (space)</span> and <span style="color:#d0453c">M&#8323; (momentum)</span>: Observer to horizon (emission); horizon to the Observer (absorption); and their backwards-in-time shadows. The radius is the scale coordinate R&middot;|sin(2a&pi;/13)|: the photon travels through scales, never through the Observer. Carrier view: the frame's common Dirac flow. Subject view: the static gauge-free curl.
+        <span id="capCone">The observable sky sector spanned by four rays per meridian of <span style="color:var(--acc)">M&#8320; (space)</span> and <span style="color:var(--mer)">M&#8323; (momentum)</span>: Observer to horizon (emission); horizon to the Observer (absorption); and their backwards-in-time shadows. The radius is the scale coordinate R&middot;|sin(2a&pi;/13)|: the photon travels through scales, never through the Observer. Carrier view: the frame's common Dirac flow. Subject view: the static gauge-free curl.
         </span>
-        <span id="capHelix" style="display:none">The sky spanned by &kappa; = 3 nested latitudes <span style="color:#58a35e">L&#8321; (time)</span>, L&#8322; and L&#8323, at radii R&middot;sin(2a&pi;/p), the Observer central; each shell one double-helix loop through both poles &mdash; twelve cells by two routes. Fibers one rung apart, &times;3 = g&#8308;, mounted 120&deg;: arrows repeat, tints cycle, values &divide;3 inward; labels ride the outer fiber. Carrier view: the frame's common Dirac flow. Subject view: Pure static space-time geometry of the frame.
+        <span id="capHelix" style="display:none">The sky spanned by &kappa; = 3 nested latitudes <span style="color:var(--grn)">L&#8321; (time)</span>, L&#8322; and L&#8323, at radii R&middot;sin(2a&pi;/p), the Observer central; each shell one double-helix loop through both poles &mdash; twelve cells by two routes. Fibers one rung apart, &times;3 = g&#8308;, mounted 120&deg;: arrows repeat, tints cycle, values &divide;3 inward; labels ride the outer fiber. Carrier view: the frame's common Dirac flow. Subject view: Pure static space-time geometry of the frame.
         </span>
         <span id="capHopf" style="display:none"> The sky spanned by Hopf fibration. The ball charts S&sup3;, its silhouette the horizon; each node rides the exact Hopf leaf through it, on the 24 outer nodes &mdash; the section of PGL&#8322;/C&#8321;&#8324; a boost slides along the fiber, unobservable. The clock fiber (&tau;, 0) is the polar axis, its cyan bead the clock. Carrier view: the frame's common flow, chart-realized: dual's band at the quarter, parity image at the half, home with the cycle. Subject view: Pure static space-time geometry of the frame.
       </span></div>
@@ -153,7 +175,7 @@
       </div>
       <canvas id="sph" width="1040" height="1040" role="img" aria-label="The arithmetic symmetry sphere of F13: meridians, latitudes, the rotating frame, and the register comb of phase arrows on the frame's great circle"></canvas>
       <div class="cap">
-        The F&#8321;&#8323; holographic projection: <span style="color:#3987e5">M&#8320; space</span> meridian, <span style="color:#d0453c">M&#8323; momentum</span> meridian, <span style="color:#58a35e">L&#8321; time</span> latitude, <span style="color:#9b7fd4">L&#8324; energy</span> latitude; the comb carries each value &mdash; arrow the phase i<sup>r</sup>, tint the rung s. Subject view: the slots re-register &times;g, the unit slot now <b id="slotOut" class="twochar">1</b>. Carrier view: the residues stand, the frame sweeps 30&deg;/chronon (ray of <b class="twochar" id="frameOut">1</b>), the register drifts one tick-angle per chronon: the frame leak &mdash; no Subject is an ideal of the Carrier &mdash; q &#8594; p at &tau; = S.
+        The F&#8321;&#8323; holographic projection: <span style="color:var(--acc)">M&#8320; space</span> meridian, <span style="color:var(--mer)">M&#8323; momentum</span> meridian, <span style="color:var(--grn)">L&#8321; time</span> latitude, <span style="color:var(--pur)">L&#8324; energy</span> latitude; the comb carries each value &mdash; arrow the phase i<sup>r</sup>, tint the rung s. Subject view: the slots re-register &times;g, the unit slot now <b id="slotOut" class="twochar">1</b>. Carrier view: the residues stand, the frame sweeps 30&deg;/chronon (ray of <b class="twochar" id="frameOut">1</b>), the register drifts one tick-angle per chronon: the frame leak &mdash; no Subject is an ideal of the Carrier &mdash; q &#8594; p at &tau; = S.
       </div>
     </div>
     <div class="panel">
@@ -170,9 +192,9 @@
 
   <div class="bridge" style="display:flex; column-gap:22px; row-gap:2px; flex-wrap:wrap; align-items:baseline">
     <span>fibre tints, the rung s=
-      <span style="color:#c98500">&#9679; 0</span>&nbsp;
-      <span style="color:#d060c0">&#9679; 1</span>&nbsp;
-      <span style="color:#c9c6c0">&#9679; 2</span></span>
+      <span style="color:var(--dot0)">&#9679; 0</span>&nbsp;
+      <span style="color:var(--dot1)">&#9679; 1</span>&nbsp;
+      <span style="color:var(--dot2)">&#9679; 2</span></span>
     <span>arrows, the quarter r= &#8594; 0&nbsp; &#8593; 1&nbsp; &#8592; 2&nbsp; &#8595; 3</span>
     <span>now: r = &tau; mod 4 = <b id="rOut">0</b>,
       i<sup>&tau;</sup> = &times;<b class="twochar" id="iOut">1</b>,
@@ -627,13 +649,43 @@ const WCLS = [,0,1,0,2,1,1,3,3,0,2,3,2];                 // index by residue 1..
 // and tint together display the complete fold (r, s), hence the whole value
 const WRNG = [,0,1,1,2,0,2,2,0,2,1,1,0];                 // index by residue 1..12
 const mod = (a,n)=>((a%n)+n)%n;
-const INK="#ffffff", INK2="#c9c6c0", INK3="#8f8c86", EDGE="#33322f",
-      ACC="#3987e5", TURN="#c98500", LAT="#7da354",
-      MER="#d0453c", GRN="#58a35e", PUR="#9b7fd4",
-      CYN="#3ec1c7";                                 // the clock fiber accent
-      // Fig 2: momentum red is the
-      // paper's quarter role; here red marks the frame's prime meridian as asked,
-      // green the time latitude L1, purple the energy latitude L4 = L_{kappa+1}
+// ---- the two colour schemes (author, 13 Aug): the sibling print
+// copy's light styling folded in as a runtime toggle -- one drawing
+// code, two palettes; the light shade law fades toward the white
+// surface. CYN the clock fiber accent; Fig 2: momentum red is the
+// paper's quarter role; here red marks the frame's prime meridian as
+// asked, green the time latitude L1, purple the energy latitude
+// L4 = L_{kappa+1} ----
+const PALS = {
+  dark: { INK:"#ffffff", INK2:"#c9c6c0", INK3:"#8f8c86", EDGE:"#33322f",
+          ACC:"#3987e5", TURN:"#c98500", LAT:"#7da354",
+          MER:"#d0453c", GRN:"#58a35e", PUR:"#9b7fd4", CYN:"#3ec1c7",
+          BGC:"#161615", GOLD:"#e8c07a", NODF:"#ffffff", GRY:"#8a877f",
+          TIKG:"#3a3936", PGRY:"rgba(150,148,142,0.95)",
+          INCL:"rgba(236,236,234,0.72)", OUTCL:"rgba(150,148,142,0.38)",
+          FIBC:["#ffa900","#ff76eb","#fffaf3"] },
+  light:{ INK:"#1a1a1a", INK2:"#44433f", INK3:"#6e6b66", EDGE:"#d8d6d2",
+          // the four cardinals (blue, red, green, purple) are scheme-
+          // stable, one identity on both surfaces (author, 13 Aug)
+          ACC:"#3987e5", TURN:"#a86f00", LAT:"#337538",
+          MER:"#d0453c", GRN:"#58a35e", PUR:"#9b7fd4", CYN:"#0097a7",
+          BGC:"#ffffff", GOLD:"#8a6a1f", NODF:"#1a1a1a", GRY:"#9c9992",
+          TIKG:"#cfcdc9", PGRY:"rgba(120,118,112,0.95)",
+          INCL:"rgba(60,60,58,0.72)", OUTCL:"rgba(140,138,132,0.5)",
+          FIBC:["#e69f00","#cc79a7","#5c5c5c"] }
+};
+let SCHEME = "dark";
+let INK, INK2, INK3, EDGE, ACC, TURN, LAT, MER, GRN, PUR, CYN,
+    BGC, GOLD, NODF, GRY, TIKG, PGRY, INCL, OUTCL, FIBC, SKYT, SKYN;
+function applyScheme(s){
+  SCHEME = s; const P = PALS[s];
+  ({INK, INK2, INK3, EDGE, ACC, TURN, LAT, MER, GRN, PUR, CYN,
+    BGC, GOLD, NODF, GRY, TIKG, PGRY, INCL, OUTCL, FIBC} = P);
+  SKYT = PROFV.map(f => FIBC.map(c => shade(c, f)));   // tints per profile
+  SKYN = PROFV.map(f => shade(INK2, f));               // node grey per profile
+  if (typeof document !== "undefined" && document.body)
+    document.body.classList.toggle("light", s === "light");
+}
 
 // No Object here, so no winding: the evolution is x -> gx, the phase g^tau.
 let tS = 0, tC = 0, pT = 0, frac = 0, paused = false;
@@ -734,7 +786,7 @@ function path(pts, style, w, aBack, aFront){
 }
 function drawSphere(aS, bC){
   sc.clearRect(0,0,520,520);
-  sc.fillStyle = "#161615"; sc.fillRect(0,0,520,520);
+  sc.fillStyle = BGC;sc.fillRect(0,0,520,520);
   sc.textBaseline = "middle"; sc.textAlign = "center";
   const F = interp ? frac : 0;                           // the sub-chronon fraction
   const rot = (aS + F)*Math.PI/6;                        // 30 deg per chronon
@@ -756,7 +808,7 @@ function drawSphere(aS, bC){
     const pts = [];
     for (let s=0; s<=120; s++) pts.push(proj(beta(a), s*2*Math.PI/120));
     const hot = a===1 || a===4;
-    path(pts, a===1 ? GRN : a===4 ? PUR : "rgba(150,148,142,0.95)",
+    path(pts, a===1 ? GRN : a===4 ? PUR : PGRY,
          hot ? 1.7 : 1, hot ? 0.30 : 0.15, hot ? 1.0 : 0.45);
   }
   // Canonical Fig-1 orientation: the unit ray on the outer great circle
@@ -766,7 +818,7 @@ function drawSphere(aS, bC){
     const psi = Math.PI/2 - m*Math.PI/6 + drift;
     const pts = [];
     for (let s=0; s<=140; s++) pts.push(proj(s*2*Math.PI/140, psi));
-    path(pts, "rgba(150,148,142,0.95)", 1, 0.12, 0.38);
+    path(pts, PGRY, 1, 0.12, 0.38);
   }
   // Carrier view: the frame ray rotates clockwise with the drive, prime
   // meridian on the ray of g^tau, riding the drifting register it points
@@ -876,23 +928,25 @@ const chi232 = a => -a*2*Math.PI/232;                     // the Subject's decla
                                                           // 144 (the i-oriented quarter) on top
                                                           // matching i on top of C12; the Carrier
                                                           // itself has no generator
-const FIBC = ["#ffa900","#ff76eb","#fffaf3"];              // the three fibres (cosets
-                                                           // of Q4), at full value V = 1
-// the value ladder: scale a hex colour's V (HSV) by f, hue and saturation kept
+// FIBC, the three fibres (cosets of Q4) at full value V = 1, lives in
+// the scheme palettes above
+// the value ladder: scale a hex colour's V (HSV) by f, hue and
+// saturation kept; in the light scheme the depth fades toward the
+// white surface instead (the print law of the sibling copy)
 const shade = (hex, f) => {
   const n = parseInt(hex.slice(1), 16);
-  const ch = v => Math.round(((n >> v) & 255) * f);
+  const ch = v => { const c = (n >> v) & 255;
+    return Math.round(SCHEME === "light" ? 255 - (255 - c)*f : c*f); };
   return "rgb(" + ch(16) + "," + ch(8) + "," + ch(0) + ")";
 };
 // the four sky visibility profiles: outer-front V = 1, mid-front, inner-front,
 // and the whole dark side; graded by brightness at full opacity
 const PROFV = [1.00, 0.74, 0.52, 0.32];
-const SKYT = PROFV.map(f => FIBC.map(c => shade(c, f)));   // tints per profile
-const SKYN = PROFV.map(f => shade("#c9c6c0", f));          // node grey per profile
+applyScheme(SCHEME);   // sets the palette variables and computes SKYT/SKYN
 const IEXP = [0, 9, 6, 3];                                 // exponent of i^r on C12
 function drawRings(aS, bC){
   rc.clearRect(0,0,520,520);
-  rc.fillStyle = "#161615"; rc.fillRect(0,0,520,520);
+  rc.fillStyle = BGC;rc.fillRect(0,0,520,520);
   rc.textBaseline = "middle"; rc.textAlign = "center";
   const rQ = (aS % 4);                       // the shared registrable class r = tau mod 4
   const alpha = (aS % 3);                    // the Subject outcome rung (fibre)
@@ -926,8 +980,8 @@ function drawRings(aS, bC){
     const card = a % 58 === 0;
     const oct = a % 29 === 0 && !card;
     const inClass = a % 4 === rQ;
-    rc.strokeStyle = card ? TURN : oct ? "#9b7fd4" :
-      inClass ? "rgba(236,236,234,0.72)" : "rgba(150,148,142,0.38)";
+    rc.strokeStyle = card ? TURN : oct ? PUR :
+      inClass ? INCL : OUTCL;
     rc.lineWidth = card ? 2 : oct ? 1.6 : 1;
     const r1 = (card||oct) ? RO-6 : RO-4, r2 = (card||oct) ? RO+6 : RO+4;
     rc.beginPath();
@@ -938,12 +992,12 @@ function drawRings(aS, bC){
   // the chart labels ride the chart: fixed in the Carrier view, turning
   // counterclockwise with the C232 in the Subject view (chart exponents:
   // hbar 174 on top, h 58 at bottom, 1 at 0, -1 at 116, the octant at 29)
-  rc.font = "11.5px sans-serif"; rc.fillStyle = "#e8c07a";
+  rc.font = "11.5px sans-serif"; rc.fillStyle = GOLD;
   for (const [ex, lab] of [[174, "\u0127 = 144"], [58, "h = 89"], [0, "1"], [116, "\u22121 = 232"]]){
     const th = chi232(ex - off);
     rc.fillText(lab, RCX + Math.cos(th)*(RO+19), RCY - Math.sin(th)*(RO+19));
   }
-  rc.fillStyle = "#9b7fd4"; rc.font = "10.5px sans-serif";
+  rc.fillStyle = PUR; rc.font = "10.5px sans-serif";
   const zth = chi232(29 - off);
   rc.fillText("\u03B6\u2088 = 97", RCX + Math.cos(zth)*(RO+26), RCY - Math.sin(zth)*(RO+26));
   // middle ring: the shell's L1 time latitude, exactly as drawn in green on
@@ -1041,7 +1095,7 @@ function drawRings(aS, bC){
   rc.beginPath(); rc.arc(RCX, RCY, 59, 0, 7); rc.stroke();
   for (let q=0; q<4; q++){
     const th = q*Math.PI/2;
-    rc.strokeStyle = "#3a3936"; rc.lineWidth = q===rQ ? 2 : 1;   // no gold on the tick:
+    rc.strokeStyle = TIKG; rc.lineWidth = q===rQ ? 2 : 1;   // no gold on the tick:
     // the hand must not read as continuing past the digit
     rc.beginPath();
     rc.moveTo(RCX + Math.cos(th)*55, RCY - Math.sin(th)*55);
@@ -1484,23 +1538,10 @@ function drawM3(m3){
       const pts = [];
       for (let j = 0; j <= N; j++)
         pts.push(proj3(m3.pos(ray, a0 + j*(a1 - a0)/N)));
-      for (const front of [false, true]){
-        sp.strokeStyle = MER; sp.lineWidth = front ? 1.35 : 1.1;
-        sp.lineJoin = "round"; sp.lineCap = "round";
-        sp.globalAlpha = (front ? 0.75 : 0.24)*am;  // subordinate to M0
-        sp.beginPath();
-        let pen = false, prev = null;
-        for (const p of pts){
-          if ((p.d > 0) === front){
-            if (!pen){ sp.moveTo((prev || p).x, (prev || p).y);
-                       if (prev) sp.lineTo(p.x, p.y); }
-            else sp.lineTo(p.x, p.y);
-            pen = true;
-          } else pen = false;
-          prev = p;
-        }
-        sp.stroke();
-      }
+      // depth-banded Beziers under the ported 173 scheme (author, 13
+      // Aug); the subordination to M0 rides the width nominal (1.35
+      // against 1.55), the alpha grading one law for both meridians
+      bezStroke(pts, MER, 1.35);
     }
     for (const aF of [3.25, 9.75]){
       const pF = proj3(m3.pos(ray, aF));
@@ -1536,23 +1577,10 @@ function drawM0(m0){
       const pts = [];
       for (let j = 0; j <= N; j++)
         pts.push(proj3(m0.pos(e, a0 + j*(a1 - a0)/N)));
-      for (const front of [false, true]){
-        sp.strokeStyle = ACC; sp.lineWidth = front ? 1.55 : 1.2;
-        sp.lineJoin = "round"; sp.lineCap = "round";
-        sp.globalAlpha = (front ? 1 : 0.24)*am;
-        sp.beginPath();
-        let pen = false, prev = null;
-        for (const p of pts){
-          if ((p.d > 0) === front){
-            if (!pen){ sp.moveTo((prev || p).x, (prev || p).y);
-                       if (prev) sp.lineTo(p.x, p.y); }
-            else sp.lineTo(p.x, p.y);
-            pen = true;
-          } else pen = false;
-          prev = p;
-        }
-        sp.stroke();
-      }
+      // depth-banded Beziers under the ported 173 scheme (author, 13
+      // Aug): alpha and width ride each span midpoint's through-screen
+      // depth on the 24-band grid, seams flush on butt caps
+      bezStroke(pts, ACC, 1.55);
     }
     // the capacity folds: small open rings
     for (const aF of [3.25, 9.75]){
@@ -1622,7 +1650,7 @@ function drawSkyMarks(nodes, skel){
     if (outer){
       const lf = prof === 3 ? 0.45 : 1;
       sp.font = "10.5px sans-serif";
-      sp.fillStyle = shade([1,5,12,8].includes(x) ? "#e8c07a" : "#ffffff", lf);
+      sp.fillStyle = shade([1,5,12,8].includes(x) ? GOLD : NODF, lf);
       sp.fillText(String(x), pn.x + 9, pn.y - 9);
     }
     sp.globalAlpha = 1;
@@ -1639,18 +1667,60 @@ function drawSkyObserver(){
   sp.fillText("Observer", po.x, po.y + 15);
   sp.globalAlpha = 1;
 }
+// BEZIER depth-graded stroking, the 173 page's scheme ported verbatim
+// (author, 13 Aug; the 10 Aug law). The curve is sampled at coarse
+// anchors and drawn as exact CR -> cubic spans (the camera is affine:
+// screen-space control points introduce no distortion); EACH SPAN
+// carries the through-screen alpha of its midpoint on the grading
+// 0.1 (maximum depth) -> 0.9 (minimum depth, author call 13 Aug),
+// quantized to 24 bands [chart] with same-band
+// runs chained into one stroke, and the width rides the same depth
+// band, 0.1 -> 1.0 of the nominal -- the curves and the nodes read on
+// one depth channel, at a fraction of the segment count. The seam
+// law (author, 13 Aug): the runs stroke with BUTT caps -- each band
+// run ends flush at its seam anchor and the next begins exactly
+// there, so the seams carry neither the round-cap double paint (the
+// overlap marks) nor any trim gap; the joints within a run stay
+// round, and the ambient cap state is restored on exit.
+function bezStroke(pts, style, wdt){
+  sp.strokeStyle = style;
+  sp.lineJoin = "round"; sp.lineCap = "butt";
+  const N = pts.length - 1;
+  const bnd = new Array(N);
+  for (let i = 0; i < N; i++){
+    const al = 0.1 + 0.8*Math.max(0, Math.min(1, ((pts[i].d + pts[i + 1].d)/2 + 1)/2));
+    bnd[i] = 0.1 + Math.round((al - 0.1)*30)/30;   // 24 bands spanning [0.1, 0.9] exactly
+  }
+  for (let i = 0; i < N; ){
+    let j = i + 1; while (j < N && bnd[j] === bnd[i]) j++;
+    sp.globalAlpha = bnd[i];
+    sp.lineWidth = wdt*(0.1 + 0.9*(bnd[i] - 0.1)/0.8);   // width rides the same depth band: 0.1 -> 1.0 of the nominal
+    sp.beginPath();
+    sp.moveTo(pts[i].x, pts[i].y);
+    for (let k = i; k < j; k++){
+      const p0 = pts[Math.max(0, k - 1)], p1 = pts[k], p2 = pts[k + 1],
+            p3 = pts[Math.min(pts.length - 1, k + 2)];
+      sp.bezierCurveTo(p1.x + (p2.x - p0.x)/6, p1.y + (p2.y - p0.y)/6,
+                       p2.x - (p3.x - p1.x)/6, p2.y - (p3.y - p1.y)/6, p2.x, p2.y);
+    }
+    sp.stroke();
+    i = j;
+  }
+  sp.globalAlpha = 1; sp.lineCap = "round";
+}
 function drawHelix(aS, bC){
   sp.clearRect(0,0,520,520);
-  sp.fillStyle = "#161615"; sp.fillRect(0,0,520,520);
+  sp.fillStyle = BGC;sp.fillRect(0,0,520,520);
   sp.textBaseline = "middle"; sp.textAlign = "center";
   const S = skyState(aS, bC);
   drawSkyGuides(S.RH, S.RSH);
   // the drive fibers: the guide loop of each shell, innermost to
-  // outermost, one stroke per depth pass -- continuous runs with a
-  // single stroke each, so the joints carry no segment overlaps; a
-  // crossing segment belongs to its end point's depth class, the
-  // original rule. Every loop point rides the flow: in the harness
-  // view the helices screw along their leaves -- the dilation ([1:C6])
+  // outermost, drawn as depth-banded Beziers under the ported 173
+  // scheme -- alpha and width ride each span midpoint's through-screen
+  // depth on the 24-band grid, same-band runs chained into one stroke,
+  // so the joints carry no segment overlaps. Every loop point rides
+  // the flow: in the harness view the helices screw along their
+  // leaves -- the dilation ([1:C6])
   for (let s = 0; s < 3; s++){
     const R = S.RSH[s], outer = s === 2;
     const pts = [];
@@ -1658,28 +1728,10 @@ function drawHelix(aS, bC){
     for (let q = 0; q <= 91; q++) pts.push([-1, 13 - q*13/91]);
     const P3 = pts.map(([e, k]) =>
       proj3(S.flowF(S.sph(S.TH3(k), S.PH3(e, k, s), 0, R), k)));
-    for (const front of [false, true]){
-      // the outer fiber is the L1 time latitude (the drive orbit through
-      // the unit): green, matching the phase panel's middle ring and the
-      // shell panel's L1
-      sp.strokeStyle = outer ? GRN : "#8a877f";
-      sp.lineWidth = front ? (outer ? 1.75 : 1.35) : (outer ? 1.4 : 1.1);
-      sp.lineJoin = "round"; sp.lineCap = "round";
-      sp.globalAlpha = front ? (outer ? 1 : 0.75) : 0.24;
-      sp.beginPath();
-      let pen = false, prev = null;
-      for (const p of P3){
-        if ((p.d > 0) === front){
-          if (!pen){ sp.moveTo((prev || p).x, (prev || p).y);
-                     if (prev) sp.lineTo(p.x, p.y); }
-          else sp.lineTo(p.x, p.y);
-          pen = true;
-        } else pen = false;
-        prev = p;
-      }
-      sp.stroke();
-    }
-    sp.globalAlpha = 1;
+    // the outer fiber is the L1 time latitude (the drive orbit through
+    // the unit): green, matching the phase panel's middle ring and the
+    // shell panel's L1; nominals keep the page's own weights
+    bezStroke(P3, outer ? GRN : GRY, outer ? 1.75 : 1.35);
   }
   if (view !== "carrier") drawCurlTraces(S.nodes);
   drawClockBead(S.PHI);
@@ -1693,7 +1745,7 @@ function drawHelix(aS, bC){
 // retarded-meridian spiral per route; further meridians M_m join here
 function drawCone(aS, bC){
   sp.clearRect(0,0,520,520);
-  sp.fillStyle = "#161615"; sp.fillRect(0,0,520,520);
+  sp.fillStyle = BGC;sp.fillRect(0,0,520,520);
   sp.textBaseline = "middle"; sp.textAlign = "center";
   const S = skyState(aS, bC);
   drawSkyGuides(S.RH, S.RSH);
@@ -1787,7 +1839,7 @@ function drawCurlTraces(nodes){
 }
 function drawHopf(aS, bC){
   sp.clearRect(0,0,520,520);
-  sp.fillStyle = "#161615"; sp.fillRect(0,0,520,520);
+  sp.fillStyle = BGC;sp.fillRect(0,0,520,520);
   sp.textBaseline = "middle"; sp.textAlign = "center";
   const S = skyState(aS, bC);
   drawSkyGuides(S.RH, S.RSH);
@@ -1839,7 +1891,7 @@ function drawHopf(aS, bC){
     const v = liftS3(n.wF, false) || n.v;
     if (!v) continue;
     const u = [-v[1], v[0], -v[3], v[2]];
-    drawFiber(v, u, "#8a877f", n.outer ? 1.4 : 1.1,
+    drawFiber(v, u, GRY, n.outer ? 1.4 : 1.1,
               n.outer ? 0.35 : 0.24, 0.12);
   }
   // the observer's clock fiber (tau, 0): the degenerate leaf through
@@ -1906,6 +1958,12 @@ function setSkyMode(m2){
       "view the nodes translate along their fibers; the Observer at the "+
       "center");
 }
+document.getElementById("schemeTog").onclick = () => {
+  applyScheme(SCHEME === "dark" ? "light" : "dark");
+  document.getElementById("schemeTog").setAttribute("aria-pressed",
+    SCHEME === "light" ? "true" : "false");
+  drawSphere(tS, tC); drawRings(tS, tC); drawSpace(tS, tC);
+};
 document.getElementById("mHelix").onclick = () => setSkyMode("helix");
 document.getElementById("mCone").onclick = () => setSkyMode("cone");
 document.getElementById("mHopf").onclick = () => setSkyMode("hopf");
