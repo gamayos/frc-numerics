@@ -12,20 +12,22 @@ const ok = (name, cond) => { console.log((cond ? 'PASS ' : 'FAIL ') + name); if 
 const html = fs.readFileSync(__dirname + '/index.html', 'utf8');
 const src = html.replace(/^[\s\S]*?<script>\n/m, '').replace(/<\/script>[\s\S]*$/m, '');
 const recs = { sph: [], rings: [], spc: [] };
-const mk = tag => { let style = '', alpha = 1;
+const mk = tag => { let style = '', alpha = 1, lw = 1;
   return new Proxy({}, {
     get: (t, p) => {
       if (p === 'measureText') return () => ({ width: 0 });
       return (...a) => {
         if (p === 'fillText') recs[tag].push(['txt', String(a[0]), a[1], a[2]]);
-        if (p === 'stroke' || p === 'fill') recs[tag].push([p, style, alpha]);
+        if (p === 'stroke' || p === 'fill') recs[tag].push([p, style, alpha, lw]);
         if (p === 'ellipse') recs[tag].push(['ell', a[0], a[1], a[2], a[3], a[4]]);
         if (p === 'arc') recs[tag].push(['arc', a[0], a[1], a[2]]);
         if (p === 'lineTo') recs[tag].push(['seg']);
+        if (p === 'bezierCurveTo') recs[tag].push(['bez']);
         return undefined; };
     },
     set: (t, p, v) => { if (p === 'strokeStyle' || p === 'fillStyle') style = v;
-      if (p === 'globalAlpha') alpha = v; return true; } }); };
+      if (p === 'globalAlpha') alpha = v;
+      if (p === 'lineWidth') lw = v; return true; } }); };
 const els = {};
 const el = id => els[id] ||= (() => {
   const e = { getContext: () => mk(recs[id] ? id : 'spc'), setAttribute: () => {},
@@ -215,20 +217,35 @@ ok('the section test: pausing and toggling the representation keeps '+
    'every node dot and every label fixed; only the fibers change',
    invOK);
 
-// 11. the helix guide loops are single strokes: two depth passes per
-// shell, six strokes in all -- four grey (inner shells) and two green
-// (the outer L1 time latitude) -- no per-segment strokes, so the
-// joints carry no segment overlaps
+// 11. the drive orbits (L1, L2, L3) render as depth-banded Bezier
+// chains under the ported 173 scheme: cubic spans present on every
+// loop, every loop stroke's alpha exactly on the [0.1, 0.9] 24-band
+// grid with several distinct bands, and the width riding the same
+// band -- width = nominal x (0.1 + 0.9(alpha - 0.1)/0.8), nominal
+// 1.75 green (the L1 time latitude, a = 1: the INNERMOST shell --
+// corrected 14 Aug, this comment previously said the outer one) and
+// 1.35 grey (L2 and L3) -- same-band runs chained, so the joints
+// carry no segment overlaps. The assertion below keys the nominal off
+// the COLOUR, not off the shell index, so it is blind to which rung
+// wears the green and held across that correction unchanged.
 let helixOK = true;
 for (const [v, s, c, sg] of [['subject',0,0,0],['carrier',5,117,1]]){
   render(v, s, c, sg, 'helix');
-  const grey = recs.spc.filter(r => r[0] === 'stroke' && r[1] === '#8a877f');
-  const grn = recs.spc.filter(r => r[0] === 'stroke' && r[1] === '#58a35e');
-  if (grey.length !== 4 || grn.length !== 2) helixOK = false;
+  const bez = recs.spc.filter(r => r[0] === 'bez').length;
+  const st = recs.spc.filter(r => r[0] === 'stroke' &&
+    (r[1] === '#8a877f' || r[1] === '#58a35e'));
+  const grid = st.every(r => r[2] >= 0.1 - 1e-9 && r[2] <= 0.9 + 1e-9 &&
+    Math.abs(r[2] - (0.1 + Math.round((r[2] - 0.1)*30)/30)) < 1e-9);
+  const law = st.every(r => Math.abs(r[3] - (r[1] === '#58a35e' ? 1.75 : 1.35)
+    *(0.1 + 0.9*(r[2] - 0.1)/0.8)) < 1e-9);
+  const bands = new Set(st.map(r => r[2]));
+  if (!(bez > 300 && st.length >= 6 && grid && law && bands.size >= 4))
+    helixOK = false;
 }
-ok('the helix guide loops draw as six single strokes (two depth '+
-   'passes per shell): four grey, two green -- the outer loop the L1 '+
-   'time latitude -- with no per-segment stroking', helixOK);
+ok('the drive orbits draw as depth-banded Bezier chains (the ported '+
+   '173 scheme): cubic spans on every loop, stroke alphas exact on '+
+   'the [0.1, 0.9] 24-band grid, the width riding the same band at '+
+   'each shell nominal (1.75 green L1 = the innermost, 1.35 grey)', helixOK);
 
 // 12. the frame leak (00:C17, 00:C18): each view holds its own frame.
 // Subject view: the register stands (east slot reads 1 at every bC)
@@ -611,11 +628,23 @@ ok('the production clock: after 696 stepChronon calls the pair is '+
   if (!uniOK) drawOK = false;
   render('subject', 0, 0, 0, 'cone');
   const acc = recs.spc.filter(r => r[0] === 'stroke' && r[1] === '#3987e5');
-  // FOUR RAYS: 2 routes x (2 rays x 2 depth passes + 2 fold rings) =
-  // 12 strokes; the Observer dot the one fill (the nodes are their
-  // own station marks); the below-resolution tower interior between
-  // the folds is not drawn
-  if (acc.length !== 12) drawOK = false;
+  // FOUR RAYS as depth-banded Bezier chains (the ported 173 scheme):
+  // the arc strokes are the band runs -- alphas exact on the [0.1,
+  // 0.9] 24-band grid, width riding the same band at nominal 1.55 --
+  // plus exactly 4 fold rings (2 routes x 2, alpha 0.35, width 1);
+  // the Observer dot the one fill (the nodes are their own station
+  // marks); the below-resolution tower interior between the folds is
+  // not drawn
+  const bezC = recs.spc.filter(r => r[0] === 'bez').length;
+  const onGrid = r => r[2] >= 0.1 - 1e-9 && r[2] <= 0.9 + 1e-9 &&
+    Math.abs(r[2] - (0.1 + Math.round((r[2] - 0.1)*30)/30)) < 1e-9;
+  const wLaw = (r, nom) =>
+    Math.abs(r[3] - nom*(0.1 + 0.9*(r[2] - 0.1)/0.8)) < 1e-9;
+  const accR = acc.filter(r => Math.abs(r[2] - 0.35) < 1e-9 &&
+                               Math.abs(r[3] - 1) < 1e-9);
+  const accB = acc.filter(r => !accR.includes(r));
+  if (!(bezC > 1000 && accR.length === 4 && accB.length >= 8 &&
+        accB.every(r => onGrid(r) && wLaw(r, 1.55)))) drawOK = false;
   const accF = recs.spc.filter(r => r[0] === 'fill' && r[1] === '#3987e5');
   if (accF.length !== 1) drawOK = false;
   // OWNERSHIP: the Subject's own locus is the frame origin, never
@@ -656,10 +685,15 @@ ok('the production clock: after 696 stepChronon calls the pair is '+
   // route flipped); the azimuth is the node law PH3 with continuous
   // arguments, the curl rides the row k(t): the twelve stations
   // (cells +-5t at the tent shells) are threaded at residual zero.
-  // Drawn as 2 routes x (2 rays x 2 passes + 2 fold ticks) = 12 red
-  // strokes -- the same four-ray assembly as M0, in momentum red
+  // Drawn as depth-banded Bezier chains, the same four-ray assembly
+  // as M0 in momentum red at nominal 1.35 (the subordination on the
+  // nominal), plus exactly 4 fold ticks (alpha 0.3, width 1)
   const mer = recs.spc.filter(r => r[0] === 'stroke' && r[1] === '#d0453c');
-  if (mer.length !== 12) drawOK = false;
+  const merT = mer.filter(r => Math.abs(r[2] - 0.3) < 1e-9 &&
+                               Math.abs(r[3] - 1) < 1e-9);
+  const merB = mer.filter(r => !merT.includes(r));
+  if (!(merT.length === 4 && merB.length >= 8 &&
+        merB.every(r => onGrid(r) && wLaw(r, 1.35)))) drawOK = false;
   // THE DRIVE STEP FACTORS EXACTLY (the tower identity): the scale
   // step is the rung ladder x3 = g^4 (order kappa = 3), the quarter
   // is Ihat = g^{-kappa} = 5 = i (order 4, the M3/M9 direction), and

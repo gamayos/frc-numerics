@@ -222,9 +222,12 @@ ok('the section test: pausing and toggling the representation keeps '+
 // loop, every loop stroke's alpha exactly on the [0.1, 0.9] 24-band
 // grid with several distinct bands, and the width riding the same
 // band -- width = nominal x (0.1 + 0.9(alpha - 0.1)/0.8), nominal
-// 1.75 green (the outer L1 time latitude) and 1.35 grey (the inner
-// shells) -- same-band runs chained, so the joints carry no segment
-// overlaps
+// 1.75 green (the L1 time latitude, a = 1: the INNERMOST shell --
+// corrected 14 Aug, this comment previously said the outer one) and
+// 1.35 grey (L2 and L3) -- same-band runs chained, so the joints
+// carry no segment overlaps. The assertion below keys the nominal off
+// the COLOUR, not off the shell index, so it is blind to which rung
+// wears the green and held across that correction unchanged.
 let helixOK = true;
 for (const [v, s, c, sg] of [['subject',0,0,0],['carrier',5,117,1]]){
   render(v, s, c, sg, 'helix');
@@ -242,7 +245,7 @@ for (const [v, s, c, sg] of [['subject',0,0,0],['carrier',5,117,1]]){
 ok('the drive orbits draw as depth-banded Bezier chains (the ported '+
    '173 scheme): cubic spans on every loop, stroke alphas exact on '+
    'the [0.1, 0.9] 24-band grid, the width riding the same band at '+
-   'each shell nominal (1.75 green L1, 1.35 grey)', helixOK);
+   'each shell nominal (1.75 green L1 = the innermost, 1.35 grey)', helixOK);
 
 // 12. the frame leak (00:C17, 00:C18): each view holds its own frame.
 // Subject view: the register stands (east slot reads 1 at every bC)
