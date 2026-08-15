@@ -116,4 +116,10 @@ ok('(kB c)^2 = (-2)(2^{-1}) = -1 on F233, no representative choice: '+
 ok('the drawn representatives evaluate the quarter root as hbar: 124*159 = 144 on F233',
    md(124*159,233)===144);
 
+// ---- the A2 general form: 4a - kappa b = 1 (mod 4 kappa), (1,1) only at kappa = 3 ----
+ok('tower factorization generalizes: (a,b) = (1,1) at kappa=3, (4,3) at kappa=5, (2,1) at kappa=7; '+
+   '(1,1) fails at kappa=5,7',
+   md(4*1-3*1,12)===1 && md(4*4-5*3,20)===1 && md(4*2-7*1,28)===1 &&
+   md(4*1-5*1,20)!==1 && md(4*1-7*1,28)!==1);
+
 process.exit(fails?1:0);
