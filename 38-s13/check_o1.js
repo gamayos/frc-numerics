@@ -44,7 +44,7 @@ ok('(c) capacity reading at kappa = 3: p_sl = S r_g -- one gravitational radius 
 ok('(c) consistency: the angular face then equals 3 r_g/p_sl = 3/(3S/kappa) = kappa/S '+
    '-- the GR apsidal fraction, automatically', req(R(3*K,3*S),R(K,S)) && req(R(K,S),ang));
 
-// ---- (d) cross-instance (53,13) read in Carrier 157 ----
+// ---- (d) the p=53 regression, read in the auxiliary modulus 157 (Omega-blind; not an admissible pair) ----
 const kO=3,kS=13;                  // q=13: kappa_O=3; p=53: kappa_S=13
 const angO=R(12,52), tmpO=R(12,104);
 ok('(d) (53,13): angular 12/52 = 3/13 = kappa_O/kappa_S, temporal 12/104 = 3/26, '+

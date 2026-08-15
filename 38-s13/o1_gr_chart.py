@@ -69,5 +69,15 @@ ok('(3) matching the temporal face: p_sl = 3 (S/kappa) r_g',
 ok('(3) the angular face then reads 3 r_g/p_sl = kappa/S: the apsidal fraction, '
    'automatically', sp.simplify(3*rg/psl - kap/S) == 0)
 
+# ---- (4) the named exclusion: Brans--Dicke at every finite omega ----
+w = sp.symbols('omega', positive=True)
+gBD = (1 + w)/(2 + w)
+ok('(4) Brans--Dicke combination 2*gamma - beta - 1 = -2/(2+omega), '
+   'nonzero at every finite omega (deviation -4/(3(2+omega)))',
+   sp.simplify((2*gBD - 1 - 1) + 2/(2 + w)) == 0
+   and sp.simplify(sp.Rational(2, 3)*(2*gBD - 1 - 1) + sp.Rational(4, 3)/(2 + w)) == 0)
+ok('(4) the omega -> oo limit returns the forced value (general relativity)',
+   sp.limit(2*gBD - 1 - 1, w, sp.oo) == 0)
+
 print('ALL O1 GR-CHART IDENTITIES PASS' if not fails else f'FAILURES: {len(fails)}')
 raise SystemExit(1 if fails else 0)

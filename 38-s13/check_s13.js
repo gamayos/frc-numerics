@@ -1,6 +1,7 @@
 'use strict';
 // framed-rational verification of every numeric claim for the 38-s13 ledger
-const ok = (n,c) => console.log((c?'PASS ':'FAIL '), n);
+let fails=0;
+const ok = (n,c) => { console.log((c?'PASS ':'FAIL '), n); if(!c)fails++; };
 const md = (x,m) => ((x % m) + m) % m;
 const powm = (b,e,m) => { let r=1n; b=BigInt(b); m=BigInt(m);
   for (let i=0n;i<BigInt(e);i++) r = r*b % m; return Number(r); };
@@ -97,3 +98,22 @@ ok('shell radii ratios sin(2pi/13):sin(4pi/13):sin(6pi/13) [approx chart 0.4647,
 ok('shell mounting 120deg = 8 C24-steps; 4 = 8 = 0 mod 4 (quarter-blind)', 8*15===120 && md(8,4)===0);
 ok('rung shift x3 = g^4 across shells: M3 ladder [3,9,1] = 3^{s-2} mod 13',
    powm(3,1,13)===3 && powm(3,2,13)===9 && powm(3,3,13)===1);
+
+// ---- registration fibre product (round 03): the transport, explicit ----
+ok('registration: x->x^3 maps C12 onto Q4 (kernel 3), y->y^58 maps C232 onto C4 '+
+   '(kernel 58); |fibre product| = 12*232/4 = 696 = lcm(12,232): the pair space',
+   (()=>{const im=new Set();let ker=0;
+     for(let e=0;e<12;e++){const v=powm(2,e,13);im.add(powm(v,3,13));if(powm(v,3,13)===1)ker++;}
+     const im2=new Set();let k2=0;
+     for(let e=0;e<232;e++){const v=powm(78,e,233);im2.add(powm(v,58,233));if(powm(v,58,233)===1)k2++;}
+     return im.size===4&&ker===3&&im2.size===4&&k2===58&&12*232/4===696;})());
+
+// ---- the k_B c quarter root (A5): representative-free square, representative evaluation ----
+ok('(kB c)^2 = (-2)(2^{-1}) = -1 on F233, no representative choice: '+
+   'c^2 = 159^2 = 117 = 2^{-1}, kB^2 = 124^2 = 231 = -2',
+   md(159*159,233)===117 && md(2*117,233)===1 && md(124*124,233)===231 &&
+   md(124*124*159*159,233)===232);
+ok('the drawn representatives evaluate the quarter root as hbar: 124*159 = 144 on F233',
+   md(124*159,233)===144);
+
+process.exit(fails?1:0);

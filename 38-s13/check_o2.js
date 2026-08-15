@@ -112,5 +112,40 @@ function cover(p){
   ok('(e) the shell-parity position law holds at p = 5, 17, 29 as well', pos);
 }
 
+// ---- (f) the all-shell parity lemma (round-02, closes the theorem) ----
+// With M = k a^-1, A = floor(aM/p), alpha = A%2: aM = pA + k exactly, so
+// kbar = abar*Mbar + alpha; the candidates match iff alpha = 0, abar, Mbar,
+// 1+abar+Mbar respectively; the 8-case table forces mu = 3 iff k even and
+// the odd sector's match at parameter a (direct) iff a odd -- every shell.
+{
+  let tab=true;
+  for(const ab of [0,1]) for(const Mb of [0,1]) for(const al of [0,1]){
+    const kb=(ab*Mb+al)%2;
+    const mu=(al===0?1:0)+(al===ab?1:0)+(al===Mb?1:0)+(al===(1+ab+Mb)%2?1:0);
+    if(mu!==(kb===0?3:1)) tab=false;
+  }
+  ok('(f) the eight-case parity table: mu = 3 iff kbar = 0, at every shell', tab);
+  let agree=true;
+  for(const p of [5,13,17,29]){
+    const K=(p-1)/4, inv=x=>{for(let y=1;y<p;y++)if(x*y%p===1)return y;};
+    const w=(m,t)=>fl(m*t/p);
+    for(let a=1;a<=K;a++) for(let k=1;k<p;k++){
+      const M=(k*inv(a))%p||p, A=fl(a*M/p), al=A%2;
+      if(k%2 !== (a*M%2+al)%2) agree=false;                    // kbar identity
+      const act=((w(M,a)%2===0)?1:0)+((w(p-M,a)%2===1)?1:0)+
+                ((w(M,p-a)%2===1)?1:0)+((w(p-M,p-a)%2===0)?1:0);
+      const mu=(al===0?1:0)+(al===(a%2)?1:0)+(al===(M%2)?1:0)+(al===(1+a%2+M%2)%2?1:0);
+      if(mu!==act || act!==((k%2===0)?3:1)) agree=false;
+      if(k%2===1){                                             // position law
+        const c=[[M,a,0],[p-M,a,1],[M,p-a,1],[p-M,p-a,0]];
+        const hits=c.filter(([m,t,r])=>w(m,t)%2===r);
+        if(hits.length!==1 || ((a%2===1)!==(hits[0][1]<=K))) agree=false;
+      }
+    }
+  }
+  ok('(f) the lemma agrees with the constructed covering and yields the '+
+     'position law, all shells, p = 5, 13, 17, 29', agree);
+}
+
 console.log(fails===0?'ALL O2 MULTIPLICITY CHECKS PASS':'FAILURES: '+fails);
 process.exit(fails?1:0);
